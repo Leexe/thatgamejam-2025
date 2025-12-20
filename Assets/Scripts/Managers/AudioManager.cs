@@ -22,9 +22,9 @@ public class AudioManager : PersistantSingleton<AudioManager>
 
 	// Music Instances
 	private EventInstance _currentMusicTrack;
-	private EventInstance _iceBossaMusicTrack;
-	private EventInstance _bloodMoonMusicTrack;
-	private EventInstance _roamMusicTrack;
+	private readonly Dictionary<FMOD.GUID, EventInstance> _musicTrackInstances =
+		new Dictionary<FMOD.GUID, EventInstance>();
+	private readonly Dictionary<FMOD.GUID, EventInstance> _activeSnapshots = new Dictionary<FMOD.GUID, EventInstance>();
 	private EventInstance _currentAmbientTrack;
 
 	protected override void Awake()
@@ -42,19 +42,9 @@ public class AudioManager : PersistantSingleton<AudioManager>
 
 		// Fetch audio preferences
 		_masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
-		_ambientVolume = PlayerPrefs.GetFloat("AmbientVolume", 1f);
 		_musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.7f);
+		_ambientVolume = PlayerPrefs.GetFloat("AmbientVolume", 1f);
 		_gameVolume = PlayerPrefs.GetFloat("GameVolume", 0.7f);
-	}
-
-	private void Start()
-	{
-		_iceBossaMusicTrack = CreateInstance(FMODEvents.Instance.IceBossa_Bgm);
-		_bloodMoonMusicTrack = CreateInstance(FMODEvents.Instance.BloodMoon_Bgm);
-		_roamMusicTrack = CreateInstance(FMODEvents.Instance.Roam_Bgm);
-		_currentAmbientTrack = CreateInstance(FMODEvents.Instance.Ambience_Amb);
-		_currentMusicTrack = _roamMusicTrack;
-		_currentMusicReference = FMODEvents.Instance.Roam_Bgm;
 	}
 
 	private void OnDestroy()
@@ -112,7 +102,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	}
 
 	/// <summary>
-	/// Switches the music track (TODO: Create a smarter way to switch music without if statements)
+	/// Switches the music track
 	/// </summary>
 	public void SwitchMusicTrack(EventReference musicTrack)
 	{
@@ -122,23 +112,20 @@ public class AudioManager : PersistantSingleton<AudioManager>
 			return;
 		}
 
+		if (_currentMusicTrack.isValid())
+		{
+			_currentMusicTrack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		}
+
 		_currentMusicReference = musicTrack;
-		_currentMusicTrack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 
-		if (musicTrack.Guid == FMODEvents.Instance.IceBossa_Bgm.Guid)
+		if (!_musicTrackInstances.ContainsKey(musicTrack.Guid))
 		{
-			_currentMusicTrack = _iceBossaMusicTrack;
-		}
-		else if (musicTrack.Guid == FMODEvents.Instance.BloodMoon_Bgm.Guid)
-		{
-			_currentMusicTrack = _bloodMoonMusicTrack;
-		}
-		else if (musicTrack.Guid == FMODEvents.Instance.Roam_Bgm.Guid)
-		{
-			_currentMusicTrack = _roamMusicTrack;
+			_musicTrackInstances[musicTrack.Guid] = CreateInstance(musicTrack);
 		}
 
-		_currentMusicTrack.start();
+		_currentMusicTrack = _musicTrackInstances[musicTrack.Guid];
+		PlayCurrentMusicTrack();
 	}
 
 	/// <summary>
@@ -286,7 +273,9 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		return state != PLAYBACK_STATE.STOPPED;
 	}
 
-	// Cleans up sound events and event emitters
+	/// <summary>
+	/// Cleans up sound events and event emitters
+	/// </summary>
 	private void CleanUp()
 	{
 		foreach (EventInstance eventInstance in _eventInstances)
@@ -294,9 +283,66 @@ public class AudioManager : PersistantSingleton<AudioManager>
 			eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 			eventInstance.release();
 		}
+		_musicTrackInstances.Clear();
 		foreach (StudioEventEmitter emitter in _eventEmitters)
 		{
 			emitter.Stop();
+		}
+	}
+
+	/// <summary>
+	/// Sets a global parameter by name
+	/// </summary>
+	/// <param name="parameterName">The name of the parameter</param>
+	/// <param name="value">The value of the parameter</param>
+	public void SetGlobalParameter(string parameterName, float value)
+	{
+		RuntimeManager.StudioSystem.setParameterByName(parameterName, value);
+	}
+
+	/// <summary>
+	/// Sets a parameter of an event instance sound by name
+	/// </summary>
+	/// <param name="instance">The event instance sound</param>
+	/// <param name="parameterName">The name of the parameter</param>
+	/// <param name="value">The value of the parameter</param>
+	public void SetInstanceParameter(EventInstance instance, string parameterName, float value)
+	{
+		instance.setParameterByName(parameterName, value);
+	}
+
+	/// <summary>
+	/// Sets a parameter of an event instance sound by name
+	/// </summary>
+	/// <param name="instance">The event instance sound</param>
+	/// <param name="parameterID">The parameter ID of the parameter</param>
+	/// <param name="value">The value of the parameter</param>
+	public void SetInstanceParameter(EventInstance instance, PARAMETER_ID parameterID, float value)
+	{
+		instance.setParameterByID(parameterID, value);
+	}
+
+	/// <summary>
+	/// Sets the state of a snapshot
+	/// </summary>
+	/// <param name="snapshotReference">The snapshot reference</param>
+	/// <param name="isActive">Whether the snapshot is active or not</param>
+	public void SetSnapshotState(EventReference snapshotReference, bool isActive)
+	{
+		if (!_activeSnapshots.ContainsKey(snapshotReference.Guid))
+		{
+			EventInstance snapshot = CreateInstance(snapshotReference);
+			_activeSnapshots[snapshotReference.Guid] = snapshot;
+		}
+
+		EventInstance instance = _activeSnapshots[snapshotReference.Guid];
+		if (isActive)
+		{
+			instance.start();
+		}
+		else
+		{
+			instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
 		}
 	}
 
@@ -307,6 +353,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	{
 		PlayerPrefs.SetFloat("MasterVolume", _masterVolume);
 		PlayerPrefs.SetFloat("MusicVolume", _musicVolume);
+		PlayerPrefs.SetFloat("AmbienceVolume", _ambientVolume);
 		PlayerPrefs.SetFloat("GameVolume", _gameVolume);
 	}
 

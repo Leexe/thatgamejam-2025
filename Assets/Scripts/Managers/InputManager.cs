@@ -9,12 +9,7 @@ public class InputManager : PersistantSingleton<InputManager>
 
 	// Actions
 	private InputAction _movementAction;
-	private InputAction _interactAction;
-	private InputAction _specialAbilityAction;
-	private InputAction _inventoryAction;
-	private InputAction _mapAction;
 	private InputAction _escapeAction;
-	private InputAction _anchorAction;
 
 	// Events
 	[HideInInspector]
@@ -67,12 +62,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	private void SetupInputActions()
 	{
 		_movementAction = InputSystem.actions.FindAction("Movement");
-		_interactAction = InputSystem.actions.FindAction("Interact");
-		_specialAbilityAction = InputSystem.actions.FindAction("Special Ability");
 		_escapeAction = InputSystem.actions.FindAction("Escape");
-		_mapAction = InputSystem.actions.FindAction("Map");
-		_inventoryAction = InputSystem.actions.FindAction("Inventory");
-		_anchorAction = InputSystem.actions.FindAction("Anchor");
 	}
 
 	/** Update Methods **/
@@ -86,14 +76,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	{
 		UpdateMovementVector(_movementAction, ref OnMovement);
 
-		AddEventToAction(_interactAction, ref OnInteractPerformed);
-		AddEventToAction(_specialAbilityAction, ref OnSpecialAbilityPerformed);
-		AddEventToAction(_mapAction, ref OnMapPerformed);
-		AddEventToAction(_inventoryAction, ref OnInventoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
-		AddEventToAction(_anchorAction, ref OnAnchorPerformed);
-
-		AddEventToActionHold(_anchorAction, ref OnAnchorHeld);
 	}
 
 	/// <summary>
