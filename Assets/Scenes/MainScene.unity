@@ -314,14 +314,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5746143767665384912, guid: 21ba0fb0bf6444c7587c6fa92c826cd3, type: 3}
-      propertyPath: _pauseTweenDuration
-      value: 0.2
-      objectReference: {fileID: 0}
-    - target: {fileID: 5746143767665384912, guid: 21ba0fb0bf6444c7587c6fa92c826cd3, type: 3}
-      propertyPath: _setttingsTweenDuration
-      value: 0.1
-      objectReference: {fileID: 0}
     - target: {fileID: 6559442635336663700, guid: 21ba0fb0bf6444c7587c6fa92c826cd3, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
