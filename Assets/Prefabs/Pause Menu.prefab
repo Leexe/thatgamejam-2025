@@ -2727,8 +2727,8 @@ MonoBehaviour:
   _mainTabCanvasGroup: {fileID: 2539921370635283789}
   _settingsTabCanvasGroup: {fileID: 5937177501003113545}
   _background: {fileID: 2535179159730047062}
-  _pauseTweenDuration: 0.5
-  _setttingsTweenDuration: 0.3
+  _pauseTweenDuration: 0.2
+  _setttingsTweenDuration: 0.1
   OnPauseMenuOpen:
     m_PersistentCalls:
       m_Calls: []
