@@ -12,10 +12,10 @@
   <Project Path="Unity.RenderPipelines.Core.Editor.csproj" />
   <Project Path="Unity.2D.Psdimporter.Editor.csproj" />
   <Project Path="UnityEngine.UI.csproj" />
-  <Project Path="Unity.2D.IK.Runtime.csproj" />
+  <Project Path="SingularityGroup.HotReload.Editor.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.2D.Runtime.csproj" />
   <Project Path="Unity.Collections.csproj" />
-  <Project Path="SingularityGroup.HotReload.Editor.csproj" />
+  <Project Path="Unity.2D.IK.Runtime.csproj" />
   <Project Path="Unity.VisualScripting.Core.Editor.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.Editor.csproj" />
   <Project Path="Unity.PerformanceTesting.Editor.csproj" />
@@ -23,8 +23,8 @@
   <Project Path="Kybernetik.Animancer.csproj" />
   <Project Path="Unity.2D.Tilemap.Editor.csproj" />
   <Project Path="Unity.Burst.csproj" />
-  <Project Path="Kybernetik.Animancer.Editor.csproj" />
   <Project Path="Unity.VisualScripting.Flow.Editor.csproj" />
+  <Project Path="Kybernetik.Animancer.Editor.csproj" />
   <Project Path="Unity.2D.SpriteShape.Editor.csproj" />
   <Project Path="Unity.VisualStudio.Editor.csproj" />
   <Project Path="Unity.InputSystem.csproj" />
@@ -75,6 +75,7 @@
   <Project Path="SingularityGroup.HotReload.Runtime.Public.csproj" />
   <Project Path="Unity.Mathematics.Editor.csproj" />
   <Project Path="Unity.VisualScripting.SettingsProvider.Editor.csproj" />
+  <Project Path="PrimeTween.Runtime.csproj" />
   <Project Path="Unity.2D.Common.Runtime.csproj" />
   <Project Path="Febucci.Attributes.Runtime.csproj" />
   <Project Path="Unity.InputSystem.TestFramework.csproj" />
@@ -82,10 +83,12 @@
   <Project Path="Unity.ShaderGraph.Utilities.csproj" />
   <Project Path="Febucci.TextAnimatorForUnity.Input.Runtime.csproj" />
   <Project Path="Unity.VisualScripting.Shared.Editor.csproj" />
+  <Project Path="PrimeTween.Editor.csproj" />
   <Project Path="Unity.2D.Aseprite.Common.csproj" />
   <Project Path="FMODUnityResonance.csproj" />
   <Project Path="Unity.RenderPipeline.Universal.ShaderLibrary.csproj" />
   <Project Path="Unity.InputSystem.DocCodeSamples.csproj" />
+  <Project Path="Sirenix.OdinInspector.Modules.UnityMathematics.csproj" />
   <Project Path="Unity.RenderPipelines.Universal.Shaders.csproj" />
   <Project Path="Unity.RenderPipelines.Core.Runtime.Shared.csproj" />
   <Project Path="Unity.InternalAPIEngineBridge.004.csproj" />
