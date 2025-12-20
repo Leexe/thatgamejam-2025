@@ -9,6 +9,7 @@ public class InputManager : PersistantSingleton<InputManager>
 
 	// Actions
 	private InputAction _movementAction;
+	private InputAction _interactAction;
 	private InputAction _escapeAction;
 
 	// Events
@@ -19,22 +20,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	public UnityEvent OnInteractPerformed;
 
 	[HideInInspector]
-	public UnityEvent OnSpecialAbilityPerformed;
-
-	[HideInInspector]
 	public UnityEvent OnEscapePerformed;
-
-	[HideInInspector]
-	public UnityEvent OnMapPerformed;
-
-	[HideInInspector]
-	public UnityEvent OnInventoryPerformed;
-
-	[HideInInspector]
-	public UnityEvent OnAnchorPerformed;
-
-	[HideInInspector]
-	public UnityEvent OnAnchorHeld;
 
 	private const string PLAYER_ACTION_MAP = "Player";
 	private const string UI_ACTION_MAP = "UI";
@@ -62,6 +48,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	private void SetupInputActions()
 	{
 		_movementAction = InputSystem.actions.FindAction("Movement");
+		_interactAction = InputSystem.actions.FindAction("Interact");
 		_escapeAction = InputSystem.actions.FindAction("Escape");
 	}
 
@@ -76,6 +63,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	{
 		UpdateMovementVector(_movementAction, ref OnMovement);
 
+		AddEventToAction(_interactAction, ref OnInteractPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
 	}
 
