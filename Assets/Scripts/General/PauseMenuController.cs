@@ -1,3 +1,4 @@
+using Animancer;
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.UI;
@@ -12,11 +13,27 @@ public class PauseMenuController : MonoBehaviour
 	private CanvasGroup _contentCanvasGroup;
 
 	[SerializeField]
+	private CanvasGroup _mainTabCanvasGroup;
+
+	[SerializeField]
+	private CanvasGroup _settingsTabCanvasGroup;
+
+	[SerializeField]
 	private Image _background;
 
 	[Header("Tweening")]
 	[SerializeField]
-	private float _tweenDuration = 0.5f;
+	private float _pauseTweenDuration = 0.5f;
+	
+	[SerializeField]
+	private float _setttingsTweenDuration = 0.3f;
+
+	// Events
+	[HideInInspector]
+	public UnityEvent OnPauseMenuOpen;
+	
+	[HideInInspector]
+	public UnityEvent OnPauseMenuClose;
 
 	// Private Variables
 	private Sequence _transitionSequence;
@@ -26,6 +43,12 @@ public class PauseMenuController : MonoBehaviour
 	private void Start()
 	{
 		_pauseMenuCanvas.SetActive(false);
+
+		// Make sure to be on the main tab and not the settings tab
+		_mainTabCanvasGroup.interactable = true;
+		_mainTabCanvasGroup.alpha = 1;
+		_settingsTabCanvasGroup.interactable = false;
+		_settingsTabCanvasGroup.alpha = 0;
 	}
 
 	private void OnEnable()
@@ -52,11 +75,13 @@ public class PauseMenuController : MonoBehaviour
 		if (_gamePaused)
 		{
 			_gamePaused = false;
+			OnPauseMenuOpen?.Invoke();
 			ClosePauseMenu();
 		}
 		else
 		{
 			_gamePaused = true;
+			OnPauseMenuClose?.Invoke();
 			OpenPauseMenu();
 		}
 	}
@@ -65,18 +90,32 @@ public class PauseMenuController : MonoBehaviour
 	private void OpenPauseMenu()
 	{
 		_pauseMenuCanvas.SetActive(true);
-		_transitionSequence.Stop();
+
+		// Reset Back to Main Tab
+		_mainTabCanvasGroup.interactable = true;
+		_mainTabCanvasGroup.alpha = 1;
+		_mainTabCanvasGroup.blocksRaycasts = true;
+		_settingsTabCanvasGroup.interactable = false;
+		_settingsTabCanvasGroup.alpha = 0;
+		_settingsTabCanvasGroup.blocksRaycasts = false;
+
+		// Allow buttons to be interactable
 		EnableButtons();
+
+		// Unfreeze time
 		GameManager.Instance.UnfreezeTime();
+
+		// Tweens
+		_transitionSequence.Stop();
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
-			.Group(Tween.Custom(target: this, _progress, 1, _tweenDuration, (target, val) => _progress = val))
+			.Group(Tween.Custom(target: this, _progress, 1, _pauseTweenDuration, (target, val) => _progress = val))
 			.Group(
 				Tween.Custom(
 					target: this,
 					_progress,
 					1,
-					_tweenDuration,
+					_pauseTweenDuration,
 					(target, val) => target._contentCanvasGroup.alpha = val
 				)
 			)
@@ -85,7 +124,7 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_progress,
 					1,
-					_tweenDuration,
+					_pauseTweenDuration,
 					(target, val) => target._background.material.SetFloat("_Progress", val)
 				)
 			);
@@ -98,15 +137,17 @@ public class PauseMenuController : MonoBehaviour
 		_pauseMenuCanvas.SetActive(true);
 		_transitionSequence.Stop();
 		DisableButtons();
+
+		// Tweens
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
-			.Group(Tween.Custom(target: this, _progress, 0, _tweenDuration, (target, val) => _progress = val))
+			.Group(Tween.Custom(target: this, _progress, 0, _pauseTweenDuration, (target, val) => _progress = val))
 			.Group(
 				Tween.Custom(
 					target: this,
 					_progress,
 					0,
-					_tweenDuration,
+					_pauseTweenDuration,
 					(target, val) => target._contentCanvasGroup.alpha = val
 				)
 			)
@@ -115,11 +156,73 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_progress,
 					0,
-					_tweenDuration,
+					_pauseTweenDuration,
 					(target, val) => target._background.material.SetFloat("_Progress", val)
 				)
 			)
 			.ChainCallback(() => _pauseMenuCanvas.SetActive(false));
+	}
+
+	private void OpenSettingsMenu()
+	{
+		_mainTabCanvasGroup.interactable = false;
+		_mainTabCanvasGroup.blocksRaycasts = false;
+		_settingsTabCanvasGroup.interactable = true;
+		_settingsTabCanvasGroup.blocksRaycasts = true;
+
+		// Tweens
+		_transitionSequence.Stop();
+		_transitionSequence = Sequence
+			.Create(useUnscaledTime: true)
+			.Group(
+				Tween.Custom(
+					target: this,
+					_mainTabCanvasGroup.alpha,
+					0,
+					_setttingsTweenDuration,
+					(target, val) => target._mainTabCanvasGroup.alpha = val
+				)
+			)
+			.Chain(
+				Tween.Custom(
+					target: this,
+					_settingsTabCanvasGroup.alpha,
+					1,
+					_setttingsTweenDuration,
+					(target, val) => target._settingsTabCanvasGroup.alpha = val
+				)
+			);
+	}
+
+	private void CloseSettingsMenu()
+	{
+		_mainTabCanvasGroup.interactable = true;
+		_mainTabCanvasGroup.blocksRaycasts = true;
+		_settingsTabCanvasGroup.interactable = false;
+		_settingsTabCanvasGroup.blocksRaycasts = false;
+
+		// Tweens
+		_transitionSequence.Stop();
+		_transitionSequence = Sequence
+			.Create(useUnscaledTime: true)
+			.Group(
+				Tween.Custom(
+					target: this,
+					_settingsTabCanvasGroup.alpha,
+					0,
+					_setttingsTweenDuration,
+					(target, val) => target._settingsTabCanvasGroup.alpha = val
+				)
+			)
+			.Chain(
+				Tween.Custom(
+					target: this,
+					_mainTabCanvasGroup.alpha,
+					1,
+					_setttingsTweenDuration,
+					(target, val) => target._mainTabCanvasGroup.alpha = val
+				)
+			);
 	}
 
 	// Makes buttons interactable
@@ -145,7 +248,13 @@ public class PauseMenuController : MonoBehaviour
 	// Opens the settings menu when button is pressed
 	public void OnSettingsButtonPressed()
 	{
-		// TODO
+		OpenSettingsMenu();
+	}
+
+	// Closes the settings menu when button is pressed
+	public void OnSettingsCloseButtonPressed()
+	{
+		CloseSettingsMenu();
 	}
 
 	// Closes the game when button is pressed
