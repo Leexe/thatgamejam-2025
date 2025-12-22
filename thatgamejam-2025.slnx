@@ -42,9 +42,11 @@
   <Project Path="Unity.VisualScripting.State.Editor.csproj" />
   <Project Path="Unity.Burst.CodeGen.csproj" />
   <Project Path="Unity.VisualScripting.Flow.csproj" />
+  <Project Path="Ink-Libraries.csproj" />
   <Project Path="Unity.PerformanceTesting.csproj" />
   <Project Path="Unity.2D.Tilemap.Extras.Editor.csproj" />
   <Project Path="SingularityGroup.HotReload.Runtime.csproj" />
+  <Project Path="InkEditor.csproj" />
   <Project Path="Unity.TextMeshPro.csproj" />
   <Project Path="Unity.TextMeshPro.Editor.csproj" />
   <Project Path="PsdPlugin.csproj" />
