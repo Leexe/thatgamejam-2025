@@ -63,8 +63,6 @@ public class DialogueController : MonoBehaviour
 		RestartStory_Debug();
 	}
 
-	#endregion
-
 	#region Debug
 
 	[Button("Debug")]
