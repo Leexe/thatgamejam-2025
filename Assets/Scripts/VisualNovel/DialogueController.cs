@@ -233,6 +233,9 @@ public class DialogueController : MonoBehaviour
 		_tagHandlers = new Dictionary<string, Action<string[]>>
 		{
 			{ "ch", HandleCharacterTag },
+			{ "chl", args => HandlePositionedCharacterTag(args, CharacterPosition.Left) },
+			{ "chc", args => HandlePositionedCharacterTag(args, CharacterPosition.Center) },
+			{ "chr", args => HandlePositionedCharacterTag(args, CharacterPosition.Right) },
 			{ "nm", HandleNameTag },
 			{ "bg", HandleBackgroundTag },
 			{ "sx", HandleSFXTag },
@@ -287,13 +290,45 @@ public class DialogueController : MonoBehaviour
 	#region Tag Handlers
 
 	/// <summary>
-	/// Handles character sprite tags.
-	/// Format: #ch_sera_happy_open → characterKey = "sera_happy_open"
+	/// Handles character sprite tags (Legacy/Default). Defaults to Center position.
+	/// Format: #ch_Sera_happy_open → characterKey = "sera_happy_open"
+	/// Format: #ch_Sera_clear → Removes character "sera"
 	/// </summary>
 	private void HandleCharacterTag(string[] args)
 	{
-		string characterKey = string.Join("_", args);
-		_dialogueEvents.UpdateCharacter(characterKey, _characterFadeDuration);
+		HandlePositionedCharacterTag(args, CharacterPosition.Center);
+	}
+
+	/// <summary>
+	/// Handles positioned character tags.
+	/// Format: #chl_Sera_happy → Position: Left, Name: Sera, Key: Sera_happy
+	/// Format: #chl_Sera → Position: Left, Name: Sera, Key: null (Move only)
+	/// Format: #chl_Sera_clear → Remove Sera Sprite
+	/// </summary>
+	private void HandlePositionedCharacterTag(string[] args, CharacterPosition position)
+	{
+		if (args.Length == 0)
+		{
+			return;
+		}
+
+		string name = args[0];
+
+		// Check for clear command
+		if (args.Length > 1 && args[1].ToLower() == "clear")
+		{
+			_dialogueEvents.RemoveCharacter(name, _characterFadeDuration);
+			return;
+		}
+
+		// Reconstruct sprite key from remaining args
+		string spriteKey = "";
+		if (args.Length > 1)
+		{
+			spriteKey = string.Join("_", args);
+		}
+
+		_dialogueEvents.UpdateCharacter(name, position, spriteKey, _characterFadeDuration);
 	}
 
 	/// <summary>

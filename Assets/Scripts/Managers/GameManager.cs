@@ -13,7 +13,7 @@ public class GameManager : PersistantSingleton<GameManager>
 	[HideInInspector]
 	public UnityEvent OnGameResume;
 
-	// Private Varaibles
+	// Private Variables
 	public bool GamePaused { private set; get; } = false;
 
 	private void OnEnable()

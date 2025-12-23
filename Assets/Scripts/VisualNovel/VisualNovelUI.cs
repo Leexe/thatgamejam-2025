@@ -1,7 +1,9 @@
+using System.Collections.Generic;
 using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles the visual novel UI presentation layer.
@@ -12,6 +14,24 @@ public class VisualNovelUI : MonoBehaviour
 	[Header("References")]
 	[SerializeField]
 	private TypewriterComponent _typewriter;
+
+	[Header("Character References")]
+	[SerializeField]
+	private VisualNovelDictionary _visualNovelDictionary;
+
+	[SerializeField]
+	private Image _characterPrefab;
+
+	[SerializeField]
+	private Transform _leftPosition;
+
+	[SerializeField]
+	private Transform _centerPosition;
+
+	[SerializeField]
+	private Transform _rightPosition;
+
+	private readonly Dictionary<string, Image> _activeCharacters = new Dictionary<string, Image>();
 
 	[Header("UI References")]
 	[SerializeField]
@@ -30,6 +50,8 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += ChangeStoryText;
+		GameManager.Instance.DialogueEventsRef.OnCharacterUpdate += UpdateCharacter;
+		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
@@ -48,6 +70,8 @@ public class VisualNovelUI : MonoBehaviour
 		{
 			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= EnableStoryPanel;
 			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
+			GameManager.Instance.DialogueEventsRef.OnCharacterUpdate -= UpdateCharacter;
+			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
 			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
 			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
@@ -110,7 +134,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-	#region Typewriter Control
+	#region Typewriter
 
 	/// <summary>
 	/// Skips the current typewriter animation to show full text immediately.
@@ -134,6 +158,71 @@ public class VisualNovelUI : MonoBehaviour
 	private void ResumeTypewriter()
 	{
 		_typewriter.SetTypewriterSpeed(1f);
+	}
+
+	#endregion
+
+
+	#region Character Display
+
+	private void UpdateCharacter(string name, CharacterPosition position, string spriteKey, float fadeDuration)
+	{
+		Transform targetParent = GetPositionTransform(position);
+
+		if (!_activeCharacters.TryGetValue(name, out Image characterImage))
+		{
+			// Spawn new character
+			characterImage = Instantiate(_characterPrefab, targetParent);
+			characterImage.name = name;
+			_activeCharacters[name] = characterImage;
+
+			// Initialize alpha to 0 for fade-in
+			Color color = characterImage.color;
+			color.a = 0;
+			characterImage.color = color;
+			Tween.Alpha(characterImage, 1f, fadeDuration);
+		}
+		else
+		{
+			// Move existing character if parent changed
+			if (characterImage.transform.parent != targetParent)
+			{
+				characterImage.transform.SetParent(targetParent);
+			}
+		}
+
+		// Update Sprite if key provided
+		if (!string.IsNullOrEmpty(spriteKey))
+		{
+			if (_visualNovelDictionary.CharacterSpriteMap.TryGetValue(spriteKey, out Sprite newSprite))
+			{
+				characterImage.sprite = newSprite;
+				characterImage.preserveAspect = true;
+			}
+			else
+			{
+				Debug.LogWarning($"[VisualNovelUI] Character sprite not found for key: {spriteKey}");
+			}
+		}
+	}
+
+	private void RemoveCharacter(string name, float fadeDuration)
+	{
+		if (_activeCharacters.TryGetValue(name, out Image characterImage))
+		{
+			_activeCharacters.Remove(name);
+			Tween.Alpha(characterImage, 0f, fadeDuration).OnComplete(() => Destroy(characterImage.gameObject));
+		}
+	}
+
+	private Transform GetPositionTransform(CharacterPosition position)
+	{
+		return position switch
+		{
+			CharacterPosition.Left => _leftPosition,
+			CharacterPosition.Right => _rightPosition,
+			_ => _centerPosition,
+		};
 	}
 
 	#endregion

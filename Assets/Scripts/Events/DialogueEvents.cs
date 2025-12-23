@@ -3,6 +3,16 @@ using System.Collections.Generic;
 using Ink.Runtime;
 
 /// <summary>
+/// Screen positions for character sprites.
+/// </summary>
+public enum CharacterPosition
+{
+	Left,
+	Center,
+	Right,
+}
+
+/// <summary>
 /// Central event hub for dialogue-related communication between systems.
 /// </summary>
 public class DialogueEvents
@@ -12,16 +22,36 @@ public class DialogueEvents
 	/// <summary>
 	/// Event fired when character sprite should change.
 	/// </summary>
-	public Action<string, float> OnCharacterUpdate;
+	/// <summary>
+	/// Event fired when character sprite should change or move.
+	/// </summary>
+	public Action<string, CharacterPosition, string, float> OnCharacterUpdate;
 
 	/// <summary>
 	/// Updates the displayed character sprite.
 	/// </summary>
-	/// <param name="characterKey">Key identifying the character sprite to display.</param>
+	/// <param name="name">Name of the character.</param>
+	/// <param name="position">Screen position (Left, Center, Right).</param>
+	/// <param name="spriteKey">Key identifying the sprite. If null/empty, only moves the character.</param>
 	/// <param name="fadeDuration">Duration of the fade transition in seconds.</param>
-	public void UpdateCharacter(string characterKey, float fadeDuration)
+	public void UpdateCharacter(string name, CharacterPosition position, string spriteKey, float fadeDuration)
 	{
-		OnCharacterUpdate?.Invoke(characterKey, fadeDuration);
+		OnCharacterUpdate?.Invoke(name, position, spriteKey, fadeDuration);
+	}
+
+	/// <summary>
+	/// Event fired when a character should be removed.
+	/// </summary>
+	public Action<string, float> OnCharacterRemove;
+
+	/// <summary>
+	/// Removes a character from the screen.
+	/// </summary>
+	/// <param name="name">Name of the character to remove.</param>
+	/// <param name="fadeDuration">Duration of the fade out.</param>
+	public void RemoveCharacter(string name, float fadeDuration)
+	{
+		OnCharacterRemove?.Invoke(name, fadeDuration);
 	}
 
 	/// <summary>

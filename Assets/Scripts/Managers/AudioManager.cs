@@ -173,7 +173,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	/// <summary>
 	/// Creates an event instance of a sound and attaches it to a game object
 	/// </summary>
-	/// <param name="sound"><The FMOD event reference of the sound/param>
+	/// <param name="sound">The FMOD event reference of the sound</param>
 	/// <param name="gameObject">The game object to attach to</param>
 	/// <returns>Returns a cached event instance of the sound, that can be used to modify the sound at runtime</returns>
 	public EventInstance CreateInstance(EventReference sound, GameObject gameObject)
@@ -353,7 +353,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	{
 		PlayerPrefs.SetFloat("MasterVolume", _masterVolume);
 		PlayerPrefs.SetFloat("MusicVolume", _musicVolume);
-		PlayerPrefs.SetFloat("AmbienceVolume", _ambientVolume);
+		PlayerPrefs.SetFloat("AmbientVolume", _ambientVolume);
 		PlayerPrefs.SetFloat("GameVolume", _gameVolume);
 	}
 
@@ -362,7 +362,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 
 	public float GetMusicVolume() => _musicVolume;
 
-	public float GetAmbienceVolume() => _musicVolume;
+	public float GetAmbienceVolume() => _ambientVolume;
 
 	public float GetGameVolume() => _gameVolume;
 
