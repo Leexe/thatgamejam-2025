@@ -2,94 +2,221 @@ using System;
 using System.Collections.Generic;
 using Ink.Runtime;
 
-public class DialogueEvents {
-	/** Visual Events **/
+/// <summary>
+/// Central event hub for dialogue-related communication between systems.
+/// </summary>
+public class DialogueEvents
+{
+	#region Visual Events
+
+	/// <summary>
+	/// Event fired when character sprite should change.
+	/// </summary>
 	public Action<string, float> OnCharacterUpdate;
 
-	public void UpdateCharacter(string characterKey, float fadeDuration) 
-  {
+	/// <summary>
+	/// Updates the displayed character sprite.
+	/// </summary>
+	/// <param name="characterKey">Key identifying the character sprite to display.</param>
+	/// <param name="fadeDuration">Duration of the fade transition in seconds.</param>
+	public void UpdateCharacter(string characterKey, float fadeDuration)
+	{
 		OnCharacterUpdate?.Invoke(characterKey, fadeDuration);
 	}
 
-	public Action<string, bool> OnNameUpdate;
+	/// <summary>
+	/// Event fired when speaker name should change.
+	/// </summary>
+	public Action<string> OnNameUpdate;
 
-	public void UpdateName(string name, bool isLeft = true) 
-  {
-		OnNameUpdate?.Invoke(name, isLeft);
+	/// <summary>
+	/// Updates the displayed speaker name.
+	/// </summary>
+	/// <param name="name">Name to display, or empty string to hide.</param>
+	public void UpdateName(string name)
+	{
+		OnNameUpdate?.Invoke(name);
 	}
 
-	/** Story Events **/
+	/// <summary>
+	/// Event fired when background should change.
+	/// </summary>
+	public Action<string> OnBackgroundUpdate;
 
+	/// <summary>
+	/// Updates the displayed background.
+	/// </summary>
+	/// <param name="backgroundKey">Key identifying the background to display.</param>
+	public void UpdateBackground(string backgroundKey)
+	{
+		OnBackgroundUpdate?.Invoke(backgroundKey);
+	}
+
+	#endregion
+
+	#region Story Events
+
+	/// <summary>
+	/// Event fired when dialogue should start at a specific knot.
+	/// </summary>
 	public Action<string> OnStartDialogue;
 
-	public void StartDialogue(string knotName) 
-  {
+	/// <summary>
+	/// Starts the dialogue from a specified Ink knot.
+	/// </summary>
+	/// <param name="knotName">Name of the Ink knot to start from.</param>
+	public void StartDialogue(string knotName)
+	{
 		OnStartDialogue?.Invoke(knotName);
 	}
 
+	/// <summary>
+	/// Event fired when dialogue ends.
+	/// </summary>
 	public Action OnEndDialogue;
 
-	public void EndStory() 
-  {
+	/// <summary>
+	/// Signals that the story has ended.
+	/// </summary>
+	public void EndStory()
+	{
 		OnEndDialogue?.Invoke();
 	}
 
+	/// <summary>
+	/// Event fired when a new dialogue line should be displayed.
+	/// </summary>
 	public Action<string> OnDisplayDialogue;
 
-	public void DisplayDialogue(string dialogue) {
+	/// <summary>
+	/// Displays a line of dialogue text.
+	/// </summary>
+	/// <param name="dialogue">The dialogue text to display.</param>
+	public void DisplayDialogue(string dialogue)
+	{
 		OnDisplayDialogue?.Invoke(dialogue);
 	}
 
+	#endregion
+
+	#region Typewriter Events
+
+	/// <summary>
+	/// Event fired when typewriter animation should be skipped.
+	/// </summary>
 	public Action OnTypewriterSkip;
 
-	public void SkipTypewriter() {
+	/// <summary>
+	/// Skips the current typewriter animation to show full text immediately.
+	/// </summary>
+	public void SkipTypewriter()
+	{
 		OnTypewriterSkip?.Invoke();
 	}
 
+	/// <summary>
+	/// Event fired when typewriter animation completes.
+	/// </summary>
 	public Action OnTypewriterFinish;
 
-	public void TypewriterFinished() {
+	/// <summary>
+	/// Signals that the typewriter animation has finished.
+	/// </summary>
+	public void TypewriterFinished()
+	{
 		OnTypewriterFinish?.Invoke();
 	}
 
-	/** Choice Events **/
+	#endregion
 
+	#region Choice Events
+
+	/// <summary>
+	/// Event fired when choices should be displayed.
+	/// </summary>
 	public Action<List<Choice>> OnDisplayChoices;
 
-	public void DisplayChoices(List<Choice> choiceList) {
+	/// <summary>
+	/// Displays a list of choices for the player to select.
+	/// </summary>
+	/// <param name="choiceList">List of Ink Choice objects to display.</param>
+	public void DisplayChoices(List<Choice> choiceList)
+	{
 		OnDisplayChoices?.Invoke(choiceList);
 	}
 
+	/// <summary>
+	/// Event fired when a choice is selected.
+	/// </summary>
 	public Action<int> OnChoiceSelect;
 
-	public void UpdateChoiceSelected(int choiceIndex) {
+	/// <summary>
+	/// Signals that a choice has been selected.
+	/// </summary>
+	/// <param name="choiceIndex">Index of the selected choice.</param>
+	public void UpdateChoiceSelected(int choiceIndex)
+	{
 		OnChoiceSelect?.Invoke(choiceIndex);
 	}
 
+	/// <summary>
+	/// Event fired when choices should be hidden.
+	/// </summary>
 	public Action OnDisableChoices;
 
-	public void DisableChoices() {
+	/// <summary>
+	/// Hides all currently displayed choices.
+	/// </summary>
+	public void DisableChoices()
+	{
 		OnDisableChoices?.Invoke();
 	}
 
-	/** Music Events **/
+	#endregion
 
+	#region Audio Events
+
+	/// <summary>
+	/// Event fired when music should change.
+	/// </summary>
 	public Action<string> OnPlayMusic;
 
-	public void PlayMusic(string musicKey) {
+	/// <summary>
+	/// Plays or switches to a music track.
+	/// </summary>
+	/// <param name="musicKey">Key identifying the music track.</param>
+	public void PlayMusic(string musicKey)
+	{
 		OnPlayMusic?.Invoke(musicKey);
 	}
 
+	/// <summary>
+	/// Event fired when a sound effect should play.
+	/// </summary>
 	public Action<string> OnPlaySFX;
 
-	public void PlaySFX(string sfxKey) {
+	/// <summary>
+	/// Plays a one-shot sound effect.
+	/// </summary>
+	/// <param name="sfxKey">Key identifying the sound effect.</param>
+	public void PlaySFX(string sfxKey)
+	{
 		OnPlaySFX?.Invoke(sfxKey);
 	}
 
+	/// <summary>
+	/// Event fired when ambience should change.
+	/// </summary>
 	public Action<string> OnPlayAmbience;
 
-	public void PlayAmbience(string ambienceKey) {
+	/// <summary>
+	/// Plays or switches to an ambient sound.
+	/// </summary>
+	/// <param name="ambienceKey">Key identifying the ambience track.</param>
+	public void PlayAmbience(string ambienceKey)
+	{
 		OnPlayAmbience?.Invoke(ambienceKey);
 	}
-}
 
+	#endregion
+}

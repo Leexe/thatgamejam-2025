@@ -3,128 +3,132 @@ using PrimeTween;
 using TMPro;
 using UnityEngine;
 
+/// <summary>
+/// Handles the visual novel UI presentation layer.
+/// Subscribes to DialogueEvents for decoupled communication with DialogueController.
+/// </summary>
 public class VisualNovelUI : MonoBehaviour
 {
-  [Header("References")]
-  [SerializeField] private TypewriterComponent _typewriter;
-  
-  [Header("UI References")]
+	[Header("References")]
+	[SerializeField] private TypewriterComponent _typewriter;
+
+	[Header("UI References")]
 	[SerializeField] private CanvasGroup _canvasGroup;
-	[SerializeField] private GameObject _leftNamePanel;
-	[SerializeField] private GameObject _rightNamePanel;
-	[SerializeField] private TextMeshProUGUI _leftNameText;
-	[SerializeField] private TextMeshProUGUI _rightNameText;
+	[SerializeField] private GameObject _namePanel;
+	[SerializeField] private TextMeshProUGUI _nameText;
 
-  public enum SpeakerSide
-  {
-    Left, // Speaker is on the left
-    Right, // Speaker is on the right
-    None, // Narration, no one is speaking
-  }
-
-  private SpeakerSide _currentSide = SpeakerSide.None;
-
-  private void OnEnable() {
+	/// <summary>
+	/// Subscribes to dialogue and game events when enabled.
+	/// </summary>
+	private void OnEnable()
+	{
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += ChangeStoryText;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
-    GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
-    GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
-    GameManager.Instance.OnGameResume.AddListener(ResumeTypewriter);
+		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
+		GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
+		GameManager.Instance.OnGameResume.AddListener(ResumeTypewriter);
 
 		_typewriter.onTextShowed.AddListener(GameManager.Instance.DialogueEventsRef.TypewriterFinished);
 	}
 
-	private void OnDisable() {
-		if (GameManager.Instance) {
+	/// <summary>
+	/// Unsubscribes from dialogue and game events when disabled.
+	/// </summary>
+	private void OnDisable()
+	{
+		if (GameManager.Instance)
+		{
 			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= EnableStoryPanel;
-      GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
-      GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
-      GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
-      GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
-      GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);
-      GameManager.Instance.OnGameResume.RemoveListener(ResumeTypewriter);
+			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
+			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
+			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
+			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
+			GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);
+			GameManager.Instance.OnGameResume.RemoveListener(ResumeTypewriter);
 		}
 	}
 
-  private void ChangeNameText(string name, bool isLeft = true) {
-    bool differentName = false;
-    bool differentSpeakerSide = false;
+	#region UI Updates
 
-    if (string.IsNullOrEmpty(name))
-    {
-      _currentSide = SpeakerSide.None;
-    }
-    else if (isLeft)
-    {
-      differentName = _leftNameText.text != name;
-      differentSpeakerSide = _currentSide != SpeakerSide.Left;
-      _currentSide = SpeakerSide.Left;
-    }
-    else
-    {
-      differentName = _rightNameText.text != name;
-      differentSpeakerSide = _currentSide != SpeakerSide.Right;
-      _currentSide = SpeakerSide.Right;
-    }
-
-    if (differentName || differentSpeakerSide || _currentSide == SpeakerSide.None)
-    {
-      UpdateNameBox(_currentSide, name);
-    }
+	/// <summary>
+	/// Updates the speaker name display.
+	/// Shows the name panel if a name is provided, hides it otherwise.
+	/// </summary>
+	/// <param name="name">Speaker name to display, or empty/null to hide.</param>
+	private void ChangeNameText(string name)
+	{
+		if (string.IsNullOrEmpty(name))
+		{
+			_namePanel.SetActive(false);
+		}
+		else
+		{
+			_namePanel.SetActive(true);
+			_nameText.text = name;
+		}
 	}
 
-  private void ChangeStoryText(string line) {
+	/// <summary>
+	/// Displays a line of dialogue using the typewriter effect.
+	/// </summary>
+	/// <param name="line">The dialogue line to display.</param>
+	private void ChangeStoryText(string line)
+	{
 		_typewriter.ShowText(line);
 	}
-  
-  private void EnableStoryPanel(string knotName) {
-    float fadeDuration = 1f;
+
+	/// <summary>
+	/// Fades in the story panel when dialogue begins.
+	/// </summary>
+	/// <param name="knotName">Name of the Ink knot being started (unused for UI).</param>
+	private void EnableStoryPanel(string knotName)
+	{
+		float fadeDuration = 1f;
 		Tween.Custom(_canvasGroup.alpha, 1, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
 		_canvasGroup.blocksRaycasts = false;
 	}
 
-	private void DisableStoryPanel() {
-    float fadeDuration = 1f;
+	/// <summary>
+	/// Fades out the story panel when dialogue ends.
+	/// </summary>
+	private void DisableStoryPanel()
+	{
+		float fadeDuration = 1f;
 		Tween.Custom(_canvasGroup.alpha, 0, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
 		_canvasGroup.blocksRaycasts = false;
 	}
 
-  private void UpdateNameBox(SpeakerSide speakerSide = SpeakerSide.None, string name = "")
-  {
-    if (speakerSide == SpeakerSide.None)
-    {
-      _leftNamePanel.SetActive(false);
-      _rightNamePanel.SetActive(false);
-    }
-    else if (speakerSide == SpeakerSide.Left)
-    {
-      _leftNamePanel.SetActive(true);
-      _rightNamePanel.SetActive(false);
-      _leftNameText.text = name;
-    }
-    else if (speakerSide == SpeakerSide.Right)
-    {
-      _leftNamePanel.SetActive(false);
-      _rightNamePanel.SetActive(true);
-      _rightNameText.text = name;
-    }
-  }
+	#endregion
 
-  private void SkipTypewriter() {
+	#region Typewriter Control
+
+	/// <summary>
+	/// Skips the current typewriter animation to show full text immediately.
+	/// </summary>
+	private void SkipTypewriter()
+	{
 		_typewriter.SkipTypewriter();
 	}
 
-  private void PauseTypewriter()
-  {
-    _typewriter.SetTypewriterSpeed(0f);
-  }
+	/// <summary>
+	/// Pauses the typewriter animation. Called when game is paused.
+	/// </summary>
+	private void PauseTypewriter()
+	{
+		_typewriter.SetTypewriterSpeed(0f);
+	}
 
-  private void ResumeTypewriter()
-  {
-    _typewriter.SetTypewriterSpeed(1f);
-  }
+	/// <summary>
+	/// Resumes the typewriter animation. Called when game is unpaused.
+	/// </summary>
+	private void ResumeTypewriter()
+	{
+		_typewriter.SetTypewriterSpeed(1f);
+	}
+
+	#endregion
 }

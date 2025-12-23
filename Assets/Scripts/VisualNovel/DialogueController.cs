@@ -1,32 +1,40 @@
-using UnityEngine;
-using Ink.Runtime;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using Ink.Runtime;
 using Sirenix.OdinInspector;
+using UnityEngine;
 
-public class DialogueController : MonoBehaviour {
+/// <summary>
+/// Acts as the bridge between Ink narrative scripts and Unity gameplay systems.
+/// </summary>
+public class DialogueController : MonoBehaviour
+{
 	[Header("References")]
-	[SerializeField] 
+	[SerializeField]
 	private TextAsset _inkJson;
 
-	private DialogueEvents _dialogueEvents;
-
 	[Header("Transition Times")]
-	[SerializeField] 
+	[SerializeField]
 	private float _characterFadeDuration = 0.5f;
 
+	private DialogueEvents _dialogueEvents;
 	private Story _story;
 	private bool _storyPlaying = false;
 	private bool _typewriterPlaying = false;
 	private int _choiceIndex = -1;
 	private bool _needToDisplayChoices = false;
+
 	private bool ChoicesAvailable => _story.currentChoices.Count > 0;
 
-	private void Awake() 
+	private void Awake()
 	{
 		_story = new Story(_inkJson.text);
+		InitializeTagHandlers();
 	}
 
-	private void OnEnable() {
+	private void OnEnable()
+	{
 		_dialogueEvents = GameManager.Instance.DialogueEventsRef;
 		_dialogueEvents.OnStartDialogue += StartStory;
 		_dialogueEvents.OnChoiceSelect += ContinueStory;
@@ -35,9 +43,10 @@ public class DialogueController : MonoBehaviour {
 		InputManager.Instance.OnContinueStoryPerformed.AddListener(ContinueStory);
 	}
 
-	private void OnDisable() 
+	private void OnDisable()
 	{
-		if (GameManager.Instance) {
+		if (GameManager.Instance)
+		{
 			_dialogueEvents.OnStartDialogue -= StartStory;
 			_dialogueEvents.OnChoiceSelect -= ContinueStory;
 			_dialogueEvents.OnTypewriterFinish -= SetTypewriterInactive;
@@ -54,146 +63,307 @@ public class DialogueController : MonoBehaviour {
 		RestartStory_Debug();
 	}
 
+	#endregion
+
+	#region Debug
+
 	[Button("Debug")]
 	private void RestartStory_Debug()
 	{
 		StartStory("Beginning");
 	}
 
-	private void StartStory(string knotName) {
-		if (_storyPlaying) {
+	#endregion
+
+	#region Story Managers
+
+	/// <summary>
+	/// Starts the story from a specified Ink knot.
+	/// </summary>
+	private void StartStory(string knotName)
+	{
+		if (_storyPlaying)
+		{
 			return;
 		}
 
 		_storyPlaying = true;
 
-		if (knotName == "") {
-			Debug.LogError("KnotName is Empty");
+		if (knotName == "")
+		{
+			Debug.LogError("[DialogueController] KnotName is Empty");
 		}
-		else {
+		else
+		{
 			_story.ChoosePathString(knotName);
 		}
 
 		ContinueStory();
 	}
 
-	private void ContinueStory() {
-		// If the background is transition do not continue story
-		if (!_storyPlaying || GameManager.Instance.GamePaused) {
+	/// <summary>
+	/// Advances the story to the next line or handles player interaction.
+	/// </summary>
+	private void ContinueStory()
+	{
+		// Don't continue if story isn't playing or game is paused
+		if (!_storyPlaying || GameManager.Instance.GamePaused)
+		{
 			return;
 		}
 
-		// If the typewriter is playing, then skip the dialogue and break from the function
-		if (_typewriterPlaying) {
+		// If typewriter is playing, skip it instead of continuing
+		if (_typewriterPlaying)
+		{
 			_dialogueEvents.SkipTypewriter();
 			return;
 		}
 
-		// If a choice was selected, proceed down the path chosen
-		if (ChoicesAvailable && _choiceIndex != -1) {
+		// If a choice was selected, proceed down that path
+		if (ChoicesAvailable && _choiceIndex != -1)
+		{
 			_story.ChooseChoiceIndex(_choiceIndex);
 			_choiceIndex = -1;
 		}
 
-		if (_story.canContinue) {
+		if (_story.canContinue)
+		{
 			string story = _story.Continue();
 			_typewriterPlaying = true;
 
-			// Parse Tags
-			if (_story.currentTags.Count > 0) {
+			// Parse any tags on this line
+			if (_story.currentTags.Count > 0)
+			{
 				ParseTags(_story.currentTags);
 			}
 
-			// If the background is changing, wait until it finishes before continuing
-      DisplayDialogue();
+			DisplayDialogue();
 		}
-		else if (!ChoicesAvailable) {
+		else if (!ChoicesAvailable)
+		{
 			ExitStory();
 		}
 	}
 
-	private void DisplayDialogue() {
-		string storyLine = _story.currentText;
-		// If the next line is blank, try to find a line that isn't blank and display it
-		while (IsLineBlank(storyLine) && _story.canContinue) {
-			storyLine = _story.Continue();
-
-			while (IsLineBlank(storyLine) && _story.canContinue) {
-				storyLine = _story.Continue();
-			}
-
-			if (IsLineBlank(storyLine) && !_story.canContinue) {
-				ExitStory();
-			}
-		}
-
-		// Display a choice if possible
-		if (ChoicesAvailable) {
-			_needToDisplayChoices = true;
-		}
-
-		_dialogueEvents.DisplayDialogue(storyLine);
-	}
-
-	private void ParseTags(List<string> tags) {
-		foreach (string tag in tags) {
-			string identifier = tag.Substring(0, 2).ToLower();
-			string context = tag.Substring(3);
-
-			if (identifier == "ch") {
-				_dialogueEvents.UpdateCharacter(context, _characterFadeDuration);
-			}
-			else if (identifier == "nm") {
-				if (context[0] == 'r')
-				{
-					context = tag.Substring(5);
-					_dialogueEvents.UpdateName(context, false);
-				}
-				else if (context[0] == 'l')
-				{
-					context = tag.Substring(5);
-					_dialogueEvents.UpdateName(context, true);
-				}
-				else
-				{
-					_dialogueEvents.UpdateName("");
-				}
-			}
-			else if (identifier == "sx") {
-				_dialogueEvents.PlaySFX(context);
-			}
-			else if (identifier == "ms") {
-				_dialogueEvents.PlayMusic(context);
-			}
-			else if (identifier == "ab") {
-				_dialogueEvents.PlayAmbience(context);
-			}
-		}
-	}
-
-	private void DisplayChoices() {
-		if (_needToDisplayChoices) {
-			_dialogueEvents.DisplayChoices(_story.currentChoices);
-		}
-	}
-
-	private void ContinueStory(int choiceIndex) {
+	/// <summary>
+	/// Continues the story after a choice is selected.
+	/// </summary>
+	/// <param name="choiceIndex">Index of the selected choice.</param>
+	private void ContinueStory(int choiceIndex)
+	{
 		_choiceIndex = choiceIndex;
 		ContinueStory();
 	}
 
-	private void ExitStory() {
+	/// <summary>
+	/// Ends the current story and cleans up state.
+	/// </summary>
+	private void ExitStory()
+	{
 		_storyPlaying = false;
 		_typewriterPlaying = false;
 
 		GameManager.Instance.DialogueEventsRef.EndStory();
 	}
 
-	private void SetTypewriterInactive() {
+	#endregion
+
+	#region Dialogue Display
+
+	/// <summary>
+	/// Displays the current dialogue line, skipping blank lines.
+	/// </summary>
+	private void DisplayDialogue()
+	{
+		string storyLine = _story.currentText;
+
+		// Skip blank lines
+		while (IsLineBlank(storyLine) && _story.canContinue)
+		{
+			storyLine = _story.Continue();
+
+			while (IsLineBlank(storyLine) && _story.canContinue)
+			{
+				storyLine = _story.Continue();
+			}
+
+			if (IsLineBlank(storyLine) && !_story.canContinue)
+			{
+				ExitStory();
+			}
+		}
+
+		// Flag choices for display after typewriter finishes
+		if (ChoicesAvailable)
+		{
+			_needToDisplayChoices = true;
+		}
+
+		_dialogueEvents.DisplayDialogue(storyLine);
+	}
+
+	/// <summary>
+	/// Displays choices if they are pending after typewriter completes.
+	/// </summary>
+	private void DisplayChoices()
+	{
+		if (_needToDisplayChoices)
+		{
+			_dialogueEvents.DisplayChoices(_story.currentChoices);
+		}
+	}
+
+	/// <summary>
+	/// Marks the typewriter as inactive when animation completes.
+	/// </summary>
+	private void SetTypewriterInactive()
+	{
 		_typewriterPlaying = false;
 	}
 
-	private bool IsLineBlank(string line) {
+	/// <summary>
+	/// Checks if a line of text is blank or only whitespace.
+	/// </summary>
+	/// <param name="line">The line to check.</param>
+	/// <returns>True if the line is blank, false otherwise.</returns>
+	private bool IsLineBlank(string line)
+	{
 		return line.Trim().Equals("") || line.Trim().Equals("\n");
 	}
+
+	#endregion
+
+	#region Tag Parsing
+
+	private Dictionary<string, Action<string[]>> _tagHandlers;
+
+	/// <summary>
+	/// Initializes the tag handler dictionary with all supported tag types.
+	/// Called in Awake after story initialization.
+	/// </summary>
+	private void InitializeTagHandlers()
+	{
+		_tagHandlers = new Dictionary<string, Action<string[]>>
+		{
+			{ "ch", HandleCharacterTag },
+			{ "nm", HandleNameTag },
+			{ "bg", HandleBackgroundTag },
+			{ "sx", HandleSFXTag },
+			{ "ms", HandleMusicTag },
+			{ "ab", HandleAmbienceTag },
+		};
+	}
+
+	/// <summary>
+	/// Parses a list of Ink tags and dispatches them to appropriate handlers.
+	/// Tags use underscore-delimited format: "identifier_arg1_arg2"
+	/// </summary>
+	/// <param name="tags">List of tag strings from the current Ink line.</param>
+	private void ParseTags(List<string> tags)
+	{
+		foreach (string tag in tags)
+		{
+			string[] parts = tag.Split('_');
+			if (parts.Length < 1)
+			{
+				Debug.LogWarning($"[DialogueController] Empty tag encountered: {tag}");
+				continue;
+			}
+
+			string identifier = parts[0].ToLower();
+			string[] args = parts.Skip(1).ToArray();
+
+			ProcessTag(identifier, args, tag);
+		}
+	}
+
+	/// <summary>
+	/// Dispatches a parsed tag to its registered handler.
+	/// </summary>
+	/// <param name="identifier">The tag type identifier (e.g., "ch", "nm").</param>
+	/// <param name="args">Arguments following the identifier.</param>
+	/// <param name="rawTag">Original tag string for error reporting.</param>
+	private void ProcessTag(string identifier, string[] args, string rawTag)
+	{
+		if (_tagHandlers.TryGetValue(identifier, out Action<string[]> handler))
+		{
+			handler(args);
+		}
+		else
+		{
+			Debug.LogWarning($"[DialogueController] Unknown tag identifier: '{identifier}' in tag: '{rawTag}'");
+		}
+	}
+
+	#endregion
+
+	#region Tag Handlers
+
+	/// <summary>
+	/// Handles character sprite tags.
+	/// Format: #ch_sera_happy_open → characterKey = "sera_happy_open"
+	/// </summary>
+	private void HandleCharacterTag(string[] args)
+	{
+		string characterKey = string.Join("_", args);
+		_dialogueEvents.UpdateCharacter(characterKey, _characterFadeDuration);
+	}
+
+	/// <summary>
+	/// Handles speaker name tags.
+	/// Format: #nm_Sera → Shows "Sera", #nm_none → Hides name
+	/// </summary>
+	private void HandleNameTag(string[] args)
+	{
+		if (args.Length == 0 || args[0].ToLower() == "none")
+		{
+			_dialogueEvents.UpdateName("");
+			return;
+		}
+
+		string name = args[0];
+		_dialogueEvents.UpdateName(name);
+	}
+
+	/// <summary>
+	/// Handles background change tags.
+	/// Format: #bg_park → backgroundKey = "park"
+	/// </summary>
+	private void HandleBackgroundTag(string[] args)
+	{
+		string backgroundKey = string.Join("_", args);
+		_dialogueEvents.UpdateBackground(backgroundKey);
+	}
+
+	/// <summary>
+	/// Handles sound effect tags.
+	/// Format: #sx_door → sfxKey = "door"
+	/// </summary>
+	private void HandleSFXTag(string[] args)
+	{
+		string sfxKey = string.Join("_", args);
+		_dialogueEvents.PlaySFX(sfxKey);
+	}
+
+	/// <summary>
+	/// Handles music change tags.
+	/// Format: #ms_morning → musicKey = "morning"
+	/// </summary>
+	private void HandleMusicTag(string[] args)
+	{
+		string musicKey = string.Join("_", args);
+		_dialogueEvents.PlayMusic(musicKey);
+	}
+
+	/// <summary>
+	/// Handles ambience change tags.
+	/// Format: #ab_park → ambienceKey = "park"
+	/// </summary>
+	private void HandleAmbienceTag(string[] args)
+	{
+		string ambienceKey = string.Join("_", args);
+		_dialogueEvents.PlayAmbience(ambienceKey);
+	}
+
+	#endregion
 }
