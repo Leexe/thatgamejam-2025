@@ -28,20 +28,20 @@ public class PauseMenuSounds : MonoBehaviour {
 		_musicVolumeSlider.value = AudioManager.Instance.GetMusicVolume();
 	}
 
-    private void OnEnable()
-    {
-        _pauseMenuController.OnPauseMenuClose.AddListener(SaveAllSoundPrefs);
-    }
+	private void OnEnable()
+	{
+		_pauseMenuController.OnPauseMenuClose.AddListener(SaveAllSoundPrefs);
+	}
 
-    private void OnDisable()
-    {
-        if (_pauseMenuController)
-        {
-            _pauseMenuController.OnPauseMenuClose.RemoveListener(SaveAllSoundPrefs);
-        }
-    }
+	private void OnDisable()
+	{
+		if (_pauseMenuController)
+		{
+			_pauseMenuController.OnPauseMenuClose.RemoveListener(SaveAllSoundPrefs);
+		}
+	}
 
-    private void PlayButtonClickSound() {
+	private void PlayButtonClickSound() {
 		// AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Click_sfx, Vector3.zero);
 	}
 

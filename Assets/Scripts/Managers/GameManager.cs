@@ -1,11 +1,57 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameManager : PersistantSingleton<GameManager>
-{   
+{          
+    // Events
+    [HideInInspector]
+    public DialogueEvents DialogueEventsRef = new DialogueEvents();
+
+    [HideInInspector]
+    public UnityEvent OnGamePaused;
+
+    [HideInInspector]
+    public UnityEvent OnGameResume;
+
+    // Private Varaibles
+    public bool GamePaused {private set; get;} = false;
+
+    private void OnEnable()
+	{
+		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
+	}
+
+	private void OnDisable()
+	{
+		if (InputManager.Instance)
+		{
+			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseGame);
+		}
+	}
+
+    // Toggles between pausing and unpausing the game
+    public void TogglePauseGame()
+    {
+        if (GamePaused)
+        {
+            // Resume Game
+            GamePaused = false;
+            OnGameResume?.Invoke();
+            UnfreezeTime();
+        }
+        else
+        {
+            // Pause Game
+            GamePaused = true;
+            OnGamePaused?.Invoke();
+            FreezeTime();
+        }
+    }
+
     /// <summary>
     /// Unpauses the game, sets the time scale to 0
     /// </summary>
-    public void FreezeTime()
+    private void FreezeTime()
     {
         Time.timeScale = 0f;
     }
@@ -13,7 +59,7 @@ public class GameManager : PersistantSingleton<GameManager>
     /// <summary>
     /// Unpauses the game, sets the time scale to 1
     /// </summary>
-    public void UnfreezeTime()
+    private void UnfreezeTime()
     {
         Time.timeScale = 1f;
     }

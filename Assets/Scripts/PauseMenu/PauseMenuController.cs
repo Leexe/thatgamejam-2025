@@ -1,6 +1,6 @@
-using Animancer;
 using PrimeTween;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
@@ -38,7 +38,6 @@ public class PauseMenuController : MonoBehaviour
 	// Private Variables
 	private Sequence _transitionSequence;
 	private float _progress = 0f;
-	private bool _gamePaused = false;
 
 	private void Start()
 	{
@@ -53,14 +52,16 @@ public class PauseMenuController : MonoBehaviour
 
 	private void OnEnable()
 	{
-		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseMenu);
+		GameManager.Instance.OnGameResume.AddListener(UnpauseGame);
+		GameManager.Instance.OnGamePaused.AddListener(PauseGame);
 	}
 
 	private void OnDisable()
 	{
 		if (InputManager.Instance)
 		{
-			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseMenu);
+			GameManager.Instance.OnGameResume.RemoveListener(UnpauseGame);
+			GameManager.Instance.OnGamePaused.RemoveListener(PauseGame);
 		}
 	}
 
@@ -69,21 +70,18 @@ public class PauseMenuController : MonoBehaviour
 		_transitionSequence.Stop();
 	}
 
-	// Switches between opening the menu and closing the menu
-	private void TogglePauseMenu()
+	// Pauses the Game
+	private void PauseGame()
 	{
-		if (_gamePaused)
-		{
-			_gamePaused = false;
-			OnPauseMenuOpen?.Invoke();
-			ClosePauseMenu();
-		}
-		else
-		{
-			_gamePaused = true;
-			OnPauseMenuClose?.Invoke();
-			OpenPauseMenu();
-		}
+		OnPauseMenuOpen?.Invoke();
+		OpenPauseMenu();
+	}
+
+	// Unpauses the Game
+	private void UnpauseGame()
+	{
+		OnPauseMenuClose?.Invoke();
+		ClosePauseMenu();
 	}
 
 	// Plays menu open transitions and pauses the game time
@@ -101,9 +99,6 @@ public class PauseMenuController : MonoBehaviour
 
 		// Allow buttons to be interactable
 		EnableButtons();
-
-		// Unfreeze time
-		GameManager.Instance.UnfreezeTime();
 
 		// Tweens
 		_transitionSequence.Stop();
@@ -133,7 +128,6 @@ public class PauseMenuController : MonoBehaviour
 	// Plays menu close transitions and resumes the game time
 	private void ClosePauseMenu()
 	{
-		GameManager.Instance.UnfreezeTime();
 		_pauseMenuCanvas.SetActive(true);
 		_transitionSequence.Stop();
 		DisableButtons();
@@ -242,7 +236,7 @@ public class PauseMenuController : MonoBehaviour
 	// Resumes the game when button is pressed
 	public void OnResumeButtonPressed()
 	{
-		TogglePauseMenu();
+		GameManager.Instance.TogglePauseGame();
 	}
 
 	// Opens the settings menu when button is pressed

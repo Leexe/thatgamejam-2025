@@ -9,7 +9,7 @@ public class InputManager : PersistantSingleton<InputManager>
 
 	// Actions
 	private InputAction _movementAction;
-	private InputAction _interactAction;
+	private InputAction _continueStoryAction;
 	private InputAction _escapeAction;
 
 	// Events
@@ -17,7 +17,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	public UnityEvent<Vector2> OnMovement;
 
 	[HideInInspector]
-	public UnityEvent OnInteractPerformed;
+	public UnityEvent OnContinueStoryPerformed;
 
 	[HideInInspector]
 	public UnityEvent OnEscapePerformed;
@@ -48,7 +48,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	private void SetupInputActions()
 	{
 		_movementAction = InputSystem.actions.FindAction("Movement");
-		_interactAction = InputSystem.actions.FindAction("Interact");
+		_continueStoryAction = InputSystem.actions.FindAction("ContinueStory");
 		_escapeAction = InputSystem.actions.FindAction("Escape");
 	}
 
@@ -63,7 +63,7 @@ public class InputManager : PersistantSingleton<InputManager>
 	{
 		UpdateMovementVector(_movementAction, ref OnMovement);
 
-		AddEventToAction(_interactAction, ref OnInteractPerformed);
+		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
 	}
 
