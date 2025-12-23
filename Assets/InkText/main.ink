@@ -12,9 +12,9 @@ You rub your eyes as you turn on the lights, then look into the mirror.
 You brush your teeth, take a shower, and change into a hoodie and sweatpants. 
 You look kinda homeless, but you don't have the time to find anything else to wear before your date. 
 Before you walk out the door, you check if you have everything: your phone, your keys, your wallet...
-Hello Aldric-sama #nm_r_God
-No, my name is Baldge #nm_l_Baldge
-bro... #nm_r_God
+Hello Aldric-sama #nm_God
+No, my name is Baldge #nm_Baldge
+bro... #nm_God
 ... #nm_none
 ...asjdajsd
 End

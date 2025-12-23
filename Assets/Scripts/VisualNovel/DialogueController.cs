@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ink.Runtime;
-using Sirenix.OdinInspector;
 using UnityEngine;
 
 /// <summary>
@@ -60,18 +59,8 @@ public class DialogueController : MonoBehaviour
 
 	private void Start()
 	{
-		RestartStory_Debug();
-	}
-
-	#region Debug
-
-	[Button("Debug")]
-	private void RestartStory_Debug()
-	{
 		StartStory("Beginning");
 	}
-
-	#endregion
 
 	#region Story Managers
 
