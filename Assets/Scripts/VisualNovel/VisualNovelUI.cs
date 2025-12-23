@@ -10,12 +10,18 @@ using UnityEngine;
 public class VisualNovelUI : MonoBehaviour
 {
 	[Header("References")]
-	[SerializeField] private TypewriterComponent _typewriter;
+	[SerializeField]
+	private TypewriterComponent _typewriter;
 
 	[Header("UI References")]
-	[SerializeField] private CanvasGroup _canvasGroup;
-	[SerializeField] private GameObject _namePanel;
-	[SerializeField] private TextMeshProUGUI _nameText;
+	[SerializeField]
+	private CanvasGroup _canvasGroup;
+
+	[SerializeField]
+	private GameObject _namePanel;
+
+	[SerializeField]
+	private TextMeshProUGUI _nameText;
 
 	/// <summary>
 	/// Subscribes to dialogue and game events when enabled.

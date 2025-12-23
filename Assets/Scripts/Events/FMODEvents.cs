@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FMODEvents : Singleton<FMODEvents>
 {
-	// Music 
+	// Music
 
 	// [field: SerializeField]
 	// [field: FoldoutGroup("Music", expanded: true)]

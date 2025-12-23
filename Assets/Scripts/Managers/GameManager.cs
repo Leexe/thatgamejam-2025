@@ -2,21 +2,21 @@ using UnityEngine;
 using UnityEngine.Events;
 
 public class GameManager : PersistantSingleton<GameManager>
-{          
-    // Events
-    [HideInInspector]
-    public DialogueEvents DialogueEventsRef = new DialogueEvents();
+{
+	// Events
+	[HideInInspector]
+	public DialogueEvents DialogueEventsRef = new DialogueEvents();
 
-    [HideInInspector]
-    public UnityEvent OnGamePaused;
+	[HideInInspector]
+	public UnityEvent OnGamePaused;
 
-    [HideInInspector]
-    public UnityEvent OnGameResume;
+	[HideInInspector]
+	public UnityEvent OnGameResume;
 
-    // Private Varaibles
-    public bool GamePaused {private set; get;} = false;
+	// Private Varaibles
+	public bool GamePaused { private set; get; } = false;
 
-    private void OnEnable()
+	private void OnEnable()
 	{
 		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
 	}
@@ -29,46 +29,46 @@ public class GameManager : PersistantSingleton<GameManager>
 		}
 	}
 
-    // Toggles between pausing and unpausing the game
-    public void TogglePauseGame()
-    {
-        if (GamePaused)
-        {
-            // Resume Game
-            GamePaused = false;
-            OnGameResume?.Invoke();
-            UnfreezeTime();
-        }
-        else
-        {
-            // Pause Game
-            GamePaused = true;
-            OnGamePaused?.Invoke();
-            FreezeTime();
-        }
-    }
+	// Toggles between pausing and unpausing the game
+	public void TogglePauseGame()
+	{
+		if (GamePaused)
+		{
+			// Resume Game
+			GamePaused = false;
+			OnGameResume?.Invoke();
+			UnfreezeTime();
+		}
+		else
+		{
+			// Pause Game
+			GamePaused = true;
+			OnGamePaused?.Invoke();
+			FreezeTime();
+		}
+	}
 
-    /// <summary>
-    /// Unpauses the game, sets the time scale to 0
-    /// </summary>
-    private void FreezeTime()
-    {
-        Time.timeScale = 0f;
-    }
+	/// <summary>
+	/// Unpauses the game, sets the time scale to 0
+	/// </summary>
+	private void FreezeTime()
+	{
+		Time.timeScale = 0f;
+	}
 
-    /// <summary>
-    /// Unpauses the game, sets the time scale to 1
-    /// </summary>
-    private void UnfreezeTime()
-    {
-        Time.timeScale = 1f;
-    }
+	/// <summary>
+	/// Unpauses the game, sets the time scale to 1
+	/// </summary>
+	private void UnfreezeTime()
+	{
+		Time.timeScale = 1f;
+	}
 
-    /// <summary>
-    /// Exits game by quitting the application 
-    /// </summary>
-    public void ExitGame()
-    {
-        Application.Quit();
-    }
+	/// <summary>
+	/// Exits game by quitting the application
+	/// </summary>
+	public void ExitGame()
+	{
+		Application.Quit();
+	}
 }

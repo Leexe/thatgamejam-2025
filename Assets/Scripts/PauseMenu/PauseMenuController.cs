@@ -24,14 +24,14 @@ public class PauseMenuController : MonoBehaviour
 	[Header("Tweening")]
 	[SerializeField]
 	private float _pauseTweenDuration = 0.5f;
-	
+
 	[SerializeField]
 	private float _setttingsTweenDuration = 0.3f;
 
 	// Events
 	[HideInInspector]
 	public UnityEvent OnPauseMenuOpen;
-	
+
 	[HideInInspector]
 	public UnityEvent OnPauseMenuClose;
 
