@@ -3,7 +3,6 @@ using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 /// <summary>
 /// Handles the visual novel UI presentation layer.
@@ -20,7 +19,7 @@ public class VisualNovelUI : MonoBehaviour
 	private VisualNovelDictionary _visualNovelDictionary;
 
 	[SerializeField]
-	private Image _characterPrefab;
+	private GameObject _characterPrefab;
 
 	[SerializeField]
 	private Transform _leftPosition;
@@ -31,7 +30,7 @@ public class VisualNovelUI : MonoBehaviour
 	[SerializeField]
 	private Transform _rightPosition;
 
-	private readonly Dictionary<string, Image> _activeCharacters = new Dictionary<string, Image>();
+	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
 
 	[Header("UI References")]
 	[SerializeField]
@@ -43,9 +42,10 @@ public class VisualNovelUI : MonoBehaviour
 	[SerializeField]
 	private TextMeshProUGUI _nameText;
 
-	/// <summary>
-	/// Subscribes to dialogue and game events when enabled.
-	/// </summary>
+	[Header("Data")]
+	[SerializeField]
+	private float _defaultFadeOutDuration = 1f;
+
 	private void OnEnable()
 	{
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
@@ -54,6 +54,7 @@ public class VisualNovelUI : MonoBehaviour
 		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
+		GameManager.Instance.DialogueEventsRef.OnEndDialogue += RemoveAllCharacters;
 		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
 		GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
 		GameManager.Instance.OnGameResume.AddListener(ResumeTypewriter);
@@ -61,9 +62,6 @@ public class VisualNovelUI : MonoBehaviour
 		_typewriter.onTextShowed.AddListener(GameManager.Instance.DialogueEventsRef.TypewriterFinished);
 	}
 
-	/// <summary>
-	/// Unsubscribes from dialogue and game events when disabled.
-	/// </summary>
 	private void OnDisable()
 	{
 		if (GameManager.Instance)
@@ -74,10 +72,16 @@ public class VisualNovelUI : MonoBehaviour
 			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
 			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
+			GameManager.Instance.DialogueEventsRef.OnEndDialogue += RemoveAllCharacters;
 			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
 			GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);
 			GameManager.Instance.OnGameResume.RemoveListener(ResumeTypewriter);
 		}
+	}
+
+	private void Start()
+	{
+		RemoveAllCharacters(0.01f);
 	}
 
 	#region UI Updates
@@ -162,33 +166,52 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-
 	#region Character Display
 
+	/// <summary>
+	/// Updates a character's state, including spawning, moving, or changing sprite.
+	/// </summary>
+	/// <param name="name">Name of the character.</param>
+	/// <param name="position">Target screen position (left, right, center).</param>
+	/// <param name="spriteKey">Key for the new sprite, or null/empty to keep current.</param>
+	/// <param name="fadeDuration">Duration for fade transitions.</param>
 	private void UpdateCharacter(string name, CharacterPosition position, string spriteKey, float fadeDuration)
 	{
 		Transform targetParent = GetPositionTransform(position);
 
-		if (!_activeCharacters.TryGetValue(name, out Image characterImage))
+		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
 			// Spawn new character
-			characterImage = Instantiate(_characterPrefab, targetParent);
-			characterImage.name = name;
-			_activeCharacters[name] = characterImage;
+			character = Instantiate(_characterPrefab, targetParent).GetComponent<VNCharacter>();
+			if (character == null)
+			{
+				Debug.LogWarning("[VisualNovelUI] Character Prefab Doesn't Have VNCharacter");
+				return;
+			}
+			character.ChangeObjectName(name);
+			_activeCharacters[name] = character;
 
 			// Initialize alpha to 0 for fade-in
-			Color color = characterImage.color;
-			color.a = 0;
-			characterImage.color = color;
-			Tween.Alpha(characterImage, 1f, fadeDuration);
+			character.SetTransparency(0f);
+			character.FadeIn(fadeDuration);
 		}
 		else
 		{
 			// Move existing character if parent changed
-			if (characterImage.transform.parent != targetParent)
+			if (character.transform.parent != targetParent)
 			{
-				characterImage.transform.SetParent(targetParent);
+				character.transform.SetParent(targetParent);
 			}
+		}
+
+		// Handle flipping based on position
+		if (position == CharacterPosition.Right)
+		{
+			character.transform.localScale = new Vector3(
+				character.transform.localScale.x * -1,
+				character.transform.localScale.y,
+				character.transform.localScale.z
+			);
 		}
 
 		// Update Sprite if key provided
@@ -196,8 +219,7 @@ public class VisualNovelUI : MonoBehaviour
 		{
 			if (_visualNovelDictionary.CharacterSpriteMap.TryGetValue(spriteKey, out Sprite newSprite))
 			{
-				characterImage.sprite = newSprite;
-				characterImage.preserveAspect = true;
+				character.SwitchSprite(newSprite);
 			}
 			else
 			{
@@ -206,15 +228,77 @@ public class VisualNovelUI : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Removes a specific character from the screen.
+	/// </summary>
+	/// <param name="name">Name of the character to remove.</param>
+	/// <param name="fadeDuration">Duration of fade out.</param>
 	private void RemoveCharacter(string name, float fadeDuration)
 	{
-		if (_activeCharacters.TryGetValue(name, out Image characterImage))
+		if (_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
 			_activeCharacters.Remove(name);
-			Tween.Alpha(characterImage, 0f, fadeDuration).OnComplete(() => Destroy(characterImage.gameObject));
+			character.FadeOutAndDestroy(fadeDuration);
 		}
 	}
 
+	/// <summary>
+	/// Cleans up all character sprites from the screen
+	/// </summary>
+	/// <param name="fadeDuration">How long it takes to fade out and delete all characters</param>
+	private void RemoveAllCharacters(float fadeDuration = 1f)
+	{
+		var activeTransforms = new HashSet<Transform>();
+
+		foreach (VNCharacter character in _activeCharacters.Values)
+		{
+			if (character != null)
+			{
+				activeTransforms.Add(character.transform);
+				character.FadeOutAndDestroy(fadeDuration);
+			}
+		}
+		_activeCharacters.Clear();
+
+		// Helper to destroy any objects not tracked by the system
+		void DestroyOrphans(Transform parent)
+		{
+			if (parent == null)
+			{
+				return;
+			}
+			for (int i = 0; i < parent.childCount; i++)
+			{
+				Transform child = parent.GetChild(i);
+				if (!activeTransforms.Contains(child))
+				{
+					Destroy(child.gameObject);
+				}
+			}
+		}
+
+		DestroyOrphans(_leftPosition);
+		DestroyOrphans(_centerPosition);
+		DestroyOrphans(_rightPosition);
+	}
+
+	/// <summary>
+	/// Cleans up all character sprites from the screen using the default fade duration.
+	/// </summary>
+	private void RemoveAllCharacters()
+	{
+		RemoveAllCharacters(_defaultFadeOutDuration);
+	}
+
+	#endregion
+
+	#region Helper
+
+	/// <summary>
+	/// Helper to get the Transform corresponding to a CharacterPosition enum.
+	/// </summary>
+	/// <param name="position">The position enum value.</param>
+	/// <returns>The transform for that position.</returns>
 	private Transform GetPositionTransform(CharacterPosition position)
 	{
 		return position switch

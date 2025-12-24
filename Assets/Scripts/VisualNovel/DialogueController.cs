@@ -323,9 +323,10 @@ public class DialogueController : MonoBehaviour
 
 		// Reconstruct sprite key from remaining args
 		string spriteKey = "";
-		if (args.Length > 1)
+		if (args.Length >= 1)
 		{
 			spriteKey = string.Join("_", args);
+			Debug.Log(spriteKey);
 		}
 
 		_dialogueEvents.UpdateCharacter(name, position, spriteKey, _characterFadeDuration);

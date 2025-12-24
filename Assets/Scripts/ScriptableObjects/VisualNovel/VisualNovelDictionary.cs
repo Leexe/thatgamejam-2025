@@ -3,6 +3,7 @@ using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "VisualNovelDictionary", menuName = "ScriptableObjects/VisualNovelDictionary", order = 1)]
 public class VisualNovelDictionary : SerializedScriptableObject
 {
 	public readonly Dictionary<string, EventReference> MusicMap;
