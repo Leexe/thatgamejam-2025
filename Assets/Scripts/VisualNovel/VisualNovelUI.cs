@@ -50,6 +50,9 @@ public class VisualNovelUI : MonoBehaviour
 	[SerializeField]
 	private float _defaultFadeOutDuration = 1f;
 
+	[SerializeField]
+	private float _slideOffset = 100f;
+
 	// Private Variables
 	private Tween _canvasAlphaTween;
 
@@ -191,7 +194,6 @@ public class VisualNovelUI : MonoBehaviour
 		// This character has not been created yet, instantiate it
 		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
-			// Spawn new character
 			character = Instantiate(_characterPrefab, targetParent).GetComponent<VNCharacter>();
 			if (character == null)
 			{
@@ -203,12 +205,15 @@ public class VisualNovelUI : MonoBehaviour
 
 			// Initialize alpha to 0 for fade-in
 			character.SetTransparency(0f);
-			character.FadeIn(fadeDuration);
 
+			// Tween characters to their new positions
 			positionSnapshots[character] = character.GetPosition();
-
-			// Animate existing characters in the group
 			AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
+
+			// Slide character from the side
+			float slideOffset = (CharacterPosition.Right == position) ? _slideOffset : -_slideOffset;
+			character.SlideIn(slideOffset, fadeDuration);
+			character.FadeIn(fadeDuration);
 		}
 		else
 		{
@@ -280,16 +285,20 @@ public class VisualNovelUI : MonoBehaviour
 			Transform layoutGroup = GetLayoutGroupParent(character);
 			Dictionary<VNCharacter, Vector3> snapshots = SnapshotLayoutGroupPositions(layoutGroup);
 
-			// Remove the character being removed
+			// Move character to a new parent that doesn't have a layout group
 			character.SetParent(_nonLayoutParent);
 			character.transform.position = snapshots[character];
 			snapshots.Remove(character);
 
 			_activeCharacters.Remove(name);
-			character.FadeOutAndDestroy(fadeDuration);
 
 			// Animate remaining characters
 			AnimateLayoutGroupCharacters(snapshots, fadeDuration);
+
+			// Slide out, fade out, and destroy
+			float slideOffset = (layoutGroup == _rightPosition) ? _slideOffset : -_slideOffset;
+			character.SlideOut(slideOffset, fadeDuration);
+			character.FadeOutAndDestroy(fadeDuration);
 		}
 	}
 
@@ -306,6 +315,11 @@ public class VisualNovelUI : MonoBehaviour
 			if (character != null)
 			{
 				activeTransforms.Add(character.transform);
+
+				Transform parent = character.transform.parent;
+				float slideOffset = (parent == _rightPosition) ? _slideOffset : -_slideOffset;
+				character.SlideOut(slideOffset, fadeDuration);
+
 				character.FadeOutAndDestroy(fadeDuration);
 			}
 		}

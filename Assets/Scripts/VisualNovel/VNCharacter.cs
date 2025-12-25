@@ -47,7 +47,7 @@ public class VNCharacter : MonoBehaviour
 	{
 		if (fadeDuration == 0f)
 		{
-			SetTransparency(0f);
+			SetTransparency(1f);
 		}
 		else
 		{
@@ -65,6 +65,51 @@ public class VNCharacter : MonoBehaviour
 		{
 			Tween.Alpha(_image, 0f, fadeDuration);
 		}
+	}
+
+	/// <summary>
+	/// Animates the character sliding in from the side while fading in.
+	/// </summary>
+	/// <param name="slideOffset">Horizontal offset to slide from (positive = from right, negative = from left).</param>
+	/// <param name="duration">Duration of the slide and fade animation.</param>
+	public void SlideIn(float slideOffset, float duration = 1f)
+	{
+		// Complete any existing position tween
+		_positionTween.Complete();
+
+		// Store the target position (current layout position)
+		Vector3 targetPosition = transform.position;
+
+		// Set starting position with offset
+		Vector3 startPosition = targetPosition + new Vector3(slideOffset, 0f, 0f);
+		transform.position = startPosition;
+
+		// Ignore layout during animation
+		_layoutElement.ignoreLayout = true;
+
+		// Start combined slide and fade animations
+		_positionTween = Tween
+			.Position(transform, targetPosition, duration, Ease.OutCubic)
+			.OnComplete(() => _layoutElement.ignoreLayout = false);
+	}
+
+	/// <summary>
+	/// Animates the character sliding out from the current position.
+	/// </summary>
+	/// <param name="slideOffset">Horizontal offset to slide to.</param>
+	/// <param name="duration">Duration of the slide animation.</param>
+	public void SlideOut(float slideOffset, float duration = 1f)
+	{
+		// Complete any existing position tween
+		_positionTween.Complete();
+
+		// Ignore layout during animation
+		_layoutElement.ignoreLayout = true;
+
+		// Move to target
+		Vector3 targetPosition = transform.position + new Vector3(slideOffset, 0f, 0f);
+
+		_positionTween = Tween.Position(transform, targetPosition, duration, Ease.InCubic);
 	}
 
 	public void FadeOutAndDestroy(float fadeDuration = 1f)

@@ -16,11 +16,10 @@ MonoBehaviour:
     SerializedFormat: 2
     SerializedBytes: 
     ReferencedUnityObjects:
-    - {fileID: 21300000, guid: 3d4bd32b801dd4de5878b5618195940f, type: 3}
-    - {fileID: 21300000, guid: 7cacbc8a4d1d64647b7e31d5442eee59, type: 3}
-    - {fileID: 21300000, guid: dba3dea2093e94e25b7720774183ccad, type: 3}
-    - {fileID: 21300000, guid: 143c8efd0e8084e65bea9ec5286de8f4, type: 3}
-    - {fileID: 21300000, guid: 040afe37ce0be412d80d97923a4d2bfc, type: 3}
+    - {fileID: 21300000, guid: 03247b9469a554fd291ff826dee16612, type: 3}
+    - {fileID: 21300000, guid: 287f46b5ad49541319a806113ab8e6e6, type: 3}
+    - {fileID: 21300000, guid: 35f0ec4b358514508a7140757f8c7d26, type: 3}
+    - {fileID: 21300000, guid: 802295abad7564e218334b1daf00dff1, type: 3}
     - {fileID: 21300000, guid: 5f0d9b7d51abc44e79b24b00146a38d8, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
@@ -72,7 +71,7 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 12
-      Data: 6
+      Data: 5
     - Name: 
       Entry: 7
       Data: 
@@ -90,7 +89,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Aldric
+      Data: Dude
     - Name: $v
       Entry: 10
       Data: 1
@@ -102,7 +101,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Samurai1
+      Data: Samurai
     - Name: $v
       Entry: 10
       Data: 2
@@ -114,7 +113,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Samurai2
+      Data: Sniper
     - Name: $v
       Entry: 10
       Data: 3
@@ -126,22 +125,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: Sniper
-    - Name: $v
-      Entry: 10
-      Data: 4
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
       Data: Eldric
     - Name: $v
       Entry: 10
-      Data: 5
+      Data: 4
     - Name: 
       Entry: 8
       Data: 

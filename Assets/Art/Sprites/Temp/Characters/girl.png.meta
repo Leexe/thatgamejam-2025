@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: dba3dea2093e94e25b7720774183ccad
+guid: 03247b9469a554fd291ff826dee16612
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3916173562773415503
-    second: Samurai1_0
+      213: 9101278813714116849
+    second: girl_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Samurai1_0
+      name: girl_0
       rect:
         serializedVersion: 2
-        x: 450
-        y: 360
-        width: 555
-        height: 1033
+        x: 427
+        y: 420
+        width: 448
+        height: 948
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 1b95d18b4e4f6a9c0800000000000000
-      internalID: -3916173562773415503
+      spriteID: 1f0f7354cdc3e4e70800000000000000
+      internalID: 9101278813714116849
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Samurai1_0: -3916173562773415503
+      girl_0: 9101278813714116849
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

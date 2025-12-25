@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 143c8efd0e8084e65bea9ec5286de8f4
+guid: 802295abad7564e218334b1daf00dff1
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -6843446186438148892
-    second: Samurai2_0
+      213: -7627819191866995224
+    second: sniper_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Samurai2_0
+      name: sniper_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 279
-        width: 979
-        height: 1001
+        x: 328
+        y: 461
+        width: 578
+        height: 1096
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4ec3ad993f13701a0800000000000000
-      internalID: -6843446186438148892
+      spriteID: 8ed4cd1ebda842690800000000000000
+      internalID: -7627819191866995224
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Samurai2_0: -6843446186438148892
+      sniper_0: -7627819191866995224
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

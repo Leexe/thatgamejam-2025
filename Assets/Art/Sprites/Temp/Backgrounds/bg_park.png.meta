@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 7cacbc8a4d1d64647b7e31d5442eee59
+guid: c8551d69c524544eba711ebc7fd1a380
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 3673648781301541460
-    second: dude1_0
+      213: 5207768761363955858
+    second: bg_park_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -37,7 +37,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -113,13 +113,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: dude1_0
+      name: bg_park_0
       rect:
         serializedVersion: 2
-        x: 415
-        y: 295
-        width: 465
-        height: 1177
+        x: 0
+        y: 0
+        width: 1280
+        height: 720
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 45a660f4a1c6bf230800000000000000
-      internalID: 3673648781301541460
+      spriteID: 2908975b816b54840800000000000000
+      internalID: 5207768761363955858
       vertices: []
       indices: 
       edges: []
@@ -148,7 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      dude1_0: 3673648781301541460
+      bg_park_0: 5207768761363955858
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
