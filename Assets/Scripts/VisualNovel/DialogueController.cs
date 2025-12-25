@@ -59,6 +59,7 @@ public class DialogueController : MonoBehaviour
 
 	private void Start()
 	{
+		_dialogueEvents.RemoveAllCharacters(0f);
 		StartStory("Testing");
 	}
 

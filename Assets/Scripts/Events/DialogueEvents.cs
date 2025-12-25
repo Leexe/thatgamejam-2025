@@ -57,15 +57,15 @@ public class DialogueEvents
 	/// <summary>
 	/// Event fired when all characters should be removed.
 	/// </summary>
-	public Action OnAllCharacterRemove;
+	public Action<float> OnAllCharacterRemove;
 
 	/// <summary>
 	/// Removes all characters from the screen.
 	/// </summary>
 	/// <param name="fadeDuration">Duration of the fade out.</param>
-	public void RemoveAllCharacters(float fadeDuration)
+	public void RemoveAllCharacters(float fadeDuration = 0f)
 	{
-		OnAllCharacterRemove?.Invoke();
+		OnAllCharacterRemove?.Invoke(fadeDuration);
 	}
 
 	/// <summary>

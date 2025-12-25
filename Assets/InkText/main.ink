@@ -31,6 +31,6 @@ End -> END
 "..." #chr_Samurai1 #nm_Dude
 "..." #chc_Samurai1 #nm_Dude
 "..." #chc_Samurai1 #nm_Dude
-"..." #chl_Samurai1 #nm_Dude
+"..." #chl_Samurai1 #nm_Dude #ch_Aldric_Clear
 End #nm_none
 -> END

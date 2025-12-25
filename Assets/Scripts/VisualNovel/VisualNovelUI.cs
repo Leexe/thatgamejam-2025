@@ -3,6 +3,7 @@ using Febucci.TextAnimatorForUnity;
 using PrimeTween;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 /// <summary>
 /// Handles the visual novel UI presentation layer.
@@ -29,6 +30,9 @@ public class VisualNovelUI : MonoBehaviour
 
 	[SerializeField]
 	private Transform _rightPosition;
+
+	[SerializeField]
+	private Transform _nonLayoutParent; // Parent for character sprites that are about to get deleted
 
 	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
 
@@ -58,6 +62,7 @@ public class VisualNovelUI : MonoBehaviour
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += RemoveAllCharacters;
+		GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove += RemoveAllCharacters;
 		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
 		GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
 		GameManager.Instance.OnGameResume.AddListener(ResumeTypewriter);
@@ -75,16 +80,12 @@ public class VisualNovelUI : MonoBehaviour
 			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
 			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
-			GameManager.Instance.DialogueEventsRef.OnEndDialogue += RemoveAllCharacters;
+			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= RemoveAllCharacters;
+			GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove -= RemoveAllCharacters;
 			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
 			GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);
 			GameManager.Instance.OnGameResume.RemoveListener(ResumeTypewriter);
 		}
-	}
-
-	private void Start()
-	{
-		RemoveAllCharacters(0.01f);
 	}
 
 	#region UI Updates
@@ -187,6 +188,7 @@ public class VisualNovelUI : MonoBehaviour
 		// Snapshot positions of existing characters in target group before layout changes
 		Dictionary<VNCharacter, Vector3> positionSnapshots = SnapshotLayoutGroupPositions(targetParent);
 
+		// This character has not been created yet, instantiate it
 		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
 			// Spawn new character
@@ -203,19 +205,29 @@ public class VisualNovelUI : MonoBehaviour
 			character.SetTransparency(0f);
 			character.FadeIn(fadeDuration);
 
+			positionSnapshots[character] = character.GetPosition();
+
 			// Animate existing characters in the group
 			AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
 		}
 		else
 		{
 			// Move existing character if parent changed
-			if (character.transform.parent != targetParent)
+			if (GetLayoutGroupParent(character) != targetParent)
 			{
 				// Snapshot the source group before moving
-				Transform sourceParent = character.transform.parent;
+				Transform sourceParent = GetLayoutGroupParent(character);
 				Dictionary<VNCharacter, Vector3> sourceSnapshots = SnapshotLayoutGroupPositions(sourceParent);
 
-				character.TweenToParent(targetParent, fadeDuration);
+				// Save old position and move to new parent
+				Vector3 oldPosition = character.GetPosition();
+				character.SetParent(targetParent);
+
+				// Add moving character to target group snapshots with old position
+				positionSnapshots[character] = oldPosition;
+
+				// Remove moving character from source snapshots
+				sourceSnapshots.Remove(character);
 
 				// Animate both groups
 				AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
@@ -227,7 +239,15 @@ public class VisualNovelUI : MonoBehaviour
 		if (position == CharacterPosition.Right)
 		{
 			character.transform.localScale = new Vector3(
-				character.transform.localScale.x * -1,
+				-Mathf.Abs(character.transform.localScale.x),
+				character.transform.localScale.y,
+				character.transform.localScale.z
+			);
+		}
+		else if (position == CharacterPosition.Left)
+		{
+			character.transform.localScale = new Vector3(
+				Mathf.Abs(character.transform.localScale.x),
 				character.transform.localScale.y,
 				character.transform.localScale.z
 			);
@@ -256,8 +276,20 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		if (_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
+			// Snapshot positions of characters in layout group
+			Transform layoutGroup = GetLayoutGroupParent(character);
+			Dictionary<VNCharacter, Vector3> snapshots = SnapshotLayoutGroupPositions(layoutGroup);
+
+			// Remove the character being removed
+			character.SetParent(_nonLayoutParent);
+			character.transform.position = snapshots[character];
+			snapshots.Remove(character);
+
 			_activeCharacters.Remove(name);
 			character.FadeOutAndDestroy(fadeDuration);
+
+			// Animate remaining characters
+			AnimateLayoutGroupCharacters(snapshots, fadeDuration);
 		}
 	}
 
@@ -286,12 +318,19 @@ public class VisualNovelUI : MonoBehaviour
 			{
 				return;
 			}
-			for (int i = 0; i < parent.childCount; i++)
+			for (int i = parent.childCount - 1; i >= 0; i--)
 			{
 				Transform child = parent.GetChild(i);
 				if (!activeTransforms.Contains(child))
 				{
-					Destroy(child.gameObject);
+					if (fadeDuration == 0)
+					{
+						DestroyImmediate(child.gameObject);
+					}
+					else
+					{
+						Destroy(child.gameObject);
+					}
 				}
 			}
 		}
@@ -325,7 +364,7 @@ public class VisualNovelUI : MonoBehaviour
 		{
 			if (character.Value != null && character.Value.transform.parent == layoutGroup)
 			{
-				snapshots[character.Value] = character.Value.transform.position;
+				snapshots[character.Value] = character.Value.GetPosition();
 			}
 		}
 		return snapshots;
@@ -338,11 +377,36 @@ public class VisualNovelUI : MonoBehaviour
 	/// <param name="duration">Duration of the tween animation.</param>
 	private void AnimateLayoutGroupCharacters(Dictionary<VNCharacter, Vector3> snapshots, float duration)
 	{
+		if (snapshots.Count == 0)
+		{
+			return;
+		}
+
+		// Get the layout group from the first character
+		Transform layoutGroup = null;
 		foreach (KeyValuePair<VNCharacter, Vector3> character in snapshots)
 		{
 			if (character.Key != null)
 			{
-				character.Key.TweenFromParent(character.Value, duration);
+				layoutGroup = character.Key.transform.parent;
+				break;
+			}
+		}
+		if (layoutGroup == null)
+		{
+			return;
+		}
+
+		// Rebuild layout once to get all target positions
+		LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup as RectTransform);
+
+		// Capture target positions and start tweens
+		foreach (KeyValuePair<VNCharacter, Vector3> character in snapshots)
+		{
+			if (character.Key != null)
+			{
+				Vector3 targetPosition = character.Key.transform.position;
+				character.Key.TweenPositions(character.Value, targetPosition, duration);
 			}
 		}
 	}
@@ -360,6 +424,16 @@ public class VisualNovelUI : MonoBehaviour
 			CharacterPosition.Right => _rightPosition,
 			_ => _centerPosition,
 		};
+	}
+
+	/// <summary>
+	/// Get the layout group parent from a VNCharacter.
+	/// </summary>
+	/// <param name="character">The character to get the layout group parent from.</param>
+	/// <returns>The layout group parent.</returns>
+	private Transform GetLayoutGroupParent(VNCharacter character)
+	{
+		return character.transform.parent;
 	}
 
 	#endregion
