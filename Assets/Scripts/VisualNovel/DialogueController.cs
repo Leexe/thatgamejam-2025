@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ink.Runtime;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 /// <summary>
@@ -60,7 +61,19 @@ public class DialogueController : MonoBehaviour
 	private void Start()
 	{
 		_dialogueEvents.RemoveAllCharacters(0f);
+	}
+
+	[Title("Debug:")]
+	[Button]
+	private void StartTestingStory()
+	{
 		StartStory("Testing");
+	}
+
+	[Button]
+	private void StartChudStory()
+	{
+		StartStory("Beginning");
 	}
 
 	#region Story Managers
@@ -291,7 +304,7 @@ public class DialogueController : MonoBehaviour
 	#region Tag Handlers
 
 	/// <summary>
-	/// Handles character sprite tags (Legacy/Default). Defaults to Center position.
+	/// Handles character sprite tags. Defaults to Center position.
 	/// Format: #ch_Sera_happy_open → characterKey = "sera_happy_open"
 	/// Format: #ch_Sera_clear → Removes character "sera"
 	/// </summary>
