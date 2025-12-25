@@ -46,6 +46,9 @@ public class VisualNovelUI : MonoBehaviour
 	[SerializeField]
 	private float _defaultFadeOutDuration = 1f;
 
+	// Private Variables
+	private Tween _canvasAlphaTween;
+
 	private void OnEnable()
 	{
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
@@ -120,7 +123,8 @@ public class VisualNovelUI : MonoBehaviour
 	private void EnableStoryPanel(string knotName)
 	{
 		float fadeDuration = 1f;
-		Tween.Custom(_canvasGroup.alpha, 1, fadeDuration, newVal => _canvasGroup.alpha = newVal);
+		_canvasAlphaTween.Stop();
+		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 1, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
 		_canvasGroup.blocksRaycasts = false;
 	}
@@ -131,7 +135,8 @@ public class VisualNovelUI : MonoBehaviour
 	private void DisableStoryPanel()
 	{
 		float fadeDuration = 1f;
-		Tween.Custom(_canvasGroup.alpha, 0, fadeDuration, newVal => _canvasGroup.alpha = newVal);
+		_canvasAlphaTween.Stop();
+		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 0, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
 		_canvasGroup.blocksRaycasts = false;
 	}
@@ -179,6 +184,9 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		Transform targetParent = GetPositionTransform(position);
 
+		// Snapshot positions of existing characters in target group before layout changes
+		Dictionary<VNCharacter, Vector3> positionSnapshots = SnapshotLayoutGroupPositions(targetParent);
+
 		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
 		{
 			// Spawn new character
@@ -194,13 +202,24 @@ public class VisualNovelUI : MonoBehaviour
 			// Initialize alpha to 0 for fade-in
 			character.SetTransparency(0f);
 			character.FadeIn(fadeDuration);
+
+			// Animate existing characters in the group
+			AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
 		}
 		else
 		{
 			// Move existing character if parent changed
 			if (character.transform.parent != targetParent)
 			{
-				character.transform.SetParent(targetParent);
+				// Snapshot the source group before moving
+				Transform sourceParent = character.transform.parent;
+				Dictionary<VNCharacter, Vector3> sourceSnapshots = SnapshotLayoutGroupPositions(sourceParent);
+
+				character.TweenToParent(targetParent, fadeDuration);
+
+				// Animate both groups
+				AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
+				AnimateLayoutGroupCharacters(sourceSnapshots, fadeDuration);
 			}
 		}
 
@@ -293,6 +312,40 @@ public class VisualNovelUI : MonoBehaviour
 	#endregion
 
 	#region Helper
+
+	/// <summary>
+	/// Captures the current positions of all characters in a layout group.
+	/// </summary>
+	/// <param name="layoutGroup">The layout group transform to snapshot.</param>
+	/// <returns>Dictionary mapping characters to their current positions.</returns>
+	private Dictionary<VNCharacter, Vector3> SnapshotLayoutGroupPositions(Transform layoutGroup)
+	{
+		var snapshots = new Dictionary<VNCharacter, Vector3>();
+		foreach (KeyValuePair<string, VNCharacter> character in _activeCharacters)
+		{
+			if (character.Value != null && character.Value.transform.parent == layoutGroup)
+			{
+				snapshots[character.Value] = character.Value.transform.position;
+			}
+		}
+		return snapshots;
+	}
+
+	/// <summary>
+	/// Animates all characters from their snapshotted positions to their new layout positions.
+	/// </summary>
+	/// <param name="snapshots">Dictionary of characters and their old positions.</param>
+	/// <param name="duration">Duration of the tween animation.</param>
+	private void AnimateLayoutGroupCharacters(Dictionary<VNCharacter, Vector3> snapshots, float duration)
+	{
+		foreach (KeyValuePair<VNCharacter, Vector3> character in snapshots)
+		{
+			if (character.Key != null)
+			{
+				character.Key.TweenFromParent(character.Value, duration);
+			}
+		}
+	}
 
 	/// <summary>
 	/// Helper to get the Transform corresponding to a CharacterPosition enum.

@@ -1,40 +1,36 @@
 /// Wake Up Scene
 === Beginning ===
 #nm_none
-
-// Sprite Tests
-#chl_Aldric
-Testing Aldric Left...
-
-#chc_Girl
-Testing Girl Center...
-
-#chr_Samurai1
-Testing Samurai1 Right...
-
-#chl_Samurai2
-Testing Samurai2 Left...
-
-#chc_Sniper
-Testing Sniper Center...
-
-#ch_Aldric_clear #chc_Girl_clear #chr_Samurai1_clear #chl_Samurai2_clear #chc_Sniper_clear
-
 ...
-You wake up...
-You go back to sleep. #sx_sleep
-Like the bum you are.
-...
-Don't you have a date in like... 30 minutes?
-You pull yourself out of bed, and stumble into the bathroom. #bg_bedroom_with_cross #ms_morning #sx_wakeup
-You rub your eyes as you turn on the lights, then look into the mirror. 
-You brush your teeth, take a shower, and change into a hoodie and sweatpants. 
-You look kinda homeless, but you don't have the time to find anything else to wear before your date. 
-Before you walk out the door, you check if you have everything: your phone, your keys, your wallet...
-Hello Aldric-sama #nm_God
-No, my name is Baldge #nm_Baldge
-bro... #nm_God
-... #nm_none
-...asjdajsd
-
+It was December 1st, the time of year where people are daydreaming about the holidays and spending time with their loved ones.
+However, all that my Chud ass was thinking about was how to get 150% on my final exam to pass my class.
+So to temper the pain, I ended up doomscrolling through reels, here in my comfortable bed...
+at 12 a.m.
+"Uhhhhhhh... FMCL." #chc_Aldric #nm_Eldric
+"That stands for fuck my chungus life, by the way." 
+I snicker to myself in my empty room, talking to no one in particular. #nm_none
+"GPT, what do I do with my life?" #nm_Eldric
+Somehow I always end up on my favorite app and pastime, ChatGPT. #nm_none
+"Hey, it seems that you are feeling down. Contact this number: 98..." #nm_ChatGPT
+"Ahhhhh..." I sigh to myself. #nm_Eldric
+Same response as always. #nm_none
+Alright, I can't rot in this bed forever...
+'Focus on making yourself feel excited, powerful.'
+That's what a wise man once told me, I have to follow through.
+Sliding out of my bed and leaving the protection of my blankie, I feel the crisp winter air assault my skin. #chl_Aldric
+I have to power through as I begin my pilgrimage towards the bathroom. #chr_Aldric
+... #ch_Aldric_Clear
+To Be Continued... Or Not
 End -> END
+
+=== Testing ===
+#nm_none
+"Uhhhhhhh... FMCL." #chl_Aldric #nm_Eldric
+"Don't say that, you look fine." #chr_Girl #nm_Girl
+"Don't talk to this guy babe, he's a chud." #chr_Samurai1 #nm_Dude
+"..." #chr_Samurai1 #nm_Dude
+"..." #chc_Samurai1 #nm_Dude
+"..." #chc_Samurai1 #nm_Dude
+"..." #chl_Samurai1 #nm_Dude
+End #nm_none
+-> END

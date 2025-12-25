@@ -59,7 +59,7 @@ public class DialogueController : MonoBehaviour
 
 	private void Start()
 	{
-		StartStory("Beginning");
+		StartStory("Testing");
 	}
 
 	#region Story Managers
@@ -301,8 +301,9 @@ public class DialogueController : MonoBehaviour
 
 	/// <summary>
 	/// Handles positioned character tags.
-	/// Format: #chl_Sera_happy → Position: Left, Name: Sera, Key: Sera_happy
-	/// Format: #chl_Sera → Position: Left, Name: Sera, Key: null (Move only)
+	/// Format: #chl_Sera_happy → Position: Left, ID: Sera, Key: Sera_happy
+	/// Format: #chl_Sera → Position: Left, ID: Sera, Key: null (Move only)
+	/// Format: #chl_Samurai1:Samurai_happy → Position: Left, ID: Samurai1, Key: Samurai_happy (alias syntax)
 	/// Format: #chl_Sera_clear → Remove Sera Sprite
 	/// </summary>
 	private void HandlePositionedCharacterTag(string[] args, CharacterPosition position)
@@ -312,24 +313,52 @@ public class DialogueController : MonoBehaviour
 			return;
 		}
 
-		string name = args[0];
+		string firstArg = args[0];
+		string characterId;
+		string spriteBase;
+
+		if (firstArg.ToLower() == "clear")
+		{
+			_dialogueEvents.RemoveAllCharacters(_characterFadeDuration);
+			return;
+		}
+
+		// Check for alias syntax: "CharacterId:SpriteBase" (e.g., "Sera:Girl_Happy")
+		// This allows multiple characters to share the same sprite asset
+		if (firstArg.Contains(':'))
+		{
+			string[] aliasParts = firstArg.Split(':');
+			characterId = aliasParts[0]; // Tracking ID (e.g., "Sera")
+			spriteBase = aliasParts[1]; // Sprite lookup base (e.g., "Girl_Happy")
+		}
+		else
+		{
+			characterId = firstArg;
+			spriteBase = firstArg;
+		}
 
 		// Check for clear command
 		if (args.Length > 1 && args[1].ToLower() == "clear")
 		{
-			_dialogueEvents.RemoveCharacter(name, _characterFadeDuration);
+			_dialogueEvents.RemoveCharacter(characterId, _characterFadeDuration);
 			return;
 		}
 
-		// Reconstruct sprite key from remaining args
+		// Reconstruct sprite key
 		string spriteKey = "";
 		if (args.Length >= 1)
 		{
-			spriteKey = string.Join("_", args);
-			Debug.Log(spriteKey);
+			// Replace the first arg with spriteBase for sprite lookup
+			string[] spriteArgs = new string[args.Length];
+			spriteArgs[0] = spriteBase;
+			for (int i = 1; i < args.Length; i++)
+			{
+				spriteArgs[i] = args[i];
+			}
+			spriteKey = string.Join("_", spriteArgs);
 		}
 
-		_dialogueEvents.UpdateCharacter(name, position, spriteKey, _characterFadeDuration);
+		_dialogueEvents.UpdateCharacter(characterId, position, spriteKey, _characterFadeDuration);
 	}
 
 	/// <summary>

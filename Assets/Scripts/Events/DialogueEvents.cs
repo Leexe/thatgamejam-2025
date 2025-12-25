@@ -55,6 +55,20 @@ public class DialogueEvents
 	}
 
 	/// <summary>
+	/// Event fired when all characters should be removed.
+	/// </summary>
+	public Action OnAllCharacterRemove;
+
+	/// <summary>
+	/// Removes all characters from the screen.
+	/// </summary>
+	/// <param name="fadeDuration">Duration of the fade out.</param>
+	public void RemoveAllCharacters(float fadeDuration)
+	{
+		OnAllCharacterRemove?.Invoke();
+	}
+
+	/// <summary>
 	/// Event fired when speaker name should change.
 	/// </summary>
 	public Action<string> OnNameUpdate;
