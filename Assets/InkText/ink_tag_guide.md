@@ -8,7 +8,7 @@ Inside the tag, values are separated by underscores `_`.
 
 **Example:**
 ```ink
-Hello there! #ch_Sera_happy
+Hello there! #chc_Sera_happy #nm_Sera #d_sera
 ```
 
 ---
@@ -43,12 +43,12 @@ You can assign a specific unique ID to a character while using a shared sprite a
 ```
 
 ### Removing Characters
-**Syntax:** `#position_CharacterID_clear` or just `#ch_clear` to remove everyone.
+**Syntax:** `#position_CharacterID_clear` or just `#chl_clear` / `#chc_clear` / `#chr_clear` to remove everyone.
 
 **Examples:**
 ```ink
 #chl_Sera_clear   // Removes Sera from the screen
-#ch_clear         // Removes ALL characters
+#chc_clear        // Removes ALL characters
 ```
 
 ---
@@ -75,7 +75,7 @@ Combines a sprite change (or move) with an animation in a single tag. Use `+` to
 
 **Examples:**
 ```ink
-#chl_Sera_Happy+Shake       // Changes Sera to Happy sprite trying to LEFT position AND Shakes
+#chl_Sera_Happy+Shake       // Changes Sera to Happy sprite at LEFT position AND Shakes
 #chr_Dude+Hop               // Dude Hops on the right (keeping current sprite if 'Dude' is base)
 #chc_Clown+Pop_1.2          // Clown Pops with strength 1.2 in center
 ```
@@ -108,6 +108,22 @@ Updates the name displayed in the name box.
 #nm_The Boss  // Sets name to "The Boss"
 #nm_none      // Hides the name box
 ```
+
+---
+
+## Dialogue Voice Tag (`d`)
+Enables character voice playback for the current line. When set, the typewriter will play voice blips for each character revealed.
+
+**Syntax:** `#d_CharacterName`
+
+**Examples:**
+```ink
+Hello there! #d_sera               // This line plays Sera's voice blips
+How are you? #nm_Sera #d_sera      // Common pattern: name + voice together
+(The wind howls softly.)           // No #d tag = no voice (narration)
+```
+
+**Note:** The character name must match a key in the `VoicesMap` dictionary.
 
 ---
 

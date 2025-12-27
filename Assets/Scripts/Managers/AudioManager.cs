@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class AudioManager : PersistantSingleton<AudioManager>
 {
+	#region Fields
+
 	private float _masterVolume = 1f;
 	private float _musicVolume = 1f;
 	private float _ambientVolume = 1f;
@@ -27,6 +29,10 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	private readonly Dictionary<FMOD.GUID, EventInstance> _activeSnapshots = new Dictionary<FMOD.GUID, EventInstance>();
 	private EventInstance _currentAmbientTrack;
 
+	#endregion
+
+	#region Lifecycle
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -35,10 +41,10 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		_eventEmitters = new List<StudioEventEmitter>();
 
 		// Get Bus Names
-		_masterBus = RuntimeManager.GetBus("bus:/");
-		_musicBus = RuntimeManager.GetBus("bus:/BGM");
-		_ambientBus = RuntimeManager.GetBus("bus:/AMB");
-		_gameBus = RuntimeManager.GetBus("bus:/SFX");
+		TryGetBus("bus:/", out _masterBus);
+		TryGetBus("bus:/BGM", out _musicBus);
+		TryGetBus("bus:/AMB", out _ambientBus);
+		TryGetBus("bus:/SFX", out _gameBus);
 
 		// Fetch audio preferences
 		_masterVolume = PlayerPrefs.GetFloat("MasterVolume", 1f);
@@ -52,6 +58,45 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		CleanUp();
 		SaveAudioPref();
 	}
+
+	/// <summary>
+	/// Attempts to get an FMOD bus by path, logging a warning if not found.
+	/// </summary>
+	private bool TryGetBus(string busPath, out Bus bus)
+	{
+		try
+		{
+			bus = RuntimeManager.GetBus(busPath);
+			return bus.isValid();
+		}
+		catch (System.Exception e)
+		{
+			Debug.LogWarning($"[AudioManager] Could not find bus '{busPath}': {e.Message}");
+			bus = default;
+			return false;
+		}
+	}
+
+	/// <summary>
+	/// Cleans up sound events and event emitters
+	/// </summary>
+	private void CleanUp()
+	{
+		foreach (EventInstance eventInstance in _eventInstances)
+		{
+			eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+			eventInstance.release();
+		}
+		_musicTrackInstances.Clear();
+		foreach (StudioEventEmitter emitter in _eventEmitters)
+		{
+			emitter.Stop();
+		}
+	}
+
+	#endregion
+
+	#region Music Track Control
 
 	/// <summary>
 	/// Resume the current music track
@@ -70,35 +115,11 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	}
 
 	/// <summary>
-	/// Pause the current music track
+	/// Stop the current music track
 	/// </summary>
 	public void StopCurrentMusicTrack()
 	{
 		StopInstance(_currentMusicTrack);
-	}
-
-	/// <summary>
-	/// Play the current ambient track
-	/// </summary>
-	public void PlayCurrentAmbientTrack()
-	{
-		PlayInstance(_currentAmbientTrack);
-	}
-
-	/// <summary>
-	/// Pause the current ambient track
-	/// </summary>
-	public void PauseCurrentAmbientTrack()
-	{
-		StopInstance(_currentAmbientTrack);
-	}
-
-	/// <summary>
-	/// Pause the current music track
-	/// </summary>
-	public void StopCurrentAmbientTrack()
-	{
-		StopInstance(_currentAmbientTrack, true);
 	}
 
 	/// <summary>
@@ -128,6 +149,38 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		PlayCurrentMusicTrack();
 	}
 
+	#endregion
+
+	#region Ambient Track Control
+
+	/// <summary>
+	/// Play the current ambient track
+	/// </summary>
+	public void PlayCurrentAmbientTrack()
+	{
+		PlayInstance(_currentAmbientTrack);
+	}
+
+	/// <summary>
+	/// Pause the current ambient track
+	/// </summary>
+	public void PauseCurrentAmbientTrack()
+	{
+		StopInstance(_currentAmbientTrack);
+	}
+
+	/// <summary>
+	/// Stop the current ambient track
+	/// </summary>
+	public void StopCurrentAmbientTrack()
+	{
+		StopInstance(_currentAmbientTrack, true);
+	}
+
+	#endregion
+
+	#region One-Shots
+
 	/// <summary>
 	/// Plays a sound effect
 	/// </summary>
@@ -156,6 +209,35 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	{
 		RuntimeManager.PlayOneShot(sound, position: pos);
 	}
+
+	/// <summary>
+	/// Plays a sound effect with a custom pitch
+	/// </summary>
+	/// <param name="sound">The FMOD event reference of the sound</param>
+	/// <param name="pitch">Pitch multiplier (0.5 = half, 1.0 = normal, 2.0 = double)</param>
+	public void PlayOneShotWithPitch(EventReference sound, float pitch = 1f)
+	{
+		EventInstance instance = RuntimeManager.CreateInstance(sound);
+		instance.setPitch(pitch);
+		instance.start();
+		instance.release();
+	}
+
+	/// <summary>
+	/// Plays a sound effect with a random pitch within a range (fire-and-forget)
+	/// </summary>
+	/// <param name="sound">The FMOD event reference of the sound</param>
+	/// <param name="minPitch">Minimum pitch multiplier</param>
+	/// <param name="maxPitch">Maximum pitch multiplier</param>
+	public void PlayOneShotWithPitch(EventReference sound, float minPitch, float maxPitch)
+	{
+		float randomPitch = Random.Range(minPitch, maxPitch);
+		PlayOneShotWithPitch(sound, randomPitch);
+	}
+
+	#endregion
+
+	#region Event Instance
 
 	/// <summary>
 	/// Creates an event instance of a sound, which allows a sound to be looped or it's FMOD parameters to be modified
@@ -193,6 +275,20 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 		eventInstance.release();
 	}
+
+	/// <summary>
+	/// Free up an event instance sound
+	/// </summary>
+	public void DestroyInstance(EventInstance instance)
+	{
+		instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+		instance.release();
+		_eventInstances.Remove(instance);
+	}
+
+	#endregion
+
+	#region Instance Playback
 
 	/// <summary>
 	/// Play an event instance sound at the start of the instance
@@ -255,16 +351,6 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	}
 
 	/// <summary>
-	/// Free up an event instance sound
-	/// </summary>
-	public void DestroyInstance(EventInstance instance)
-	{
-		instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-		instance.release();
-		_eventInstances.Remove(instance);
-	}
-
-	/// <summary>
 	/// Returns a boolean indicating if an event instance sound is playing
 	/// </summary>
 	public bool InstanceIsPlaying(EventInstance instance)
@@ -274,21 +360,18 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	}
 
 	/// <summary>
-	/// Cleans up sound events and event emitters
+	/// Sets the pitch of an event instance
 	/// </summary>
-	private void CleanUp()
+	/// <param name="instance">The event instance to modify</param>
+	/// <param name="pitch">Pitch multiplier (0.5 = half, 1.0 = normal, 2.0 = double)</param>
+	public void SetInstancePitch(EventInstance instance, float pitch)
 	{
-		foreach (EventInstance eventInstance in _eventInstances)
-		{
-			eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-			eventInstance.release();
-		}
-		_musicTrackInstances.Clear();
-		foreach (StudioEventEmitter emitter in _eventEmitters)
-		{
-			emitter.Stop();
-		}
+		instance.setPitch(pitch);
 	}
+
+	#endregion
+
+	#region Parameters
 
 	/// <summary>
 	/// Sets a global parameter by name
@@ -322,6 +405,10 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		instance.setParameterByID(parameterID, value);
 	}
 
+	#endregion
+
+	#region Snapshots
+
 	/// <summary>
 	/// Sets the state of a snapshot
 	/// </summary>
@@ -346,6 +433,10 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		}
 	}
 
+	#endregion
+
+	#region Volume Control
+
 	/// <summary>
 	/// Saves audio level preferences to player prefs
 	/// </summary>
@@ -357,7 +448,6 @@ public class AudioManager : PersistantSingleton<AudioManager>
 		PlayerPrefs.SetFloat("GameVolume", _gameVolume);
 	}
 
-	// Getters and Setters
 	public float GetMasterVolume() => _masterVolume;
 
 	public float GetMusicVolume() => _musicVolume;
@@ -369,24 +459,38 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	public void SetMasterVolume(float masterVolume)
 	{
 		_masterVolume = Mathf.Clamp(masterVolume, 0f, 1f);
-		_masterBus.setVolume(_masterVolume);
+		if (_masterBus.isValid())
+		{
+			_masterBus.setVolume(_masterVolume);
+		}
 	}
 
 	public void SetMusicVolume(float musicVolume)
 	{
 		_musicVolume = Mathf.Clamp(musicVolume, 0f, 1f);
-		_musicBus.setVolume(_musicVolume);
+		if (_musicBus.isValid())
+		{
+			_musicBus.setVolume(_musicVolume);
+		}
 	}
 
 	public void SetGameVolume(float gameVolume)
 	{
 		_gameVolume = Mathf.Clamp(gameVolume, 0f, 1f);
-		_gameBus.setVolume(_gameVolume);
+		if (_gameBus.isValid())
+		{
+			_gameBus.setVolume(_gameVolume);
+		}
 	}
 
 	public void SetAmbienceVolume(float ambientVolume)
 	{
 		_ambientVolume = Mathf.Clamp(ambientVolume, 0f, 1f);
-		_ambientBus.setVolume(_ambientVolume);
+		if (_ambientBus.isValid())
+		{
+			_ambientBus.setVolume(_ambientVolume);
+		}
 	}
+
+	#endregion
 }

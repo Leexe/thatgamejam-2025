@@ -114,30 +114,30 @@ public class DialogueEvents
 	#region Story Events
 
 	/// <summary>
-	/// Event fired when dialogue should start at a specific knot.
+	/// Event fired when story should start at a specific knot.
 	/// </summary>
-	public Action<string> OnStartDialogue;
+	public Action<string> OnStartStory;
 
 	/// <summary>
-	/// Starts the dialogue from a specified Ink knot.
+	/// Starts the story from a specified Ink knot.
 	/// </summary>
 	/// <param name="knotName">Name of the Ink knot to start from.</param>
-	public void StartDialogue(string knotName)
+	public void StartStory(string knotName)
 	{
-		OnStartDialogue?.Invoke(knotName);
+		OnStartStory?.Invoke(knotName);
 	}
 
 	/// <summary>
-	/// Event fired when dialogue ends.
+	/// Event fired when story ends.
 	/// </summary>
-	public Action OnEndDialogue;
+	public Action OnEndStory;
 
 	/// <summary>
 	/// Signals that the story has ended.
 	/// </summary>
 	public void EndStory()
 	{
-		OnEndDialogue?.Invoke();
+		OnEndStory?.Invoke();
 	}
 
 	/// <summary>
@@ -152,6 +152,19 @@ public class DialogueEvents
 	public void DisplayDialogue(string dialogue)
 	{
 		OnDisplayDialogue?.Invoke(dialogue);
+	}
+
+	/// <summary>
+	/// Event fired when a new dialogue line starts.
+	/// </summary>
+	public Action OnStartDialogue;
+
+	/// <summary>
+	/// Signals the start of a new dialogue line.
+	/// </summary>
+	public void StartDialogue()
+	{
+		OnStartDialogue?.Invoke();
 	}
 
 	#endregion
@@ -182,6 +195,20 @@ public class DialogueEvents
 	public void TypewriterFinished()
 	{
 		OnTypewriterFinish?.Invoke();
+	}
+
+	/// <summary>
+	/// Event fired when a character's dialogue is being spoken.
+	/// </summary>
+	public Action<string> OnDialogueVoice;
+
+	/// <summary>
+	/// Sets the speaking character for voice playback.
+	/// </summary>
+	/// <param name="characterName">Name of the speaking character for voice lookup.</param>
+	public void SetDialogueVoice(string characterName)
+	{
+		OnDialogueVoice?.Invoke(characterName);
 	}
 
 	#endregion

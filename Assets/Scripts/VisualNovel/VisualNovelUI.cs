@@ -19,7 +19,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	[FoldoutGroup("References")]
 	[SerializeField]
-	private VisualNovelDictionary _visualNovelDictionary;
+	private VisualNovelDictionarySO _visualNovelDictionary;
 
 	[FoldoutGroup("References")]
 	[SerializeField]
@@ -40,8 +40,6 @@ public class VisualNovelUI : MonoBehaviour
 	[FoldoutGroup("References")]
 	[SerializeField]
 	private Transform _nonLayoutParent; // Parent for character sprites that are about to get deleted
-
-	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
 
 	[FoldoutGroup("UI References")]
 	[SerializeField]
@@ -77,6 +75,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	// Private Variables
 	private Tween _canvasAlphaTween;
+	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
 	private Dictionary<string, Action<VNCharacter, string[]>> _animationHandlers;
 
 	private void Awake()
@@ -147,14 +146,14 @@ public class VisualNovelUI : MonoBehaviour
 
 	private void OnEnable()
 	{
-		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
+		GameManager.Instance.DialogueEventsRef.OnStartStory += EnableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += ChangeStoryText;
 		GameManager.Instance.DialogueEventsRef.OnCharacterUpdate += UpdateCharacter;
 		GameManager.Instance.DialogueEventsRef.OnCharacterAnimation += PlayAnimation;
 		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
-		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
-		GameManager.Instance.DialogueEventsRef.OnEndDialogue += RemoveAllCharacters;
+		GameManager.Instance.DialogueEventsRef.OnEndStory += DisableStoryPanel;
+		GameManager.Instance.DialogueEventsRef.OnEndStory += RemoveAllCharacters;
 		GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove += RemoveAllCharacters;
 		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
 		GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
@@ -167,14 +166,14 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		if (GameManager.Instance)
 		{
-			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= EnableStoryPanel;
+			GameManager.Instance.DialogueEventsRef.OnStartStory -= EnableStoryPanel;
 			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
 			GameManager.Instance.DialogueEventsRef.OnCharacterUpdate -= UpdateCharacter;
 			GameManager.Instance.DialogueEventsRef.OnCharacterAnimation -= PlayAnimation;
 			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
-			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
-			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= RemoveAllCharacters;
+			GameManager.Instance.DialogueEventsRef.OnEndStory -= DisableStoryPanel;
+			GameManager.Instance.DialogueEventsRef.OnEndStory -= RemoveAllCharacters;
 			GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove -= RemoveAllCharacters;
 			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
 			GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);

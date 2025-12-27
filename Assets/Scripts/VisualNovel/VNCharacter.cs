@@ -100,6 +100,12 @@ public class VNCharacter : MonoBehaviour
 	/// <param name="duration">Duration of the slide and fade animation.</param>
 	public void SlideIn(float slideOffset, float duration = 1f)
 	{
+		// Skip animation if duration is 0
+		if (duration <= 0f)
+		{
+			return;
+		}
+
 		// Complete any existing position tween
 		_positionTween.Complete();
 
@@ -126,6 +132,12 @@ public class VNCharacter : MonoBehaviour
 	/// <param name="duration">Duration of the slide animation.</param>
 	public void SlideOut(float slideOffset, float duration = 1f)
 	{
+		// Skip animation if duration is 0
+		if (duration <= 0f)
+		{
+			return;
+		}
+
 		// Complete any existing position tween
 		_positionTween.Complete();
 

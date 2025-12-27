@@ -37,7 +37,7 @@ public class DialogueController : MonoBehaviour
 	private void OnEnable()
 	{
 		_dialogueEvents = GameManager.Instance.DialogueEventsRef;
-		_dialogueEvents.OnStartDialogue += StartStory;
+		_dialogueEvents.OnStartStory += StartStory;
 		_dialogueEvents.OnChoiceSelect += ContinueStory;
 		_dialogueEvents.OnTypewriterFinish += SetTypewriterInactive;
 		_dialogueEvents.OnTypewriterFinish += DisplayChoices;
@@ -48,7 +48,7 @@ public class DialogueController : MonoBehaviour
 	{
 		if (GameManager.Instance)
 		{
-			_dialogueEvents.OnStartDialogue -= StartStory;
+			_dialogueEvents.OnStartStory -= StartStory;
 			_dialogueEvents.OnChoiceSelect -= ContinueStory;
 			_dialogueEvents.OnTypewriterFinish -= SetTypewriterInactive;
 			_dialogueEvents.OnTypewriterFinish -= DisplayChoices;
@@ -69,21 +69,28 @@ public class DialogueController : MonoBehaviour
 	[UsedImplicitly]
 	private void StartTestingStory()
 	{
-		_dialogueEvents.StartDialogue("Testing");
+		_dialogueEvents.StartStory("Testing");
 	}
 
 	[Button]
 	[UsedImplicitly]
 	private void StartChudStory()
 	{
-		_dialogueEvents.StartDialogue("Beginning");
+		_dialogueEvents.StartStory("Beginning");
 	}
 
 	[Button]
 	[UsedImplicitly]
 	private void StartAnimationTest()
 	{
-		_dialogueEvents.StartDialogue("Testing_Animations");
+		_dialogueEvents.StartStory("Testing_Animations");
+	}
+
+	[Button]
+	[UsedImplicitly]
+	private void StartVoiceTest()
+	{
+		_dialogueEvents.StartStory("Testing_Voices");
 	}
 
 	#region Story Managers
@@ -145,6 +152,9 @@ public class DialogueController : MonoBehaviour
 		{
 			string story = _story.Continue();
 			_typewriterPlaying = true;
+
+			// Signal start of new dialogue line
+			_dialogueEvents.StartDialogue();
 
 			// Parse any tags on this line
 			if (_story.currentTags.Count > 0)
@@ -266,6 +276,7 @@ public class DialogueController : MonoBehaviour
 			{ "chr", args => HandlePositionedCharacterTag(args, CharacterPosition.Right) },
 			{ "an", HandleAnimationTag },
 			{ "nm", HandleNameTag },
+			{ "d", HandleDialogueVoiceTag },
 			{ "bg", HandleBackgroundTag },
 			{ "sx", HandleSFXTag },
 			{ "ms", HandleMusicTag },
@@ -447,6 +458,22 @@ public class DialogueController : MonoBehaviour
 
 		string name = args[0];
 		_dialogueEvents.UpdateName(name);
+	}
+
+	/// <summary>
+	/// Handles dialogue voice tags to indicate spoken dialogue lines.
+	/// Format: #d_sera → Marks line as spoken dialogue by "sera"
+	/// </summary>
+	private void HandleDialogueVoiceTag(string[] args)
+	{
+		if (args.Length == 0)
+		{
+			Debug.LogWarning("[DialogueController] Dialogue voice tag requires character name (e.g. #d_sera)");
+			return;
+		}
+
+		string characterName = args[0].ToLower();
+		_dialogueEvents.SetDialogueVoice(characterName);
 	}
 
 	/// <summary>
