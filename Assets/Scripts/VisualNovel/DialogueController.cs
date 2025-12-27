@@ -504,7 +504,7 @@ public class DialogueController : MonoBehaviour
 	private void HandleSFXTag(string[] args)
 	{
 		string sfxKey = string.Join("_", args);
-		_dialogueEvents.PlaySFX(sfxKey);
+		_dialogueEvents.PlaySfx(sfxKey);
 	}
 
 	/// <summary>

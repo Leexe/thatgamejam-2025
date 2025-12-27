@@ -7,7 +7,7 @@ trim_trailing_whitespace = true
 
 # IMPORTANT - marks Assets/Plugins/** as generated code.
 # the linter doesn't run on their source code, and we don't get squiggles everywhere.
-[Assets/Plugins/**.cs]
+[Assets/Plugins/**]
 generated_code = true
 
 

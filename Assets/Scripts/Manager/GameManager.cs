@@ -49,7 +49,7 @@ public class GameManager : PersistentSingleton<GameManager>
 	}
 
 	/// <summary>
-	/// Unpauses the game, sets the time scale to 0
+	/// Unpauses the game, sets the timescale to 0
 	/// </summary>
 	private void FreezeTime()
 	{
@@ -57,7 +57,7 @@ public class GameManager : PersistentSingleton<GameManager>
 	}
 
 	/// <summary>
-	/// Unpauses the game, sets the time scale to 1
+	/// Unpauses the game, sets the timescale to 1
 	/// </summary>
 	private void UnfreezeTime()
 	{

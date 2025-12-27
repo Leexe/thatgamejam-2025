@@ -22,7 +22,7 @@ public class VisualNovelSFX : MonoBehaviour
 		_typewriter.onCharacterVisible.AddListener(PlayVoice);
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += ResetVoiceState;
 		GameManager.Instance.DialogueEventsRef.OnDialogueVoice += SetSpeakingCharacter;
-		GameManager.Instance.DialogueEventsRef.OnPlaySFX += PlaySFX;
+		GameManager.Instance.DialogueEventsRef.OnPlaySfx += PlaySFX;
 		GameManager.Instance.DialogueEventsRef.OnPlayAmbience += PlayAmbience;
 		GameManager.Instance.DialogueEventsRef.OnPlayMusic += PlayMusic;
 	}
@@ -34,7 +34,7 @@ public class VisualNovelSFX : MonoBehaviour
 		{
 			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= ResetVoiceState;
 			GameManager.Instance.DialogueEventsRef.OnDialogueVoice -= SetSpeakingCharacter;
-			GameManager.Instance.DialogueEventsRef.OnPlaySFX -= PlaySFX;
+			GameManager.Instance.DialogueEventsRef.OnPlaySfx -= PlaySFX;
 			GameManager.Instance.DialogueEventsRef.OnPlayAmbience -= PlayAmbience;
 			GameManager.Instance.DialogueEventsRef.OnPlayMusic -= PlayMusic;
 		}

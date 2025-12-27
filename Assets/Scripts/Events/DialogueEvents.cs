@@ -277,15 +277,15 @@ public class DialogueEvents
 	/// <summary>
 	/// Event fired when a sound effect should play.
 	/// </summary>
-	public Action<string> OnPlaySFX;
+	public Action<string> OnPlaySfx;
 
 	/// <summary>
 	/// Plays a one-shot sound effect.
 	/// </summary>
 	/// <param name="sfxKey">Key identifying the sound effect.</param>
-	public void PlaySFX(string sfxKey)
+	public void PlaySfx(string sfxKey)
 	{
-		OnPlaySFX?.Invoke(sfxKey);
+		OnPlaySfx?.Invoke(sfxKey);
 	}
 
 	/// <summary>
