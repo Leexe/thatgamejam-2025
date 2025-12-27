@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Ink.Runtime;
+using JetBrains.Annotations;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
@@ -10,11 +11,11 @@ using UnityEngine;
 /// </summary>
 public class DialogueController : MonoBehaviour
 {
-	[Header("References")]
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private TextAsset _inkJson;
 
-	[Header("Transition Times")]
+	[FoldoutGroup("Transition Times")]
 	[SerializeField]
 	private float _characterFadeDuration = 0.5f;
 
@@ -65,15 +66,24 @@ public class DialogueController : MonoBehaviour
 
 	[Title("Debug:")]
 	[Button]
+	[UsedImplicitly]
 	private void StartTestingStory()
 	{
-		StartStory("Testing");
+		_dialogueEvents.StartDialogue("Testing");
 	}
 
 	[Button]
+	[UsedImplicitly]
 	private void StartChudStory()
 	{
-		StartStory("Beginning");
+		_dialogueEvents.StartDialogue("Beginning");
+	}
+
+	[Button]
+	[UsedImplicitly]
+	private void StartAnimationTest()
+	{
+		_dialogueEvents.StartDialogue("Testing_Animations");
 	}
 
 	#region Story Managers
@@ -85,7 +95,11 @@ public class DialogueController : MonoBehaviour
 	{
 		if (_storyPlaying)
 		{
-			return;
+			// Restart the story
+			_storyPlaying = false;
+			_typewriterPlaying = false;
+			_choiceIndex = -1;
+			_dialogueEvents.RemoveAllCharacters();
 		}
 
 		_storyPlaying = true;
@@ -250,6 +264,7 @@ public class DialogueController : MonoBehaviour
 			{ "chl", args => HandlePositionedCharacterTag(args, CharacterPosition.Left) },
 			{ "chc", args => HandlePositionedCharacterTag(args, CharacterPosition.Center) },
 			{ "chr", args => HandlePositionedCharacterTag(args, CharacterPosition.Right) },
+			{ "an", HandleAnimationTag },
 			{ "nm", HandleNameTag },
 			{ "bg", HandleBackgroundTag },
 			{ "sx", HandleSFXTag },
@@ -372,7 +387,44 @@ public class DialogueController : MonoBehaviour
 			spriteKey = string.Join("_", spriteArgs);
 		}
 
-		_dialogueEvents.UpdateCharacter(characterId, position, spriteKey, _characterFadeDuration);
+		// Handle inline animation syntax (e.g. Sera_Happy+Shake)
+		if (spriteKey.Contains('+'))
+		{
+			string[] splitParts = spriteKey.Split('+');
+			string realSpriteKey = splitParts[0];
+			string animationPart = splitParts[1];
+
+			// Update the character with the real sprite key
+			_dialogueEvents.UpdateCharacter(characterId, position, realSpriteKey, _characterFadeDuration);
+
+			// Parse animation part (e.g. "shake_10_0.5")
+			string[] animParts = animationPart.Split('_');
+			string animName = animParts[0];
+			string[] animArgs = animParts.Skip(1).ToArray();
+
+			_dialogueEvents.UpdateAnimation(characterId, animName, animArgs);
+		}
+		else
+		{
+			_dialogueEvents.UpdateCharacter(characterId, position, spriteKey, _characterFadeDuration);
+		}
+	}
+
+	private void HandleAnimationTag(string[] args)
+	{
+		if (args.Length < 2)
+		{
+			Debug.LogWarning(
+				$"[DialogueController] Animation tag requires at least CharacterID and AnimationName (e.g. an_Sera_Shake). Args passed: {string.Join(", ", args)}"
+			);
+			return;
+		}
+
+		string characterId = args[0];
+		string animationName = args[1];
+		string[] parameters = args.Skip(2).ToArray();
+
+		_dialogueEvents.UpdateAnimation(characterId, animationName, parameters);
 	}
 
 	/// <summary>

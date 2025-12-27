@@ -20,9 +20,6 @@ public class DialogueEvents
 	#region Visual Events
 
 	/// <summary>
-	/// Event fired when character sprite should change.
-	/// </summary>
-	/// <summary>
 	/// Event fired when character sprite should change or move.
 	/// </summary>
 	public Action<string, CharacterPosition, string, float> OnCharacterUpdate;
@@ -37,6 +34,22 @@ public class DialogueEvents
 	public void UpdateCharacter(string name, CharacterPosition position, string spriteKey, float fadeDuration)
 	{
 		OnCharacterUpdate?.Invoke(name, position, spriteKey, fadeDuration);
+	}
+
+	/// <summary>
+	/// Event fired when a character animation should play.
+	/// </summary>
+	public Action<string, string, string[]> OnCharacterAnimation;
+
+	/// <summary>
+	/// Triggers an animation on a character.
+	/// </summary>
+	/// <param name="name">Name of the character.</param>
+	/// <param name="animation">Name of the animation (e.g. "shake", "hop").</param>
+	/// <param name="args">Optional arguments for the animation.</param>
+	public void UpdateAnimation(string name, string animation, string[] args)
+	{
+		OnCharacterAnimation?.Invoke(name, animation, args);
 	}
 
 	/// <summary>

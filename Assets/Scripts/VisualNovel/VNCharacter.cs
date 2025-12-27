@@ -1,16 +1,19 @@
 using PrimeTween;
+using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class VNCharacter : MonoBehaviour
 {
-	[Header("References")]
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Image _image;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Image _tempImage;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private LayoutElement _layoutElement;
 
@@ -19,15 +22,23 @@ public class VNCharacter : MonoBehaviour
 	private Tween _alphaTween;
 	private Tween _shakeTween;
 	private Tween _scaleTween;
+	private Tween _colorTween;
 
 	private void OnDisable()
 	{
 		_positionTween.Stop();
-		_alphaTween.Stop();
 		_shakeTween.Stop();
 		_scaleTween.Stop();
+		_alphaTween.Complete();
+		_colorTween.Complete();
 	}
 
+	#region Transition Animations
+
+	/// <summary>
+	/// Fades in the character sprite.
+	/// </summary>
+	/// <param name="fadeDuration">Duration of the fade animation.</param>
 	public void FadeIn(float fadeDuration = 1f)
 	{
 		if (fadeDuration == 0f)
@@ -41,9 +52,13 @@ public class VNCharacter : MonoBehaviour
 		}
 	}
 
+	/// <summary>
+	/// Fades out the character sprite.
+	/// </summary>
+	/// <param name="fadeDuration">Duration of the fade animation.</param>
 	public void FadeOut(float fadeDuration = 1f)
 	{
-		if (fadeDuration == 0f)
+		if (fadeDuration == 0f || Mathf.Approximately(_image.color.a, 0f))
 		{
 			SetTransparency(0f);
 		}
@@ -124,57 +139,6 @@ public class VNCharacter : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Shakes the character sprite horizontally.
-	/// </summary>
-	/// <param name="shakeOffset">Offset for the shake effect.</param>
-	/// <param name="duration">Duration of the shake animation.</param>
-	public void ShakeHorizontal(float shakeOffset = 10f, float duration = 1f)
-	{
-		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
-		_shakeTween = Tween
-			.ShakeLocalPosition(
-				_image.transform,
-				new Vector3(shakeOffset, 0f, 0f),
-				duration,
-				frequency: 10,
-				easeBetweenShakes: Ease.Default
-			)
-			.OnComplete(() => _layoutElement.ignoreLayout = false);
-	}
-
-	/// <summary>
-	/// Shakes the character sprite vertically.
-	/// </summary>
-	/// <param name="shakeOffset">Offset for the shake effect.</param>
-	/// <param name="duration">Duration of the shake animation.</param>
-	public void ShakeVertical(float shakeOffset = 10f, float duration = 1f)
-	{
-		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
-		_shakeTween = Tween
-			.ShakeLocalPosition(
-				_image.transform,
-				new Vector3(0f, shakeOffset, 0f),
-				duration,
-				frequency: 10,
-				easeBetweenShakes: Ease.Default
-			)
-			.OnComplete(() => _layoutElement.ignoreLayout = false);
-	}
-
-	/// <summary>
-	/// Punches the character sprite scale.
-	/// </summary>
-	/// <param name="punchStrength">Strength of the punch (how much bigger it gets).</param>
-	/// <param name="duration">Duration of the punch animation.</param>
-	public void Punch(float punchStrength = 0.1f, float duration = 0.5f)
-	{
-		_scaleTween.Complete();
-		_scaleTween = Tween.PunchScale(_image.transform, new Vector3(punchStrength, punchStrength, 0f), duration);
-	}
-
-	/// <summary>
 	/// Cross-fades the character sprite with a new sprite.
 	/// </summary>
 	/// <param name="newSprite">The new sprite to cross-fade to.</param>
@@ -218,6 +182,191 @@ public class VNCharacter : MonoBehaviour
 		}
 	}
 
+	#endregion
+
+	#region Sprite Animations
+
+	/// <summary>
+	/// Shakes the character sprite horizontally.
+	/// </summary>
+	/// <param name="shakeOffset">Offset for the shake effect.</param>
+	/// <param name="duration">Duration of the shake animation.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void ShakeHorizontal(float shakeOffset = 20f, float duration = 0.7f)
+	{
+		_shakeTween.Complete();
+		_layoutElement.ignoreLayout = true;
+		_shakeTween = Tween
+			.ShakeLocalPosition(
+				_image.transform,
+				new Vector3(shakeOffset, 0f, 0f),
+				duration,
+				frequency: 15,
+				easeBetweenShakes: Ease.Default
+			)
+			.OnComplete(() => _layoutElement.ignoreLayout = false);
+	}
+
+	/// <summary>
+	/// Shakes the character sprite vertically.
+	/// </summary>
+	/// <param name="shakeOffset">Offset for the shake effect.</param>
+	/// <param name="duration">Duration of the shake animation.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void ShakeVertical(float shakeOffset = 30f, float duration = 0.7f)
+	{
+		_shakeTween.Complete();
+		_layoutElement.ignoreLayout = true;
+		_shakeTween = Tween
+			.ShakeLocalPosition(
+				_image.transform,
+				new Vector3(0f, shakeOffset, 0f),
+				duration,
+				frequency: 15,
+				easeBetweenShakes: Ease.Default
+			)
+			.OnComplete(() => _layoutElement.ignoreLayout = false);
+	}
+
+	/// <summary>
+	/// Makes the character sprite bounce like jelly
+	/// </summary>
+	/// <param name="bounceStrength">Strength of the bounce.</param>
+	/// <param name="duration">Duration of the bounce animation.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void Bounce(float bounceStrength = 0.1f, float duration = 0.35f)
+	{
+		_scaleTween.Complete();
+		_scaleTween = Tween.PunchScale(_image.transform, new Vector3(bounceStrength, bounceStrength, 0f), duration);
+	}
+
+	/// <summary>
+	/// Expands the character scale and returns it back to normal.
+	/// </summary>
+	/// <param name="popStrength">Strength of the pop, relative to the scale of the character sprite</param>
+	/// <param name="duration">Duration of the pop animation.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void Pop(float popStrength = 1.05f, float duration = 0.3f)
+	{
+		_scaleTween.Complete();
+		_scaleTween = Tween.Scale(
+			_image.transform,
+			new Vector3(_image.transform.localScale.x * popStrength, _image.transform.localScale.y * popStrength, 0),
+			duration / 2f,
+			Ease.Default,
+			cycles: 2,
+			cycleMode: CycleMode.Yoyo
+		);
+	}
+
+	/// <summary>
+	/// Character sprite jumps up and back down.
+	/// </summary>
+	/// <param name="jumpHeight">Height of the jump.</param>
+	/// <param name="duration">Duration of the jump.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void Hop(float jumpHeight = 100f, float duration = 0.35f)
+	{
+		_shakeTween.Complete();
+		_layoutElement.ignoreLayout = true;
+		Vector3 startPos = _image.transform.localPosition;
+		_shakeTween = Tween
+			.LocalPosition(
+				_image.transform,
+				startPos + new Vector3(0, jumpHeight, 0),
+				duration / 2f,
+				Ease.Default,
+				cycles: 2,
+				cycleMode: CycleMode.Yoyo
+			)
+			.OnComplete(() =>
+			{
+				_image.transform.localPosition = startPos;
+				_layoutElement.ignoreLayout = false;
+			});
+	}
+
+	/// <summary>
+	/// Character sprite goes downwards and back up.
+	/// </summary>
+	/// <param name="hopHeight">Height of the hop.</param>
+	/// <param name="duration">Duration of the hop.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void ReverseHop(float hopHeight = 33f, float duration = 0.35f)
+	{
+		_shakeTween.Complete();
+		_layoutElement.ignoreLayout = true;
+		Vector3 startPos = _image.transform.localPosition;
+		_shakeTween = Tween
+			.LocalPosition(
+				_image.transform,
+				startPos + new Vector3(0, -hopHeight, 0),
+				duration / 2f,
+				Ease.OutQuad,
+				cycles: 2,
+				cycleMode: CycleMode.Yoyo
+			)
+			.OnComplete(() =>
+			{
+				_image.transform.localPosition = startPos;
+				_layoutElement.ignoreLayout = false;
+			});
+	}
+
+	/// <summary>
+	/// Flashes the character sprite with a color.
+	/// </summary>
+	/// <param name="flashColor">Color to flash.</param>
+	/// <param name="duration">Duration of the flash.</param>
+	[Button("Flash")]
+	[FoldoutGroup("Debug Animations")]
+	public void Flash(Color flashColor, float duration = 0.25f)
+	{
+		_colorTween.Complete();
+		Color originalColor = _image.color;
+		_colorTween = Tween
+			.Color(_image, flashColor, duration / 2f, cycles: 2, cycleMode: CycleMode.Yoyo)
+			.OnComplete(() => _image.color = originalColor);
+	}
+
+	/// <summary>
+	/// Pushes the sprite to the side horizontally and back.
+	/// </summary>
+	/// <param name="dodgeDistance">Distance to dodge.</param>
+	/// <param name="duration">Duration of the dodge.</param>
+	[Button]
+	[FoldoutGroup("Debug Animations")]
+	public void Dodge(float dodgeDistance = 100f, float duration = 0.35f)
+	{
+		_shakeTween.Complete();
+		_layoutElement.ignoreLayout = true;
+		Vector3 startPos = _image.transform.localPosition;
+		_shakeTween = Tween
+			.LocalPosition(
+				_image.transform,
+				startPos + new Vector3(dodgeDistance, 0, 0),
+				duration / 2f,
+				Ease.OutQuad,
+				cycles: 2,
+				cycleMode: CycleMode.Yoyo
+			)
+			.OnComplete(() =>
+			{
+				_image.transform.localPosition = startPos;
+				_layoutElement.ignoreLayout = false;
+			});
+	}
+
+	#endregion
+
+	#region Setup
+
 	public void ChangeObjectName(string name)
 	{
 		this.name = name;
@@ -249,4 +398,6 @@ public class VNCharacter : MonoBehaviour
 	{
 		Destroy(gameObject);
 	}
+
+	#endregion
 }

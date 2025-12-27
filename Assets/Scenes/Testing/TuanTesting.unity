@@ -856,7 +856,7 @@ PrefabInstance:
     - target: {fileID: 4717657879626835893, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 235b07cb43d744be2ab0725b11f9f676, type: 3}
+      objectReference: {fileID: 21300000, guid: c8551d69c524544eba711ebc7fd1a380, type: 3}
     - target: {fileID: 4927542473866028708, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
       propertyPath: m_Sprite
       value: 
@@ -895,7 +895,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6324184216006114400, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
       propertyPath: m_text
-      value: Tuan
+      value: Debug
+      objectReference: {fileID: 0}
+    - target: {fileID: 7068544694545489261, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
+      propertyPath: m_text
+      value: Start a Story in the "Dialogue" Game Object
       objectReference: {fileID: 0}
     - target: {fileID: 7228143630980288931, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
       propertyPath: m_Name
@@ -921,6 +925,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8602183900171311035, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: 35f0ec4b358514508a7140757f8c7d26, type: 3}
     - target: {fileID: 8814326225300937202, guid: ae91ebf63bdc749ef8a30cd968a432e7, type: 3}
       propertyPath: m_LocalScale.x
       value: 1.7

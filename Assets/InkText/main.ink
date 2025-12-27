@@ -35,3 +35,19 @@ End -> END
 ... #chr_clown_clear #chl_dude #nm_Chud
 End #nm_none
 -> END
+
+=== Testing_Animations ===
+#nm_none
+Spawning Character #chc_clown
+Testing Standard Shake. #an_clown_shake
+Testing Inline Syntax (Sprite Change + Shake). #chc_clown_freaky+shake
+Testing Hop with Parameters (Height 20, Duration 0.5s). #an_clown_hop_20_0.5
+Testing Reverse Hop. #an_clown_reversehop
+Testing Bounce on Dude. #chr_dude+bounce
+Testing Flash on Clown. #chc_clown+flash
+Testing Dodge on Clown. #chc_clown+dodge
+Testing Pop on Clown. #chc_clown+pop
+Testing Vertical Shake on Dude. #chr_dude+shakevertical
+Clearing Characters. #chl_clown_clear #chr_dude_clear
+Tests Complete.
+-> END

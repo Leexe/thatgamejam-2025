@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using Febucci.TextAnimatorForUnity;
 using PrimeTween;
+using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,56 +13,144 @@ using UnityEngine.UI;
 /// </summary>
 public class VisualNovelUI : MonoBehaviour
 {
-	[Header("References")]
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private TypewriterComponent _typewriter;
 
-	[Header("Character References")]
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private VisualNovelDictionary _visualNovelDictionary;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private GameObject _characterPrefab;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Transform _leftPosition;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Transform _centerPosition;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Transform _rightPosition;
 
+	[FoldoutGroup("References")]
 	[SerializeField]
 	private Transform _nonLayoutParent; // Parent for character sprites that are about to get deleted
 
 	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
 
-	[Header("UI References")]
+	[FoldoutGroup("UI References")]
 	[SerializeField]
 	private CanvasGroup _canvasGroup;
 
+	[FoldoutGroup("UI References")]
 	[SerializeField]
 	private GameObject _namePanel;
 
+	[FoldoutGroup("UI References")]
 	[SerializeField]
 	private TextMeshProUGUI _nameText;
 
-	[Header("Data")]
+	[FoldoutGroup("Default Values")]
 	[SerializeField]
 	private float _defaultFadeOutDuration = 1f;
 
+	[FoldoutGroup("Default Values")]
+	[SerializeField]
+	private float _defaultShakeOffset = 20f;
+
+	[FoldoutGroup("Default Values")]
+	[SerializeField]
+	private float _defaultAnimationDuration = 0.7f;
+
+	[FoldoutGroup("Default Values")]
 	[SerializeField]
 	private float _slideOffset = 100f;
 
+	[FoldoutGroup("Default Values")]
+	[SerializeField]
+	private Color _flashColor = Color.white;
+
 	// Private Variables
 	private Tween _canvasAlphaTween;
+	private Dictionary<string, Action<VNCharacter, string[]>> _animationHandlers;
+
+	private void Awake()
+	{
+		InitializeAnimationHandlers();
+	}
+
+	private void InitializeAnimationHandlers()
+	{
+		_animationHandlers = new Dictionary<string, Action<VNCharacter, string[]>>(StringComparer.OrdinalIgnoreCase)
+		{
+			{
+				"shake",
+				(c, args) =>
+					c.ShakeHorizontal(
+						ParseFloat(args, 0, _defaultShakeOffset),
+						ParseFloat(args, 1, _defaultAnimationDuration)
+					)
+			},
+			{
+				"shakehorizontal",
+				(c, args) =>
+					c.ShakeHorizontal(
+						ParseFloat(args, 0, _defaultShakeOffset),
+						ParseFloat(args, 1, _defaultAnimationDuration)
+					)
+			},
+			{
+				"shakevertical",
+				(c, args) =>
+					c.ShakeVertical(
+						ParseFloat(args, 0, _defaultShakeOffset),
+						ParseFloat(args, 1, _defaultAnimationDuration)
+					)
+			},
+			{
+				"hop",
+				(c, args) => c.Hop(ParseFloat(args, 0, 100f), ParseFloat(args, 1, _defaultAnimationDuration / 3f))
+			},
+			{
+				"reversehop",
+				(c, args) => c.ReverseHop(ParseFloat(args, 0, 33f), ParseFloat(args, 1, _defaultAnimationDuration / 2f))
+			},
+			{
+				"bounce",
+				(c, args) => c.Bounce(ParseFloat(args, 0, 0.1f), ParseFloat(args, 1, _defaultAnimationDuration / 2f))
+			},
+			{ "flash", (c, args) => c.Flash(_flashColor, ParseFloat(args, 0, _defaultAnimationDuration / 3f)) },
+			{
+				"dodge",
+				(c, args) => c.Dodge(ParseFloat(args, 0, 100f), ParseFloat(args, 1, _defaultAnimationDuration / 2f))
+			},
+			{
+				"pop",
+				(c, args) => c.Pop(ParseFloat(args, 0, 1.05f), ParseFloat(args, 1, _defaultAnimationDuration / 3f))
+			},
+		};
+	}
+
+	private float ParseFloat(string[] args, int index, float defaultValue)
+	{
+		if (args != null && index < args.Length && float.TryParse(args[index], out float result))
+		{
+			return result;
+		}
+		return defaultValue;
+	}
 
 	private void OnEnable()
 	{
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += EnableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += ChangeStoryText;
 		GameManager.Instance.DialogueEventsRef.OnCharacterUpdate += UpdateCharacter;
+		GameManager.Instance.DialogueEventsRef.OnCharacterAnimation += PlayAnimation;
 		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
 		GameManager.Instance.DialogueEventsRef.OnEndDialogue += DisableStoryPanel;
@@ -80,6 +170,7 @@ public class VisualNovelUI : MonoBehaviour
 			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= EnableStoryPanel;
 			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
 			GameManager.Instance.DialogueEventsRef.OnCharacterUpdate -= UpdateCharacter;
+			GameManager.Instance.DialogueEventsRef.OnCharacterAnimation -= PlayAnimation;
 			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
 			GameManager.Instance.DialogueEventsRef.OnEndDialogue -= DisableStoryPanel;
@@ -175,7 +266,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-	#region Character Display
+	#region Character Management
 
 	/// <summary>
 	/// Updates a character's state, including spawning, moving, or changing sprite.
@@ -273,6 +364,34 @@ public class VisualNovelUI : MonoBehaviour
 	}
 
 	/// <summary>
+	/// Plays an animation on a specific character.
+	/// </summary>
+	/// <param name="name">Name of the character.</param>
+	/// <param name="animation">Animation name (e.g. shake, hop).</param>
+	/// <param name="args">Arguments for the animation.</param>
+	private void PlayAnimation(string name, string animation, string[] args)
+	{
+		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
+		{
+			Debug.LogWarning($"[VisualNovelUI] Cannot play animation '{animation}'. Character '{name}' not found.");
+			return;
+		}
+
+		if (_animationHandlers.TryGetValue(animation, out Action<VNCharacter, string[]> handler))
+		{
+			handler(character, args);
+		}
+		else
+		{
+			Debug.LogWarning($"[VisualNovelUI] Unknown animation '{animation}' for character '{name}'.");
+		}
+	}
+
+	#endregion
+
+	#region Clean Up
+
+	/// <summary>
 	/// Removes a specific character from the screen.
 	/// </summary>
 	/// <param name="name">Name of the character to remove.</param>
@@ -364,7 +483,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-	#region Helper
+	#region Position Management
 
 	/// <summary>
 	/// Captures the current positions of all characters in a layout group.
