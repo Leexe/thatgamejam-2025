@@ -243,19 +243,6 @@ public class DialogueEvents
 		OnChoiceSelect?.Invoke(choiceIndex);
 	}
 
-	/// <summary>
-	/// Event fired when choices should be hidden.
-	/// </summary>
-	public Action OnDisableChoices;
-
-	/// <summary>
-	/// Hides all currently displayed choices.
-	/// </summary>
-	public void DisableChoices()
-	{
-		OnDisableChoices?.Invoke();
-	}
-
 	#endregion
 
 	#region Audio Events
@@ -277,15 +264,15 @@ public class DialogueEvents
 	/// <summary>
 	/// Event fired when a sound effect should play.
 	/// </summary>
-	public Action<string> OnPlaySfx;
+	public Action<string> OnPlaySFX;
 
 	/// <summary>
 	/// Plays a one-shot sound effect.
 	/// </summary>
 	/// <param name="sfxKey">Key identifying the sound effect.</param>
-	public void PlaySfx(string sfxKey)
+	public void PlaySFX(string sfxKey)
 	{
-		OnPlaySfx?.Invoke(sfxKey);
+		OnPlaySFX?.Invoke(sfxKey);
 	}
 
 	/// <summary>

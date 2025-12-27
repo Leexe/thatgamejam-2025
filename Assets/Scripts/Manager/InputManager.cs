@@ -12,6 +12,9 @@ public class InputManager : PersistentSingleton<InputManager>
 	private InputAction _continueStoryAction;
 	private InputAction _escapeAction;
 
+	private InputActionMap _playerActionMap;
+	private InputActionMap _uiActionMap;
+
 	// Events
 	[HideInInspector]
 	public UnityEvent<Vector2> OnMovement;
@@ -22,8 +25,8 @@ public class InputManager : PersistentSingleton<InputManager>
 	[HideInInspector]
 	public UnityEvent OnEscapePerformed;
 
-	private const string PLAYER_ACTION_MAP = "Player";
-	private const string UI_ACTION_MAP = "UI";
+	private const string PlayerActionMap = "Player";
+	private const string UIActionMap = "UI";
 
 	/** Start Methods **/
 
@@ -45,11 +48,29 @@ public class InputManager : PersistentSingleton<InputManager>
 		DisablePlayerInput();
 	}
 
+	private void OnDestroy()
+	{
+		if (_movementAction != null)
+		{
+			_movementAction.performed -= OnMovementPerformed;
+			_movementAction.canceled -= OnMovementCanceled;
+		}
+	}
+
+	/// <summary>
+	/// Initializes the input actions by finding them in the InputSystem.
+	/// </summary>
 	private void SetupInputActions()
 	{
-		_movementAction = InputSystem.actions.FindAction("Movement");
-		_continueStoryAction = InputSystem.actions.FindAction("ContinueStory");
-		_escapeAction = InputSystem.actions.FindAction("Escape");
+		_playerActionMap = InputActions.FindActionMap(PlayerActionMap);
+		_uiActionMap = InputActions.FindActionMap(UIActionMap);
+
+		_movementAction = InputActions.FindAction("Movement");
+		_movementAction.performed += OnMovementPerformed;
+		_movementAction.canceled += OnMovementCanceled;
+
+		_continueStoryAction = InputActions.FindAction("ContinueStory");
+		_escapeAction = InputActions.FindAction("Escape");
 	}
 
 	/** Update Methods **/
@@ -61,28 +82,32 @@ public class InputManager : PersistentSingleton<InputManager>
 
 	private void UpdateInputs()
 	{
-		UpdateMovementVector(_movementAction, ref OnMovement);
-
 		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
 	}
 
 	/// <summary>
-	/// Updates a Vector3 variable depending on a movement input action
+	/// Callback fired when movement input is performed.
 	/// </summary>
-	/// <param name="movementInput">Vector3 representing the movement</param>
-	/// <param name="inputAction">Input action was pressed</param>
-	private void UpdateMovementVector(InputAction inputAction, ref UnityEvent<Vector2> unityEvent)
+	private void OnMovementPerformed(InputAction.CallbackContext context)
 	{
-		Vector3 readVector = inputAction.ReadValue<Vector3>();
-		unityEvent?.Invoke(new Vector2(readVector.x, readVector.z));
+		Vector3 readVector = context.ReadValue<Vector3>();
+		OnMovement?.Invoke(new Vector2(readVector.x, readVector.z));
 	}
 
 	/// <summary>
-	/// Checks every update if the input was pressed and calls the unity event
+	/// Callback fired when movement input is canceled.
 	/// </summary>
-	/// <param name="inputAction">Input action was pressed</param>
-	/// <param name="unityEvent">Unity Event To Trigger</param>
+	private void OnMovementCanceled(InputAction.CallbackContext context)
+	{
+		OnMovement?.Invoke(Vector2.zero);
+	}
+
+	/// <summary>
+	/// Checks if the input action was pressed this frame and invokes the UnityEvent.
+	/// </summary>
+	/// <param name="inputAction">The input action to check.</param>
+	/// <param name="unityEvent">The UnityEvent to trigger.</param>
 	private void AddEventToAction(InputAction inputAction, ref UnityEvent unityEvent)
 	{
 		if (inputAction.WasPressedThisFrame())
@@ -92,10 +117,10 @@ public class InputManager : PersistentSingleton<InputManager>
 	}
 
 	/// <summary>
-	/// Checks every update if the input was held down and calls the unity event
+	/// Checks if the input action is currently held down and invokes the UnityEvent.
 	/// </summary>
-	/// <param name="inputAction">Input action was pressed</param>
-	/// <param name="unityEvent">Unity Event To Trigger</param>
+	/// <param name="inputAction">The input action to check.</param>
+	/// <param name="unityEvent">The UnityEvent to trigger.</param>
 	private void AddEventToActionHold(InputAction inputAction, ref UnityEvent unityEvent)
 	{
 		if (inputAction.IsPressed())
@@ -105,10 +130,10 @@ public class InputManager : PersistentSingleton<InputManager>
 	}
 
 	/// <summary>
-	/// Checks every update if the input was released and calls the unity event
+	/// Checks if the input action was released this frame and invokes the UnityEvent.
 	/// </summary>
-	/// <param name="inputAction">Input action was pressed</param>
-	/// <param name="unityEvent">Unity Event To Trigger</param>
+	/// <param name="inputAction">The input action to check.</param>
+	/// <param name="unityEvent">The UnityEvent to trigger.</param>
 	private void AddEventToActionRelease(InputAction inputAction, ref UnityEvent unityEvent)
 	{
 		if (inputAction.WasReleasedThisFrame())
@@ -122,7 +147,7 @@ public class InputManager : PersistentSingleton<InputManager>
 	/// </summary>
 	public void EnablePlayerInput()
 	{
-		InputActions.FindActionMap(PLAYER_ACTION_MAP).Enable();
+		_playerActionMap?.Enable();
 	}
 
 	/// <summary>
@@ -130,7 +155,7 @@ public class InputManager : PersistentSingleton<InputManager>
 	/// </summary>
 	public void DisablePlayerInput()
 	{
-		InputActions.FindActionMap(PLAYER_ACTION_MAP).Disable();
+		_playerActionMap?.Disable();
 	}
 
 	/// <summary>
@@ -138,7 +163,7 @@ public class InputManager : PersistentSingleton<InputManager>
 	/// </summary>
 	public void EnableUIInput()
 	{
-		InputActions.FindActionMap(UI_ACTION_MAP).Enable();
+		_uiActionMap?.Enable();
 	}
 
 	/// <summary>
@@ -146,6 +171,6 @@ public class InputManager : PersistentSingleton<InputManager>
 	/// </summary>
 	public void DisableUIInput()
 	{
-		InputActions.FindActionMap(UI_ACTION_MAP).Disable();
+		_uiActionMap?.Disable();
 	}
 }

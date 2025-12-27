@@ -81,7 +81,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	// Private Variables
 	private Tween _canvasAlphaTween;
-	private readonly Dictionary<string, VNCharacter> _activeCharacters = new Dictionary<string, VNCharacter>();
+	private readonly Dictionary<string, VNCharacter> _activeCharacters = new();
 	private Dictionary<string, Action<VNCharacter, string[]>> _animationHandlers;
 
 	private void Awake()
@@ -147,6 +147,7 @@ public class VisualNovelUI : MonoBehaviour
 		{
 			return result;
 		}
+
 		return defaultValue;
 	}
 
@@ -195,17 +196,17 @@ public class VisualNovelUI : MonoBehaviour
 	/// Updates the speaker name display.
 	/// Shows the name panel if a name is provided, hides it otherwise.
 	/// </summary>
-	/// <param name="name">Speaker name to display, or empty/null to hide.</param>
-	private void ChangeNameText(string name)
+	/// <param name="speakerName">Speaker name to display, or empty/null to hide.</param>
+	private void ChangeNameText(string speakerName)
 	{
-		if (string.IsNullOrEmpty(name))
+		if (string.IsNullOrEmpty(speakerName))
 		{
 			_namePanel.SetActive(false);
 		}
 		else
 		{
 			_namePanel.SetActive(true);
-			_nameText.text = name;
+			_nameText.text = speakerName;
 		}
 	}
 
@@ -303,11 +304,11 @@ public class VisualNovelUI : MonoBehaviour
 	/// <summary>
 	/// Updates a character's state, including spawning, moving, or changing sprite.
 	/// </summary>
-	/// <param name="name">Name of the character.</param>
+	/// <param name="characterName">Name of the character.</param>
 	/// <param name="position">Target screen position (left, right, center).</param>
 	/// <param name="spriteKey">Key for the new sprite, or null/empty to keep current.</param>
 	/// <param name="fadeDuration">Duration for fade transitions.</param>
-	private void UpdateCharacter(string name, CharacterPosition position, string spriteKey, float fadeDuration)
+	private void UpdateCharacter(string characterName, CharacterPosition position, string spriteKey, float fadeDuration)
 	{
 		Transform targetParent = GetPositionTransform(position);
 
@@ -315,7 +316,7 @@ public class VisualNovelUI : MonoBehaviour
 		Dictionary<VNCharacter, Vector3> positionSnapshots = SnapshotLayoutGroupPositions(targetParent);
 
 		// This character has not been created yet, instantiate it
-		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
+		if (!_activeCharacters.TryGetValue(characterName, out VNCharacter character))
 		{
 			character = Instantiate(_characterPrefab, targetParent).GetComponent<VNCharacter>();
 			if (character == null)
@@ -323,8 +324,9 @@ public class VisualNovelUI : MonoBehaviour
 				Debug.LogWarning("[VisualNovelUI] Character Prefab Doesn't Have VNCharacter");
 				return;
 			}
-			character.ChangeObjectName(name);
-			_activeCharacters[name] = character;
+
+			character.ChangeObjectName(characterName);
+			_activeCharacters[characterName] = character;
 
 			// Initialize alpha to 0 for fade-in
 			character.SetTransparency(0f);
@@ -334,7 +336,7 @@ public class VisualNovelUI : MonoBehaviour
 			AnimateLayoutGroupCharacters(positionSnapshots, fadeDuration);
 
 			// Slide character from the side
-			float slideOffset = (CharacterPosition.Right == position) ? _slideOffset : -_slideOffset;
+			float slideOffset = CharacterPosition.Right == position ? _slideOffset : -_slideOffset;
 			character.SlideIn(slideOffset, fadeDuration);
 			character.FadeIn(fadeDuration);
 		}
@@ -398,24 +400,26 @@ public class VisualNovelUI : MonoBehaviour
 	/// <summary>
 	/// Plays an animation on a specific character.
 	/// </summary>
-	/// <param name="name">Name of the character.</param>
-	/// <param name="animation">Animation name (e.g. shake, hop).</param>
+	/// <param name="characterName">Name of the character.</param>
+	/// <param name="animationID">Animation name (e.g. shake, hop).</param>
 	/// <param name="args">Arguments for the animation.</param>
-	private void PlayAnimation(string name, string animation, string[] args)
+	private void PlayAnimation(string characterName, string animationID, string[] args)
 	{
-		if (!_activeCharacters.TryGetValue(name, out VNCharacter character))
+		if (!_activeCharacters.TryGetValue(characterName, out VNCharacter character))
 		{
-			Debug.LogWarning($"[VisualNovelUI] Cannot play animation '{animation}'. Character '{name}' not found.");
+			Debug.LogWarning(
+				$"[VisualNovelUI] Cannot play animation '{animationID}'. Character '{characterName}' not found."
+			);
 			return;
 		}
 
-		if (_animationHandlers.TryGetValue(animation, out Action<VNCharacter, string[]> handler))
+		if (_animationHandlers.TryGetValue(animationID, out Action<VNCharacter, string[]> handler))
 		{
 			handler(character, args);
 		}
 		else
 		{
-			Debug.LogWarning($"[VisualNovelUI] Unknown animation '{animation}' for character '{name}'.");
+			Debug.LogWarning($"[VisualNovelUI] Unknown animation '{animationID}' for character '{characterName}'.");
 		}
 	}
 
@@ -426,11 +430,11 @@ public class VisualNovelUI : MonoBehaviour
 	/// <summary>
 	/// Removes a specific character from the screen.
 	/// </summary>
-	/// <param name="name">Name of the character to remove.</param>
+	/// <param name="characterName">Name of the character to remove.</param>
 	/// <param name="fadeDuration">Duration of fade out.</param>
-	private void RemoveCharacter(string name, float fadeDuration)
+	private void RemoveCharacter(string characterName, float fadeDuration)
 	{
-		if (_activeCharacters.TryGetValue(name, out VNCharacter character))
+		if (_activeCharacters.TryGetValue(characterName, out VNCharacter character))
 		{
 			// Snapshot positions of characters in layout group
 			Transform layoutGroup = GetLayoutGroupParent(character);
@@ -441,13 +445,13 @@ public class VisualNovelUI : MonoBehaviour
 			character.transform.position = snapshots[character];
 			snapshots.Remove(character);
 
-			_activeCharacters.Remove(name);
+			_activeCharacters.Remove(characterName);
 
 			// Animate remaining characters
 			AnimateLayoutGroupCharacters(snapshots, fadeDuration);
 
 			// Slide out, fade out, and destroy
-			float slideOffset = (layoutGroup == _rightSpriteTransform) ? _slideOffset : -_slideOffset;
+			float slideOffset = layoutGroup == _rightSpriteTransform ? _slideOffset : -_slideOffset;
 			character.SlideOut(slideOffset, fadeDuration);
 			character.FadeOutAndDestroy(fadeDuration);
 		}
@@ -457,7 +461,7 @@ public class VisualNovelUI : MonoBehaviour
 	/// Cleans up all character sprites from the screen
 	/// </summary>
 	/// <param name="fadeDuration">How long it takes to fade out and delete all characters</param>
-	private void RemoveAllCharacters(float fadeDuration = 1f)
+	private void RemoveAllCharacters(float fadeDuration)
 	{
 		var activeTransforms = new HashSet<Transform>();
 
@@ -468,12 +472,13 @@ public class VisualNovelUI : MonoBehaviour
 				activeTransforms.Add(character.transform);
 
 				Transform parent = character.transform.parent;
-				float slideOffset = (parent == _rightSpriteTransform) ? _slideOffset : -_slideOffset;
+				float slideOffset = parent == _rightSpriteTransform ? _slideOffset : -_slideOffset;
 				character.SlideOut(slideOffset, fadeDuration);
 
 				character.FadeOutAndDestroy(fadeDuration);
 			}
 		}
+
 		_activeCharacters.Clear();
 
 		// Helper to destroy any objects not tracked by the system
@@ -483,6 +488,7 @@ public class VisualNovelUI : MonoBehaviour
 			{
 				return;
 			}
+
 			for (int i = parent.childCount - 1; i >= 0; i--)
 			{
 				Transform child = parent.GetChild(i);
@@ -520,7 +526,7 @@ public class VisualNovelUI : MonoBehaviour
 	/// <summary>
 	/// Captures the current positions of all characters in a layout group.
 	/// </summary>
-	/// <param name="layoutGroup">The layout group transform to snapshot.</param>
+	/// <param name="layoutGroup">The layout group transforms snapshot.</param>
 	/// <returns>Dictionary mapping characters to their current positions.</returns>
 	private Dictionary<VNCharacter, Vector3> SnapshotLayoutGroupPositions(Transform layoutGroup)
 	{
@@ -532,11 +538,12 @@ public class VisualNovelUI : MonoBehaviour
 				snapshots[character.Value] = character.Value.GetPosition();
 			}
 		}
+
 		return snapshots;
 	}
 
 	/// <summary>
-	/// Animates all characters from their snapshotted positions to their new layout positions.
+	/// Animates all characters from their snap-shotted positions to their new layout positions.
 	/// </summary>
 	/// <param name="snapshots">Dictionary of characters and their old positions.</param>
 	/// <param name="duration">Duration of the tween animation.</param>
@@ -557,6 +564,7 @@ public class VisualNovelUI : MonoBehaviour
 				break;
 			}
 		}
+
 		if (layoutGroup == null)
 		{
 			return;

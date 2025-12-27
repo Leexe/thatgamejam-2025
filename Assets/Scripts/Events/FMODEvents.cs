@@ -24,7 +24,7 @@ public class FMODEvents : Singleton<FMODEvents>
 
 	// [field: SerializeField]
 	// [field: FoldoutGroup("SFX")]
-	// public EventReference Voice_Sfx { get; private set; }
+	// public EventReference Voice_SFX { get; private set; }
 
 	#endregion
 
@@ -34,7 +34,7 @@ public class FMODEvents : Singleton<FMODEvents>
 
 	// [field: SerializeField]
 	// [field: FoldoutGroup("Loop SFX", expanded: true)]
-	// public EventReference Reel_LoopSfx { get; private set; }
+	// public EventReference Reel_LoopSFX { get; private set; }
 
 	#endregion
 }

@@ -5,16 +5,15 @@ public class GameManager : PersistentSingleton<GameManager>
 {
 	// Events
 	[HideInInspector]
-	public DialogueEvents DialogueEventsRef = new DialogueEvents();
-
-	[HideInInspector]
 	public UnityEvent OnGamePaused;
 
 	[HideInInspector]
 	public UnityEvent OnGameResume;
 
+	public readonly DialogueEvents DialogueEventsRef = new DialogueEvents();
+
 	// Private Variables
-	public bool GamePaused { private set; get; } = false;
+	public bool GamePaused { private set; get; }
 
 	private void OnEnable()
 	{

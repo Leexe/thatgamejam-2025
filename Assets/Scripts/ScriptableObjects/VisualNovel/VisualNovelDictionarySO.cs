@@ -11,7 +11,7 @@ using UnityEngine;
 public class VisualNovelDictionarySO : SerializedScriptableObject
 {
 	public readonly Dictionary<string, EventReference> MusicMap;
-	public readonly Dictionary<string, EventReference> SfxMap;
+	public readonly Dictionary<string, EventReference> SFXMap;
 	public readonly Dictionary<string, EventReference> AmbienceMap;
 	public Dictionary<string, Sprite> CharacterSpriteMap;
 	public Dictionary<string, Sprite> BackgroundSpriteMap;

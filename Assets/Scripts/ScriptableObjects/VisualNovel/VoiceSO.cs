@@ -14,10 +14,10 @@ public class VoiceSO : SerializedScriptableObject
 
 	[Tooltip("The pitch range that a voice would be played at (0.5 = half pitch, 1 = normal, 2 = double)")]
 	[MinMaxSlider(0.5f, 2f, ShowFields = true)]
-	public Vector2 PitchVariation = new Vector2(0.9f, 1.1f);
+	public Vector2 PitchVariation = new(0.9f, 1.1f);
 
 	// Private Variables
-	private int _characterCount = 0;
+	private int _characterCount;
 
 	/// <summary>
 	/// Plays a voice sample with random pitch variation.

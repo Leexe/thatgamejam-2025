@@ -22,7 +22,7 @@ public class VisualNovelSFX : MonoBehaviour
 		_typewriter.onCharacterVisible.AddListener(PlayVoice);
 		GameManager.Instance.DialogueEventsRef.OnStartDialogue += ResetVoiceState;
 		GameManager.Instance.DialogueEventsRef.OnDialogueVoice += SetSpeakingCharacter;
-		GameManager.Instance.DialogueEventsRef.OnPlaySfx += PlaySFX;
+		GameManager.Instance.DialogueEventsRef.OnPlaySFX += PlaySFX;
 		GameManager.Instance.DialogueEventsRef.OnPlayAmbience += PlayAmbience;
 		GameManager.Instance.DialogueEventsRef.OnPlayMusic += PlayMusic;
 	}
@@ -34,7 +34,7 @@ public class VisualNovelSFX : MonoBehaviour
 		{
 			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= ResetVoiceState;
 			GameManager.Instance.DialogueEventsRef.OnDialogueVoice -= SetSpeakingCharacter;
-			GameManager.Instance.DialogueEventsRef.OnPlaySfx -= PlaySFX;
+			GameManager.Instance.DialogueEventsRef.OnPlaySFX -= PlaySFX;
 			GameManager.Instance.DialogueEventsRef.OnPlayAmbience -= PlayAmbience;
 			GameManager.Instance.DialogueEventsRef.OnPlayMusic -= PlayMusic;
 		}
@@ -50,6 +50,7 @@ public class VisualNovelSFX : MonoBehaviour
 		{
 			_currentCharacterVoice.ResetCount();
 		}
+
 		_charactersTalking = false;
 		_currentCharacterVoice = null;
 	}
@@ -83,7 +84,7 @@ public class VisualNovelSFX : MonoBehaviour
 	/// </summary>
 	private void PlaySFX(string key)
 	{
-		GenericPlayAudio(key, _vnDictionary.SfxMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
+		GenericPlayAudio(key, _vnDictionary.SFXMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
 	}
 
 	/// <summary>
