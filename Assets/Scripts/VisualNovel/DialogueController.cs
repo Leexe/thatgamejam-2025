@@ -366,6 +366,12 @@ public class DialogueController : MonoBehaviour
 			spriteBase = firstArg;
 		}
 
+		// Strip animation suffix from characterId if present (e.g., "clown+pop" -> "clown")
+		if (characterId.Contains('+'))
+		{
+			characterId = characterId.Split('+')[0];
+		}
+
 		// Check for clear command
 		if (args.Length > 1 && args[1].ToLower() == "clear")
 		{
