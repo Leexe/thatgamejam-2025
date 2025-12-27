@@ -243,19 +243,6 @@ public class DialogueEvents
 		OnChoiceSelect?.Invoke(choiceIndex);
 	}
 
-	/// <summary>
-	/// Event fired when choices should be hidden.
-	/// </summary>
-	public Action OnDisableChoices;
-
-	/// <summary>
-	/// Hides all currently displayed choices.
-	/// </summary>
-	public void DisableChoices()
-	{
-		OnDisableChoices?.Invoke();
-	}
-
 	#endregion
 
 	#region Audio Events

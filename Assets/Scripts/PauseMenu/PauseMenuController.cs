@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
 {
+	private static readonly int Progress = Shader.PropertyToID(ProgressName);
+
 	[Header("References")]
 	[SerializeField]
 	private GameObject _pauseMenuCanvas;
@@ -26,7 +28,7 @@ public class PauseMenuController : MonoBehaviour
 	private float _pauseTweenDuration = 0.5f;
 
 	[SerializeField]
-	private float _setttingsTweenDuration = 0.3f;
+	private float _setttingTweenDuration = 0.3f;
 
 	// Events
 	[HideInInspector]
@@ -37,7 +39,8 @@ public class PauseMenuController : MonoBehaviour
 
 	// Private Variables
 	private Sequence _transitionSequence;
-	private float _progress = 0f;
+	private float _progressID;
+	private const string ProgressName = "Progress";
 
 	private void Start()
 	{
@@ -104,11 +107,19 @@ public class PauseMenuController : MonoBehaviour
 		_transitionSequence.Stop();
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
-			.Group(Tween.Custom(target: this, _progress, 1, _pauseTweenDuration, (target, val) => _progress = val))
 			.Group(
 				Tween.Custom(
 					target: this,
-					_progress,
+					_progressID,
+					1,
+					_pauseTweenDuration,
+					(target, val) => target._progressID = val
+				)
+			)
+			.Group(
+				Tween.Custom(
+					target: this,
+					_progressID,
 					1,
 					_pauseTweenDuration,
 					(target, val) => target._contentCanvasGroup.alpha = val
@@ -117,10 +128,10 @@ public class PauseMenuController : MonoBehaviour
 			.Group(
 				Tween.Custom(
 					target: this,
-					_progress,
+					_progressID,
 					1,
 					_pauseTweenDuration,
-					(target, val) => target._background.material.SetFloat("_Progress", val)
+					(target, val) => target._background.material.SetFloat(Progress, val)
 				)
 			);
 	}
@@ -135,11 +146,19 @@ public class PauseMenuController : MonoBehaviour
 		// Tweens
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
-			.Group(Tween.Custom(target: this, _progress, 0, _pauseTweenDuration, (target, val) => _progress = val))
 			.Group(
 				Tween.Custom(
 					target: this,
-					_progress,
+					_progressID,
+					0,
+					_pauseTweenDuration,
+					(target, val) => target._progressID = val
+				)
+			)
+			.Group(
+				Tween.Custom(
+					target: this,
+					_progressID,
 					0,
 					_pauseTweenDuration,
 					(target, val) => target._contentCanvasGroup.alpha = val
@@ -148,10 +167,10 @@ public class PauseMenuController : MonoBehaviour
 			.Group(
 				Tween.Custom(
 					target: this,
-					_progress,
+					_progressID,
 					0,
 					_pauseTweenDuration,
-					(target, val) => target._background.material.SetFloat("_Progress", val)
+					(target, val) => target._background.material.SetFloat(Progress, val)
 				)
 			)
 			.ChainCallback(() => _pauseMenuCanvas.SetActive(false));
@@ -173,7 +192,7 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_mainTabCanvasGroup.alpha,
 					0,
-					_setttingsTweenDuration,
+					_setttingTweenDuration,
 					(target, val) => target._mainTabCanvasGroup.alpha = val
 				)
 			)
@@ -182,7 +201,7 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_settingsTabCanvasGroup.alpha,
 					1,
-					_setttingsTweenDuration,
+					_setttingTweenDuration,
 					(target, val) => target._settingsTabCanvasGroup.alpha = val
 				)
 			);
@@ -204,7 +223,7 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_settingsTabCanvasGroup.alpha,
 					0,
-					_setttingsTweenDuration,
+					_setttingTweenDuration,
 					(target, val) => target._settingsTabCanvasGroup.alpha = val
 				)
 			)
@@ -213,7 +232,7 @@ public class PauseMenuController : MonoBehaviour
 					target: this,
 					_mainTabCanvasGroup.alpha,
 					1,
-					_setttingsTweenDuration,
+					_setttingTweenDuration,
 					(target, val) => target._mainTabCanvasGroup.alpha = val
 				)
 			);
@@ -226,7 +245,7 @@ public class PauseMenuController : MonoBehaviour
 		_contentCanvasGroup.interactable = true;
 	}
 
-	// Makes buttons uninteractable
+	// Makes buttons un-interactable
 	private void DisableButtons()
 	{
 		_contentCanvasGroup.blocksRaycasts = false;

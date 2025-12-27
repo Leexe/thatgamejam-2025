@@ -21,10 +21,10 @@ public class DialogueController : MonoBehaviour
 
 	private DialogueEvents _dialogueEvents;
 	private Story _story;
-	private bool _storyPlaying = false;
-	private bool _typewriterPlaying = false;
+	private bool _storyPlaying;
+	private bool _typewriterPlaying;
 	private int _choiceIndex = -1;
-	private bool _needToDisplayChoices = false;
+	private bool _needToDisplayChoices;
 
 	private bool ChoicesAvailable => _story.currentChoices.Count > 0;
 
@@ -53,6 +53,7 @@ public class DialogueController : MonoBehaviour
 			_dialogueEvents.OnTypewriterFinish -= SetTypewriterInactive;
 			_dialogueEvents.OnTypewriterFinish -= DisplayChoices;
 		}
+
 		if (InputManager.Instance)
 		{
 			InputManager.Instance.OnContinueStoryPerformed.RemoveListener(ContinueStory);
@@ -61,10 +62,10 @@ public class DialogueController : MonoBehaviour
 
 	private void Start()
 	{
-		_dialogueEvents.RemoveAllCharacters(0f);
+		_dialogueEvents.RemoveAllCharacters();
 	}
 
-	[Title("Debug:")]
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartTestingStory()
@@ -72,6 +73,7 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Testing");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartChudStory()
@@ -79,6 +81,7 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Beginning");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartAnimationTest()
@@ -86,11 +89,20 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Testing_Animations");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartVoiceTest()
 	{
 		_dialogueEvents.StartStory("Testing_Voices");
+	}
+
+	[FoldoutGroup("Debug")]
+	[Button]
+	[UsedImplicitly]
+	private void StartTextAnimatorTest()
+	{
+		_dialogueEvents.StartStory("Testing_TextAnimator");
 	}
 
 	#region Story Managers
@@ -150,7 +162,7 @@ public class DialogueController : MonoBehaviour
 
 		if (_story.canContinue)
 		{
-			string story = _story.Continue();
+			_story.Continue();
 			_typewriterPlaying = true;
 
 			// Signal start of new dialogue line
@@ -291,19 +303,19 @@ public class DialogueController : MonoBehaviour
 	/// <param name="tags">List of tag strings from the current Ink line.</param>
 	private void ParseTags(List<string> tags)
 	{
-		foreach (string tag in tags)
+		foreach (string inkTag in tags)
 		{
-			string[] parts = tag.Split('_');
+			string[] parts = inkTag.Split('_');
 			if (parts.Length < 1)
 			{
-				Debug.LogWarning($"[DialogueController] Empty tag encountered: {tag}");
+				Debug.LogWarning($"[DialogueController] Empty tag encountered: {inkTag}");
 				continue;
 			}
 
 			string identifier = parts[0].ToLower();
 			string[] args = parts.Skip(1).ToArray();
 
-			ProcessTag(identifier, args, tag);
+			ProcessTag(identifier, args, inkTag);
 		}
 	}
 
@@ -401,6 +413,7 @@ public class DialogueController : MonoBehaviour
 			{
 				spriteArgs[i] = args[i];
 			}
+
 			spriteKey = string.Join("_", spriteArgs);
 		}
 
@@ -456,8 +469,8 @@ public class DialogueController : MonoBehaviour
 			return;
 		}
 
-		string name = args[0];
-		_dialogueEvents.UpdateName(name);
+		string characterName = args[0];
+		_dialogueEvents.UpdateName(characterName);
 	}
 
 	/// <summary>

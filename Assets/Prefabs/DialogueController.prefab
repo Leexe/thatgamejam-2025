@@ -916,13 +916,14 @@ MonoBehaviour:
   _typewriter: {fileID: 1186690133704978293}
   _visualNovelDictionary: {fileID: 11400000, guid: 391d02018765b41f4ae5cb69b61197ea, type: 2}
   _characterPrefab: {fileID: 6477682457468806699, guid: 074b4cd2895de4266bd3802bf7e001e0, type: 3}
-  _leftPosition: {fileID: 5813942347806033913}
-  _centerPosition: {fileID: 368189074489385404}
-  _rightPosition: {fileID: 155742081974939357}
+  _leftSpriteTransform: {fileID: 5813942347806033913}
+  _centerSpriteTransform: {fileID: 368189074489385404}
+  _rightSpriteTransform: {fileID: 155742081974939357}
   _nonLayoutParent: {fileID: 7563555933312891309}
   _canvasGroup: {fileID: 6748709315100956854}
   _namePanel: {fileID: 616905194644350493}
   _nameText: {fileID: 6324184216006114400}
+  _backgroundImage: {fileID: 4717657879626835893}
   _defaultFadeOutDuration: 1
   _defaultShakeOffset: 20
   _defaultAnimationDuration: 0.7

@@ -50,6 +50,7 @@ public class VisualNovelSFX : MonoBehaviour
 		{
 			_currentCharacterVoice.ResetCount();
 		}
+
 		_charactersTalking = false;
 		_currentCharacterVoice = null;
 	}
@@ -83,7 +84,7 @@ public class VisualNovelSFX : MonoBehaviour
 	/// </summary>
 	private void PlaySFX(string key)
 	{
-		GenericPlayAudio(key, _vnDictionary.SfxMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
+		GenericPlayAudio(key, _vnDictionary.SFXMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
 	}
 
 	/// <summary>

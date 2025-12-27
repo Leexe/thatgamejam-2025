@@ -148,3 +148,38 @@ Plays ambient looping sound (rain, wind, etc).
 Plays a one-shot sound effect.
 **Syntax:** `#sx_SoundName`
 **Example:** `#sx_door_slam`
+
+---
+
+## Text Effects (Text Animator)
+
+You can apply special effects to the text itself (like wavy text, shaking text, or colors) using tags inside the text line.
+These tags use angle brackets `< >` instead of `#`.
+
+**Syntax:** `<effect>Your text here</effect>` or `<effect a=value>Your text here</effect>`
+
+**Built-in Effects Documentation:** https://docs.febucci.com/text-animator-unity/effects/built-in-effects-list
+
+### Common Effects
+
+| Tag | Description | Example |
+| :--- | :--- | :--- |
+| `<wave>` | Wavy text animation | `<wave>I'm feeling dizzy...</wave>` |
+| `<shake>` | Shaking text animation | `<shake>I'm so angry!</shake>` |
+| `<wiggle>` | Wiggling text animation | `<wiggle>Wiggle wiggle!</wiggle>` |
+| `<rainb>` | Rainbow colored text | `<rainb>It's magical!</rainb>` |
+| `<bounce>` | Bouncing text | `<bounce>Boing!</bounce>` |
+
+### Text Control
+You can also control the flow of the text.
+
+| Tag | Description | Example |
+| :--- | :--- | :--- |
+| `<waitfor=seconds>` | Pauses the typewriter | `Wait for it... <waitfor=1> NOW!` |
+| `<speed=value>` | Changes typing speed | `Start normal. <speed=0.1>Slooooooooooow... <speed=10>Faaaaaaaaaaaaaaaast!` |
+| `<br>` | Line break | `Line 1<br>Line 2` |
+
+**Note:** Unlike the `#` tags which go at the end of the line, these tags go **inside** the text where you want the effect to happen.
+
+**Documentation:** https://docs.febucci.com/text-animator-unity
+

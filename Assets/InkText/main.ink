@@ -89,3 +89,35 @@ This is narration. No voice should play here.
 #nm_none
 Voice test complete.
 -> END
+
+=== Testing_TextAnimator ===
+
+#nm_none
+Testing Text Animator Effects.
+
+Basic Wiggle: <wiggle>Wiggle Wiggle</wiggle>
+High Intensity Wiggle: <wiggle a=2>INTENSE WIGGLE</wiggle>
+Low Frequency Wiggle: <wiggle f=0.5>Slow Wiggle</wiggle>
+
+Basic Shake: <shake>Shaking Text</shake>
+Violent Shake: <shake a=3>VIOLENT SHAKE</shake>
+
+Wave Effect: <wave>Wavy Text goes up and down</wave>
+Fast Wave: <wave f=5>Super Fast Wave</wave>
+
+Rotation ("Rot"): <rot>Rotating Text</rot>
+Swing: <swing>Swinging Text</swing>
+
+Rainbow: <rainb>Taste the Rainbow</rainb>
+Rainbow (Fast): <rainb f=2>Fast Rainbow</rainb>
+
+Fade In: <fade>Fading In Text</fade>
+Delayed Words: Wait for it... <waitfor=1> Now!
+
+<wiggle><rainb>Wiggling Rainbow</rainb></wiggle>
+<shake a=0.5><wave f=2>Shaking Wave</wave></shake>
+
+Typewritte Speed: Start normal. <speed=0.1>Slooooooooooow... <speed=10>Faaaaaaaaaaaaaaaast!
+
+Test Complete.
+-> END

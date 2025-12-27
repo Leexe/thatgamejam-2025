@@ -5,16 +5,15 @@ public class GameManager : PersistentSingleton<GameManager>
 {
 	// Events
 	[HideInInspector]
-	public DialogueEvents DialogueEventsRef = new DialogueEvents();
-
-	[HideInInspector]
 	public UnityEvent OnGamePaused;
 
 	[HideInInspector]
 	public UnityEvent OnGameResume;
 
+	public readonly DialogueEvents DialogueEventsRef = new DialogueEvents();
+
 	// Private Variables
-	public bool GamePaused { private set; get; } = false;
+	public bool GamePaused { private set; get; }
 
 	private void OnEnable()
 	{
@@ -49,7 +48,7 @@ public class GameManager : PersistentSingleton<GameManager>
 	}
 
 	/// <summary>
-	/// Unpauses the game, sets the time scale to 0
+	/// Unpauses the game, sets the timescale to 0
 	/// </summary>
 	private void FreezeTime()
 	{
@@ -57,7 +56,7 @@ public class GameManager : PersistentSingleton<GameManager>
 	}
 
 	/// <summary>
-	/// Unpauses the game, sets the time scale to 1
+	/// Unpauses the game, sets the timescale to 1
 	/// </summary>
 	private void UnfreezeTime()
 	{

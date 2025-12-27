@@ -214,7 +214,7 @@ public class VNCharacter : MonoBehaviour
 				_image.transform,
 				new Vector3(shakeOffset, 0f, 0f),
 				duration,
-				frequency: 15,
+				15,
 				easeBetweenShakes: Ease.Default
 			)
 			.OnComplete(() => _layoutElement.ignoreLayout = false);
@@ -236,7 +236,7 @@ public class VNCharacter : MonoBehaviour
 				_image.transform,
 				new Vector3(0f, shakeOffset, 0f),
 				duration,
-				frequency: 15,
+				15,
 				easeBetweenShakes: Ease.Default
 			)
 			.OnComplete(() => _layoutElement.ignoreLayout = false);
@@ -270,8 +270,8 @@ public class VNCharacter : MonoBehaviour
 			new Vector3(_image.transform.localScale.x * popStrength, _image.transform.localScale.y * popStrength, 0),
 			duration / 2f,
 			Ease.Default,
-			cycles: 2,
-			cycleMode: CycleMode.Yoyo
+			2,
+			CycleMode.Yoyo
 		);
 	}
 
@@ -293,8 +293,8 @@ public class VNCharacter : MonoBehaviour
 				startPos + new Vector3(0, jumpHeight, 0),
 				duration / 2f,
 				Ease.Default,
-				cycles: 2,
-				cycleMode: CycleMode.Yoyo
+				2,
+				CycleMode.Yoyo
 			)
 			.OnComplete(() =>
 			{
@@ -321,8 +321,8 @@ public class VNCharacter : MonoBehaviour
 				startPos + new Vector3(0, -hopHeight, 0),
 				duration / 2f,
 				Ease.OutQuad,
-				cycles: 2,
-				cycleMode: CycleMode.Yoyo
+				2,
+				CycleMode.Yoyo
 			)
 			.OnComplete(() =>
 			{
@@ -365,8 +365,8 @@ public class VNCharacter : MonoBehaviour
 				startPos + new Vector3(dodgeDistance, 0, 0),
 				duration / 2f,
 				Ease.OutQuad,
-				cycles: 2,
-				cycleMode: CycleMode.Yoyo
+				2,
+				CycleMode.Yoyo
 			)
 			.OnComplete(() =>
 			{
@@ -379,9 +379,9 @@ public class VNCharacter : MonoBehaviour
 
 	#region Setup
 
-	public void ChangeObjectName(string name)
+	public void ChangeObjectName(string objName)
 	{
-		this.name = name;
+		name = objName;
 	}
 
 	public void SwitchSprite(Sprite sprite)
