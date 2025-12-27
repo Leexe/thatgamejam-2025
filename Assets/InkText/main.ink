@@ -108,14 +108,13 @@ Fast Wave: <wave f=5>Super Fast Wave</wave>
 Rotation ("Rot"): <rot>Rotating Text</rot>
 Swing: <swing>Swinging Text</swing>
 
-Rainbow: <rainbow>Taste the Rainbow</rainbow>
-Gradient: <gradient=red;blue>Red to Blue Gradient</gradient>
+Rainbow: <rainb>Taste the Rainbow</rainb>
+Rainbow (Fast): <rainb f=2>Fast Rainbow</rainb>
 
 Fade In: <fade>Fading In Text</fade>
-Typewriter Wait: Wait for it... <?wait=1?> Now!
+Delayed Words: Wait for it... <waitfor=1> Now!
 
-Effect Combinations:
-<wiggle><rainbow>Wiggling Rainbow</rainbow></wiggle>
+<wiggle><rainb>Wiggling Rainbow</rainb></wiggle>
 <shake a=0.5><wave f=2>Shaking Wave</wave></shake>
 
 Test Complete.
