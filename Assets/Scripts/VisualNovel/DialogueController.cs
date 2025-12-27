@@ -64,7 +64,7 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.RemoveAllCharacters(0f);
 	}
 
-	[Title("Debug:")]
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartTestingStory()
@@ -72,6 +72,7 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Testing");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartChudStory()
@@ -79,6 +80,7 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Beginning");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartAnimationTest()
@@ -86,11 +88,20 @@ public class DialogueController : MonoBehaviour
 		_dialogueEvents.StartStory("Testing_Animations");
 	}
 
+	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
 	private void StartVoiceTest()
 	{
 		_dialogueEvents.StartStory("Testing_Voices");
+	}
+
+	[FoldoutGroup("Debug")]
+	[Button]
+	[UsedImplicitly]
+	private void StartTextAnimatorTest()
+	{
+		_dialogueEvents.StartStory("Testing_TextAnimator");
 	}
 
 	#region Story Managers
