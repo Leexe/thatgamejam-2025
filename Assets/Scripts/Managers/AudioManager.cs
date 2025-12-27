@@ -3,7 +3,7 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-public class AudioManager : PersistantSingleton<AudioManager>
+public class AudioManager : PersistentSingleton<AudioManager>
 {
 	#region Fields
 
@@ -27,7 +27,12 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	private readonly Dictionary<FMOD.GUID, EventInstance> _musicTrackInstances =
 		new Dictionary<FMOD.GUID, EventInstance>();
 	private readonly Dictionary<FMOD.GUID, EventInstance> _activeSnapshots = new Dictionary<FMOD.GUID, EventInstance>();
+
+	// Ambient Instances
 	private EventInstance _currentAmbientTrack;
+	private EventReference _currentAmbientReference;
+	private readonly Dictionary<FMOD.GUID, EventInstance> _ambientTrackInstances =
+		new Dictionary<FMOD.GUID, EventInstance>();
 
 	#endregion
 
@@ -88,6 +93,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 			eventInstance.release();
 		}
 		_musicTrackInstances.Clear();
+		_ambientTrackInstances.Clear();
 		foreach (StudioEventEmitter emitter in _eventEmitters)
 		{
 			emitter.Stop();
@@ -127,25 +133,7 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	/// </summary>
 	public void SwitchMusicTrack(EventReference musicTrack)
 	{
-		if (musicTrack.Guid == _currentMusicReference.Guid)
-		{
-			PlayCurrentMusicTrack();
-			return;
-		}
-
-		if (_currentMusicTrack.isValid())
-		{
-			_currentMusicTrack.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-		}
-
-		_currentMusicReference = musicTrack;
-
-		if (!_musicTrackInstances.ContainsKey(musicTrack.Guid))
-		{
-			_musicTrackInstances[musicTrack.Guid] = CreateInstance(musicTrack);
-		}
-
-		_currentMusicTrack = _musicTrackInstances[musicTrack.Guid];
+		SwitchTrack(musicTrack, ref _currentMusicReference, ref _currentMusicTrack, _musicTrackInstances);
 		PlayCurrentMusicTrack();
 	}
 
@@ -175,6 +163,45 @@ public class AudioManager : PersistantSingleton<AudioManager>
 	public void StopCurrentAmbientTrack()
 	{
 		StopInstance(_currentAmbientTrack, true);
+	}
+
+	/// <summary>
+	/// Switches the ambient track
+	/// </summary>
+	public void SwitchAmbienceTrack(EventReference ambienceTrack)
+	{
+		SwitchTrack(ambienceTrack, ref _currentAmbientReference, ref _currentAmbientTrack, _ambientTrackInstances);
+		PlayCurrentAmbientTrack();
+	}
+
+	/// <summary>
+	/// Generic helper to switch tracks for music or ambience.
+	/// </summary>
+	private void SwitchTrack(
+		EventReference newTrack,
+		ref EventReference currentReference,
+		ref EventInstance currentInstance,
+		Dictionary<FMOD.GUID, EventInstance> instanceCache
+	)
+	{
+		if (newTrack.Guid == currentReference.Guid)
+		{
+			return; // Already playing this track
+		}
+
+		if (currentInstance.isValid())
+		{
+			currentInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
+		}
+
+		currentReference = newTrack;
+
+		if (!instanceCache.ContainsKey(newTrack.Guid))
+		{
+			instanceCache[newTrack.Guid] = CreateInstance(newTrack);
+		}
+
+		currentInstance = instanceCache[newTrack.Guid];
 	}
 
 	#endregion

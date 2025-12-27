@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GameManager : PersistantSingleton<GameManager>
+public class GameManager : PersistentSingleton<GameManager>
 {
 	// Events
 	[HideInInspector]

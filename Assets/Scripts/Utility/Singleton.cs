@@ -37,7 +37,10 @@ public abstract class Singleton<T> : StaticInstance<T>
 /// <summary>
 /// A Singleton that does not get destroyed on scene loads
 /// </summary>
-public abstract class PersistantSingleton<T> : Singleton<T>
+/// <summary>
+/// A Singleton that does not get destroyed on scene loads
+/// </summary>
+public abstract class PersistentSingleton<T> : Singleton<T>
 	where T : MonoBehaviour
 {
 	protected override void Awake()
