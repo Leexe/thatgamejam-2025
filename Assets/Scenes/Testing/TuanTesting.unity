@@ -760,23 +760,23 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Voice_Sfx>k__BackingField.Path
-      value: event:/CW_Dialogue
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Voice_Sfx>k__BackingField.Guid.Data1
-      value: 1623900547
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Voice_Sfx>k__BackingField.Guid.Data2
-      value: 1183564685
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Voice_Sfx>k__BackingField.Guid.Data3
-      value: -1514693713
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Voice_Sfx>k__BackingField.Guid.Data4
-      value: -761915895
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

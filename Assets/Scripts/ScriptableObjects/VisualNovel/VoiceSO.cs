@@ -68,8 +68,8 @@ public class VoiceSO : SerializedScriptableObject
 	/// <returns>A scrambled hash value.</returns>
 	private int GetCharHash(char character)
 	{
-		int charCode = (int)character;
-		return (charCode * 31 + 17) ^ (charCode >> 2);
+		int charCode = character;
+		return ((charCode * 31) + 17) ^ (charCode >> 2);
 	}
 
 	/// <summary>

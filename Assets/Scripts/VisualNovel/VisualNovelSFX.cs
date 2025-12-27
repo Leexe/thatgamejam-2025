@@ -2,7 +2,7 @@ using Febucci.TextAnimatorForUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class VisualNovelVoices : MonoBehaviour
+public class VisualNovelSFX : MonoBehaviour
 {
 	[FoldoutGroup("References")]
 	[SerializeField]
