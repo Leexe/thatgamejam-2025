@@ -863,6 +863,7 @@ GameObject:
   - component: {fileID: 2382799599912282527}
   - component: {fileID: 1392654113957027913}
   - component: {fileID: 1685082927716918428}
+  - component: {fileID: 8681759257847459427}
   m_Layer: 0
   m_Name: DialogueController
   m_TagString: Untagged
@@ -927,6 +928,20 @@ MonoBehaviour:
   _defaultAnimationDuration: 0.7
   _slideOffset: 100
   _flashColor: {r: 1, g: 0.4764151, b: 0.4764151, a: 1}
+--- !u!114 &8681759257847459427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7228143630980288931}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec86c244978364f40b9e251f94c7ec12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::VisualNovelVoices
+  _typewriter: {fileID: 1186690133704978293}
+  _vnDictionary: {fileID: 11400000, guid: 391d02018765b41f4ae5cb69b61197ea, type: 2}
 --- !u!1 &7339729798253768515
 GameObject:
   m_ObjectHideFlags: 0
@@ -1118,8 +1133,7 @@ MonoBehaviour:
     defaultEffectsMode: 1
     timeScale: 1
     defaultBehaviorTags: []
-    defaultAppearanceTags:
-    - fade d=0.05
+    defaultAppearanceTags: []
     defaultDisappearanceTags: []
     isAnimatingBehaviors: 1
     isAnimatingAppearances: 1
