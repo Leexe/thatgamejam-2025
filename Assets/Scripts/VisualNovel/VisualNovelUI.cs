@@ -28,15 +28,15 @@ public class VisualNovelUI : MonoBehaviour
 
 	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _leftSpritePosition;
+	private Transform _leftSpriteTransform;
 
 	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _centerSpritePosition;
+	private Transform _centerSpriteTransform;
 
 	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _rightSpritePosition;
+	private Transform _rightSpriteTransform;
 
 	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
@@ -53,6 +53,10 @@ public class VisualNovelUI : MonoBehaviour
 	[FoldoutGroup("References/UI References")]
 	[SerializeField]
 	private TextMeshProUGUI _nameText;
+
+	[FoldoutGroup("References/UI References")]
+	[SerializeField]
+	private Image _backgroundImage;
 
 	[TitleGroup("Default Values")]
 	[FoldoutGroup("Default Values/Animation")]
@@ -154,6 +158,7 @@ public class VisualNovelUI : MonoBehaviour
 		GameManager.Instance.DialogueEventsRef.OnCharacterAnimation += PlayAnimation;
 		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
 		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
+		GameManager.Instance.DialogueEventsRef.OnBackgroundUpdate += ChangeBackground;
 		GameManager.Instance.DialogueEventsRef.OnEndStory += DisableStoryPanel;
 		GameManager.Instance.DialogueEventsRef.OnEndStory += RemoveAllCharacters;
 		GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove += RemoveAllCharacters;
@@ -174,6 +179,7 @@ public class VisualNovelUI : MonoBehaviour
 			GameManager.Instance.DialogueEventsRef.OnCharacterAnimation -= PlayAnimation;
 			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
 			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
+			GameManager.Instance.DialogueEventsRef.OnBackgroundUpdate -= ChangeBackground;
 			GameManager.Instance.DialogueEventsRef.OnEndStory -= DisableStoryPanel;
 			GameManager.Instance.DialogueEventsRef.OnEndStory -= RemoveAllCharacters;
 			GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove -= RemoveAllCharacters;
@@ -267,7 +273,32 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-	#region Character Management
+	#region Background Sprite
+
+	/// <summary>
+	/// Updates the background image.
+	/// </summary>
+	/// <param name="backgroundKey">The key for the background sprite.</param>
+	private void ChangeBackground(string backgroundKey)
+	{
+		if (string.IsNullOrEmpty(backgroundKey))
+		{
+			return;
+		}
+
+		if (_visualNovelDictionary.BackgroundSpriteMap.TryGetValue(backgroundKey, out Sprite bgSprite))
+		{
+			_backgroundImage.sprite = bgSprite;
+		}
+		else
+		{
+			Debug.LogWarning($"[VisualNovelUI] Background sprite not found for key: {backgroundKey}");
+		}
+	}
+
+	#endregion
+
+	#region Character Sprite
 
 	/// <summary>
 	/// Updates a character's state, including spawning, moving, or changing sprite.
@@ -416,7 +447,7 @@ public class VisualNovelUI : MonoBehaviour
 			AnimateLayoutGroupCharacters(snapshots, fadeDuration);
 
 			// Slide out, fade out, and destroy
-			float slideOffset = (layoutGroup == _rightSpritePosition) ? _slideOffset : -_slideOffset;
+			float slideOffset = (layoutGroup == _rightSpriteTransform) ? _slideOffset : -_slideOffset;
 			character.SlideOut(slideOffset, fadeDuration);
 			character.FadeOutAndDestroy(fadeDuration);
 		}
@@ -437,7 +468,7 @@ public class VisualNovelUI : MonoBehaviour
 				activeTransforms.Add(character.transform);
 
 				Transform parent = character.transform.parent;
-				float slideOffset = (parent == _rightSpritePosition) ? _slideOffset : -_slideOffset;
+				float slideOffset = (parent == _rightSpriteTransform) ? _slideOffset : -_slideOffset;
 				character.SlideOut(slideOffset, fadeDuration);
 
 				character.FadeOutAndDestroy(fadeDuration);
@@ -469,9 +500,9 @@ public class VisualNovelUI : MonoBehaviour
 			}
 		}
 
-		DestroyOrphans(_leftSpritePosition);
-		DestroyOrphans(_centerSpritePosition);
-		DestroyOrphans(_rightSpritePosition);
+		DestroyOrphans(_leftSpriteTransform);
+		DestroyOrphans(_centerSpriteTransform);
+		DestroyOrphans(_rightSpriteTransform);
 	}
 
 	/// <summary>
@@ -484,7 +515,7 @@ public class VisualNovelUI : MonoBehaviour
 
 	#endregion
 
-	#region Position Management
+	#region Position
 
 	/// <summary>
 	/// Captures the current positions of all characters in a layout group.
@@ -554,9 +585,9 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		return position switch
 		{
-			CharacterPosition.Left => _leftSpritePosition,
-			CharacterPosition.Right => _rightSpritePosition,
-			_ => _centerSpritePosition,
+			CharacterPosition.Left => _leftSpriteTransform,
+			CharacterPosition.Right => _rightSpriteTransform,
+			_ => _centerSpriteTransform,
 		};
 	}
 
