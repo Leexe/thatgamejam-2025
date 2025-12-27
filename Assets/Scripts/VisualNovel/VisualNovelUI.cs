@@ -13,63 +13,65 @@ using UnityEngine.UI;
 /// </summary>
 public class VisualNovelUI : MonoBehaviour
 {
-	[FoldoutGroup("References")]
+	[TitleGroup("References")]
+	[FoldoutGroup("References/Game References")]
 	[SerializeField]
 	private TypewriterComponent _typewriter;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Game References")]
 	[SerializeField]
 	private VisualNovelDictionarySO _visualNovelDictionary;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
 	private GameObject _characterPrefab;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _leftPosition;
+	private Transform _leftSpritePosition;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _centerPosition;
+	private Transform _centerSpritePosition;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
-	private Transform _rightPosition;
+	private Transform _rightSpritePosition;
 
-	[FoldoutGroup("References")]
+	[FoldoutGroup("References/Character Sprite References")]
 	[SerializeField]
 	private Transform _nonLayoutParent; // Parent for character sprites that are about to get deleted
 
-	[FoldoutGroup("UI References")]
+	[FoldoutGroup("References/UI References")]
 	[SerializeField]
 	private CanvasGroup _canvasGroup;
 
-	[FoldoutGroup("UI References")]
+	[FoldoutGroup("References/UI References")]
 	[SerializeField]
 	private GameObject _namePanel;
 
-	[FoldoutGroup("UI References")]
+	[FoldoutGroup("References/UI References")]
 	[SerializeField]
 	private TextMeshProUGUI _nameText;
 
-	[FoldoutGroup("Default Values")]
+	[TitleGroup("Default Values")]
+	[FoldoutGroup("Default Values/Animation")]
 	[SerializeField]
 	private float _defaultFadeOutDuration = 1f;
 
-	[FoldoutGroup("Default Values")]
+	[FoldoutGroup("Default Values/Animation")]
 	[SerializeField]
 	private float _defaultShakeOffset = 20f;
 
-	[FoldoutGroup("Default Values")]
+	[FoldoutGroup("Default Values/Animation")]
 	[SerializeField]
 	private float _defaultAnimationDuration = 0.7f;
 
-	[FoldoutGroup("Default Values")]
+	[FoldoutGroup("Default Values/Animation")]
 	[SerializeField]
 	private float _slideOffset = 100f;
 
-	[FoldoutGroup("Default Values")]
+	[FoldoutGroup("Default Values/Animation")]
 	[SerializeField]
 	private Color _flashColor = Color.white;
 
@@ -414,7 +416,7 @@ public class VisualNovelUI : MonoBehaviour
 			AnimateLayoutGroupCharacters(snapshots, fadeDuration);
 
 			// Slide out, fade out, and destroy
-			float slideOffset = (layoutGroup == _rightPosition) ? _slideOffset : -_slideOffset;
+			float slideOffset = (layoutGroup == _rightSpritePosition) ? _slideOffset : -_slideOffset;
 			character.SlideOut(slideOffset, fadeDuration);
 			character.FadeOutAndDestroy(fadeDuration);
 		}
@@ -435,7 +437,7 @@ public class VisualNovelUI : MonoBehaviour
 				activeTransforms.Add(character.transform);
 
 				Transform parent = character.transform.parent;
-				float slideOffset = (parent == _rightPosition) ? _slideOffset : -_slideOffset;
+				float slideOffset = (parent == _rightSpritePosition) ? _slideOffset : -_slideOffset;
 				character.SlideOut(slideOffset, fadeDuration);
 
 				character.FadeOutAndDestroy(fadeDuration);
@@ -467,9 +469,9 @@ public class VisualNovelUI : MonoBehaviour
 			}
 		}
 
-		DestroyOrphans(_leftPosition);
-		DestroyOrphans(_centerPosition);
-		DestroyOrphans(_rightPosition);
+		DestroyOrphans(_leftSpritePosition);
+		DestroyOrphans(_centerSpritePosition);
+		DestroyOrphans(_rightSpritePosition);
 	}
 
 	/// <summary>
@@ -552,9 +554,9 @@ public class VisualNovelUI : MonoBehaviour
 	{
 		return position switch
 		{
-			CharacterPosition.Left => _leftPosition,
-			CharacterPosition.Right => _rightPosition,
-			_ => _centerPosition,
+			CharacterPosition.Left => _leftSpritePosition,
+			CharacterPosition.Right => _rightSpritePosition,
+			_ => _centerSpritePosition,
 		};
 	}
 
