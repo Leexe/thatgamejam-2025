@@ -53,24 +53,47 @@ You can assign a specific unique ID to a character while using a shared sprite a
 
 ---
 
-## Animation Tag (`an`)
-Plays a special animation on a specific character.
+## Animation Tags
+
+You can play animations on characters using the dedicated `an` tag or the inline `+` syntax.
+
+### 1. Dedicated Animation Tag (`an`)
+Plays an animation on a character without changing their sprite.
 
 **Syntax:** `#an_CharacterID_AnimationName_OptionalArgs...`
 
+**Example:**
+```ink
+#an_Sera_shake      // Sera shakes with default settings
+#an_Sera_hop_50     // Sera hops with height 50
+```
+
+### 2. Inline Animation Syntax (`+`)
+Combines a sprite change (or move) with an animation in a single tag. Use `+` to separate the sprite name from the animation.
+
+**Syntax:** `#position_CharacterID_Sprite+Animation`
+
+**Examples:**
+```ink
+#chl_Sera_Happy+Shake       // Changes Sera to Happy sprite trying to LEFT position AND Shakes
+#chr_Dude+Hop               // Dude Hops on the right (keeping current sprite if 'Dude' is base)
+#chc_Clown+Pop_1.2          // Clown Pops with strength 1.2 in center
+```
+
 ### Available Animations
 
-| Animation | Description | Arguments | Example |
+| Animation | Description | Arguments (Default) | Example |
 | :--- | :--- | :--- | :--- |
-| **shake** | Shakes horizontally | `Intensity` (def: 10), `Duration` (def: 1) | `#an_Sera_shake_10_0.5` |
-| **shakevertical** | Shakes vertically | `Intensity` (def: 10), `Duration` (def: 1) | `#an_Sera_shakevertical` |
-| **hop** | Hops up | `Height` (def: 30), `Duration` (def: 0.5) | `#an_Sera_hop` |
-| **reversehop** | Hops down | `Height` (def: 15), `Duration` (def: 0.5) | `#an_Sera_reversehop` |
-| **punch** | "Punches" (scales up) | `Strength` (def: 0.1), `Duration` (def: 0.5) | `#an_Sera_punch` |
-| **flash** | Flashes white | `Duration` (def: 0.5) | `#an_Sera_flash` |
-| **dodge** | Slides side-to-side | `Distance` (def: 20), `Duration` (def: 0.5) | `#an_Sera_dodge` |
+| **shake** | Shakes horizontally | `Offset` (20), `Duration` (0.7) | `#an_Sera_shake` |
+| **shakevertical** | Shakes vertically | `Offset` (20), `Duration` (0.7) | `#an_Sera_shakevertical` |
+| **hop** | Jumps UP and back | `Height` (100), `Duration` (0.23) | `#an_Sera_hop` |
+| **reversehop** | Jumps DOWN and back | `Height` (33), `Duration` (0.35) | `#an_Sera_reversehop` |
+| **bounce** | Bounces scale (Jelly-like) | `Strength` (0.1), `Duration` (0.35) | `#an_Sera_bounce` |
+| **pop** | Expands scale briefly | `Strength` (1.05), `Duration` (0.23) | `#an_Sera_pop` |
+| **flash** | Flashes white | `Duration` (0.23) | `#an_Sera_flash` |
+| **dodge** | Slides SIDEWAYS and back | `Distance` (100), `Duration` (0.35) | `#an_Sera_dodge` |
 
-**Note:** If you don't provide arguments, the defaults will be used.
+**Note:** Duration is in seconds.
 
 ---
 
