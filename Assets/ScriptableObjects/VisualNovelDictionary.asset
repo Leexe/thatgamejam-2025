@@ -19,7 +19,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 03247b9469a554fd291ff826dee16612, type: 3}
     - {fileID: 21300000, guid: 287f46b5ad49541319a806113ab8e6e6, type: 3}
     - {fileID: 21300000, guid: 35f0ec4b358514508a7140757f8c7d26, type: 3}
-    - {fileID: 21300000, guid: 802295abad7564e218334b1daf00dff1, type: 3}
     - {fileID: 21300000, guid: 5f0d9b7d51abc44e79b24b00146a38d8, type: 3}
     - {fileID: 21300000, guid: 6293b43dab15a4b32b9121c5d2169b50, type: 3}
     - {fileID: 21300000, guid: e76525f206ad442e3b2cbfa808880028, type: 3}
@@ -76,7 +75,7 @@ MonoBehaviour:
       Data: 1
     - Name: 
       Entry: 12
-      Data: 10
+      Data: 9
     - Name: 
       Entry: 7
       Data: 
@@ -118,7 +117,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: sniper
+      Data: eldric
     - Name: $v
       Entry: 10
       Data: 3
@@ -130,7 +129,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: eldric
+      Data: girl_eyes_closed
     - Name: $v
       Entry: 10
       Data: 4
@@ -142,7 +141,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: girl_eyes_closed
+      Data: girl_eyes_lowered
     - Name: $v
       Entry: 10
       Data: 5
@@ -154,7 +153,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: girl_eyes_lowered
+      Data: dude_suprised
     - Name: $v
       Entry: 10
       Data: 6
@@ -166,7 +165,7 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: dude_suprised
+      Data: clown
     - Name: $v
       Entry: 10
       Data: 7
@@ -178,22 +177,10 @@ MonoBehaviour:
       Data: 
     - Name: $k
       Entry: 1
-      Data: clown
-    - Name: $v
-      Entry: 10
-      Data: 8
-    - Name: 
-      Entry: 8
-      Data: 
-    - Name: 
-      Entry: 7
-      Data: 
-    - Name: $k
-      Entry: 1
       Data: clown_freaky
     - Name: $v
       Entry: 10
-      Data: 9
+      Data: 8
     - Name: 
       Entry: 8
       Data: 
