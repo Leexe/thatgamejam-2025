@@ -117,5 +117,7 @@ Delayed Words: Wait for it... <waitfor=1> Now!
 <wiggle><rainb>Wiggling Rainbow</rainb></wiggle>
 <shake a=0.5><wave f=2>Shaking Wave</wave></shake>
 
+Typewritte Speed: Start normal. <speed=0.1>Slooooooooooow... <speed=10>Faaaaaaaaaaaaaaaast!
+
 Test Complete.
 -> END
