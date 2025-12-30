@@ -1,10 +1,131 @@
+using System.Collections.Generic;
+using PrimeTween;
+using TMPro;
 using UnityEngine;
 
 public class BacklogController : MonoBehaviour
 {
-	// Start is called once before the first execution of Update after the MonoBehaviour is created
-	void Start() { }
+	[Header("References")]
+	[SerializeField]
+	private TextMeshProUGUI _text;
 
-	// Update is called once per frame
-	void Update() { }
+	[SerializeField]
+	private CanvasGroup _canvas;
+
+	[Header("Data")]
+	[SerializeField]
+	private int _maxBacklog = 50;
+
+	[SerializeField]
+	private float _tweenDuration = 0.25f;
+
+	private readonly List<string> _backlog = new();
+	private Tween _opacityTween;
+	private bool _isOpen;
+	private string _currentSpeaker = "";
+
+	private void OnEnable()
+	{
+		GameManager.Instance.DialogueEventsRef.OnNameUpdate += UpdateSpeaker;
+		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += AddToBacklog;
+		InputManager.Instance.OnBacklogPerformed.AddListener(ToggleBacklog);
+
+		CloseBacklog();
+		ClearSpeaker();
+		ClearText();
+	}
+
+	private void OnDisable()
+	{
+		if (GameManager.Instance)
+		{
+			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= UpdateSpeaker;
+			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= AddToBacklog;
+		}
+
+		if (InputManager.Instance)
+		{
+			InputManager.Instance.OnBacklogPerformed.RemoveListener(ToggleBacklog);
+		}
+	}
+
+	private void ToggleBacklog()
+	{
+		if (_isOpen)
+		{
+			CloseBacklog();
+			_isOpen = false;
+		}
+		else
+		{
+			OpenBacklog();
+			_isOpen = true;
+		}
+	}
+
+	private void OpenBacklog()
+	{
+		_opacityTween.Stop();
+		_opacityTween = Tween.Custom(
+			_canvas,
+			0f,
+			1f,
+			_tweenDuration,
+			(t, val) =>
+			{
+				t.alpha = val;
+			}
+		);
+		_canvas.blocksRaycasts = true;
+	}
+
+	private void CloseBacklog()
+	{
+		_opacityTween.Stop();
+		_opacityTween = Tween.Custom(
+			_canvas,
+			1f,
+			0f,
+			_tweenDuration,
+			(t, val) =>
+			{
+				t.alpha = val;
+			}
+		);
+		_canvas.blocksRaycasts = false;
+	}
+
+	private void UpdateSpeaker(string speaker)
+	{
+		_currentSpeaker = speaker;
+	}
+
+	private void ClearSpeaker()
+	{
+		_currentSpeaker = "";
+	}
+
+	private void AddToBacklog(string backlog)
+	{
+		if (_backlog.Count >= _maxBacklog)
+		{
+			_backlog.RemoveAt(0);
+		}
+
+		string entry = string.IsNullOrEmpty(_currentSpeaker) ? backlog : $"{_currentSpeaker}: {backlog}";
+
+		_backlog.Add(entry);
+		UpdateText();
+	}
+
+	private void UpdateText()
+	{
+		_text.text = string.Join("\n\n", _backlog);
+	}
+
+	private void ClearText()
+	{
+		_backlog.Clear();
+		UpdateText();
+	}
 }

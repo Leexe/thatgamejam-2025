@@ -20,6 +20,10 @@ public class VisualNovelUI : MonoBehaviour
 
 	[FoldoutGroup("References/Game References")]
 	[SerializeField]
+	private TypewriterComponent _hiddenTypewriter;
+
+	[FoldoutGroup("References/Game References")]
+	[SerializeField]
 	private VisualNovelDictionarySO _visualNovelDictionary;
 
 	[FoldoutGroup("References/Character Sprite References")]
@@ -217,6 +221,7 @@ public class VisualNovelUI : MonoBehaviour
 	private void ChangeStoryText(string line)
 	{
 		_typewriter.ShowText(line);
+		_hiddenTypewriter.ShowText(line);
 	}
 
 	/// <summary>
@@ -229,7 +234,7 @@ public class VisualNovelUI : MonoBehaviour
 		_canvasAlphaTween.Stop();
 		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 1, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
-		_canvasGroup.blocksRaycasts = false;
+		_canvasGroup.blocksRaycasts = true;
 	}
 
 	/// <summary>
@@ -240,7 +245,7 @@ public class VisualNovelUI : MonoBehaviour
 		float fadeDuration = 1f;
 		_canvasAlphaTween.Stop();
 		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 0, fadeDuration, newVal => _canvasGroup.alpha = newVal);
-		_canvasGroup.interactable = true;
+		_canvasGroup.interactable = false;
 		_canvasGroup.blocksRaycasts = false;
 	}
 
@@ -262,6 +267,7 @@ public class VisualNovelUI : MonoBehaviour
 	private void PauseTypewriter()
 	{
 		_typewriter.SetTypewriterSpeed(0f);
+		_hiddenTypewriter.SetTypewriterSpeed(0f);
 	}
 
 	/// <summary>
@@ -270,6 +276,7 @@ public class VisualNovelUI : MonoBehaviour
 	private void ResumeTypewriter()
 	{
 		_typewriter.SetTypewriterSpeed(1f);
+		_hiddenTypewriter.SetTypewriterSpeed(1f);
 	}
 
 	#endregion

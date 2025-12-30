@@ -4,18 +4,21 @@ using UnityEngine.InputSystem;
 
 public class InputManager : PersistentSingleton<InputManager>
 {
-	// References
 	public InputActionAsset InputActions;
 
-	// Actions
 	private InputAction _movementAction;
 	private InputAction _continueStoryAction;
+	private InputAction _backlogAction;
 	private InputAction _escapeAction;
 
 	private InputActionMap _playerActionMap;
 	private InputActionMap _uiActionMap;
+	private InputActionMap _visualNovelActionMap;
 
-	// Events
+	private const string PlayerActionMap = "Player";
+	private const string UIActionMap = "UI";
+	private const string VisualNovelActionMap = "VisualNovel";
+
 	[HideInInspector]
 	public UnityEvent<Vector2> OnMovement;
 
@@ -25,10 +28,8 @@ public class InputManager : PersistentSingleton<InputManager>
 	[HideInInspector]
 	public UnityEvent OnEscapePerformed;
 
-	private const string PlayerActionMap = "Player";
-	private const string UIActionMap = "UI";
-
-	/** Start Methods **/
+	[HideInInspector]
+	public UnityEvent OnBacklogPerformed;
 
 	protected override void Awake()
 	{
@@ -57,13 +58,18 @@ public class InputManager : PersistentSingleton<InputManager>
 		}
 	}
 
-	/// <summary>
-	/// Initializes the input actions by finding them in the InputSystem.
-	/// </summary>
+	private void Update()
+	{
+		UpdateInputs();
+	}
+
+	#region Input Setup
+
 	private void SetupInputActions()
 	{
 		_playerActionMap = InputActions.FindActionMap(PlayerActionMap);
 		_uiActionMap = InputActions.FindActionMap(UIActionMap);
+		_visualNovelActionMap = InputActions.FindActionMap(VisualNovelActionMap);
 
 		_movementAction = InputActions.FindAction("Movement");
 		_movementAction.performed += OnMovementPerformed;
@@ -71,43 +77,35 @@ public class InputManager : PersistentSingleton<InputManager>
 
 		_continueStoryAction = InputActions.FindAction("ContinueStory");
 		_escapeAction = InputActions.FindAction("Escape");
-	}
-
-	/** Update Methods **/
-
-	private void Update()
-	{
-		UpdateInputs();
+		_backlogAction = InputActions.FindAction("Backlog");
 	}
 
 	private void UpdateInputs()
 	{
 		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
+		AddEventToAction(_backlogAction, ref OnBacklogPerformed);
 	}
 
-	/// <summary>
-	/// Callback fired when movement input is performed.
-	/// </summary>
+	#endregion
+
+	#region Input Callbacks
+
 	private void OnMovementPerformed(InputAction.CallbackContext context)
 	{
 		Vector3 readVector = context.ReadValue<Vector3>();
 		OnMovement?.Invoke(new Vector2(readVector.x, readVector.z));
 	}
 
-	/// <summary>
-	/// Callback fired when movement input is canceled.
-	/// </summary>
 	private void OnMovementCanceled(InputAction.CallbackContext context)
 	{
 		OnMovement?.Invoke(Vector2.zero);
 	}
 
-	/// <summary>
-	/// Checks if the input action was pressed this frame and invokes the UnityEvent.
-	/// </summary>
-	/// <param name="inputAction">The input action to check.</param>
-	/// <param name="unityEvent">The UnityEvent to trigger.</param>
+	#endregion
+
+	#region Input Helpers
+
 	private void AddEventToAction(InputAction inputAction, ref UnityEvent unityEvent)
 	{
 		if (inputAction.WasPressedThisFrame())
@@ -142,35 +140,39 @@ public class InputManager : PersistentSingleton<InputManager>
 		}
 	}
 
-	/// <summary>
-	/// Enable Player Input
-	/// </summary>
+	#endregion
+
+	#region Public Methods
+
 	public void EnablePlayerInput()
 	{
 		_playerActionMap?.Enable();
 	}
 
-	/// <summary>
-	/// Disable Player Input
-	/// </summary>
 	public void DisablePlayerInput()
 	{
 		_playerActionMap?.Disable();
 	}
 
-	/// <summary>
-	/// Enable UI Input
-	/// </summary>
 	public void EnableUIInput()
 	{
 		_uiActionMap?.Enable();
 	}
 
-	/// <summary>
-	/// Disable UI Input
-	/// </summary>
 	public void DisableUIInput()
 	{
 		_uiActionMap?.Disable();
 	}
+
+	public void EnableVisualNovelInput()
+	{
+		_visualNovelActionMap?.Enable();
+	}
+
+	public void DisableVisualNovelInput()
+	{
+		_visualNovelActionMap?.Disable();
+	}
+
+	#endregion
 }
