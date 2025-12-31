@@ -9,6 +9,9 @@ public class InputManager : PersistentSingleton<InputManager>
 
 	// Actions
 	private InputAction _movementAction;
+	private InputAction _movement2Action;
+	private InputAction _kickAction;
+	private InputAction _punchAction;
 	private InputAction _continueStoryAction;
 	private InputAction _escapeAction;
 
@@ -18,6 +21,15 @@ public class InputManager : PersistentSingleton<InputManager>
 	// Events
 	[HideInInspector]
 	public UnityEvent<Vector2> OnMovement;
+
+	[HideInInspector]
+	public UnityEvent<Vector2> OnMovement2;
+
+	[HideInInspector]
+	public UnityEvent OnPunchPerformed;
+
+	[HideInInspector]
+	public UnityEvent OnKickPerformed;
 
 	[HideInInspector]
 	public UnityEvent OnContinueStoryPerformed;
@@ -55,6 +67,11 @@ public class InputManager : PersistentSingleton<InputManager>
 			_movementAction.performed -= OnMovementPerformed;
 			_movementAction.canceled -= OnMovementCanceled;
 		}
+		if (_movement2Action != null)
+		{
+			_movement2Action.performed -= OnMovementPerformed;
+			_movement2Action.canceled -= OnMovementCanceled;
+		}
 	}
 
 	/// <summary>
@@ -69,6 +86,13 @@ public class InputManager : PersistentSingleton<InputManager>
 		_movementAction.performed += OnMovementPerformed;
 		_movementAction.canceled += OnMovementCanceled;
 
+		_movement2Action = InputActions.FindAction("Movement2");
+		_movement2Action.performed += OnMovementPerformed;
+		_movement2Action.canceled += OnMovementCanceled;
+
+		_punchAction = InputActions.FindAction("Punch");
+		_kickAction = InputActions.FindAction("Kick");
+
 		_continueStoryAction = InputActions.FindAction("ContinueStory");
 		_escapeAction = InputActions.FindAction("Escape");
 	}
@@ -82,6 +106,9 @@ public class InputManager : PersistentSingleton<InputManager>
 
 	private void UpdateInputs()
 	{
+		AddEventToAction(_kickAction, ref OnKickPerformed);
+		AddEventToAction(_punchAction, ref OnPunchPerformed);
+
 		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
 	}
