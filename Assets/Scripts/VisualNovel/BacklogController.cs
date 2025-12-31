@@ -24,18 +24,23 @@ public class BacklogController : MonoBehaviour
 	private Tween _opacityTween;
 	private bool _isOpen;
 
+	public bool IsOpen => _isOpen;
+
 	private void OnEnable()
 	{
 		DialogueEvents.OnDisplayDialogue += AddToBacklog;
+		DialogueEvents.AddBlockingCondition(() => IsOpen);
 		InputManager.Instance.OnBacklogPerformed.AddListener(ToggleBacklog);
 
-		CloseBacklog();
+		_canvas.alpha = 0f;
+		_canvas.blocksRaycasts = false;
 		ClearText();
 	}
 
 	private void OnDisable()
 	{
 		DialogueEvents.OnDisplayDialogue -= AddToBacklog;
+		DialogueEvents.RemoveBlockingCondition(() => IsOpen);
 
 		if (InputManager.Instance)
 		{

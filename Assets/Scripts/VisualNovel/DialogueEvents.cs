@@ -116,6 +116,50 @@ public class DialogueEvents : Singleton<DialogueEvents>
 
 	#endregion
 
+	#region Blocking Logic
+
+	private readonly List<Func<bool>> _blockingConditions = new();
+
+	/// <summary>
+	/// Registers a condition that blocks the story from advancing.
+	/// </summary>
+	public void AddBlockingCondition(Func<bool> condition)
+	{
+		if (!_blockingConditions.Contains(condition))
+		{
+			_blockingConditions.Add(condition);
+		}
+	}
+
+	/// <summary>
+	/// Unregisters a blocking condition.
+	/// </summary>
+	public void RemoveBlockingCondition(Func<bool> condition)
+	{
+		_blockingConditions.Remove(condition);
+	}
+
+	/// <summary>
+	/// Checks if the story is allowed to advance.
+	/// Returns true if no blocking conditions are met.
+	/// </summary>
+	public bool CanAdvanceStory
+	{
+		get
+		{
+			foreach (Func<bool> condition in _blockingConditions)
+			{
+				if (condition())
+				{
+					return false;
+				}
+			}
+			return true;
+		}
+	}
+
+	#endregion
+
 	#region Story Events
 
 	/// <summary>

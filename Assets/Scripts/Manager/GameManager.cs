@@ -16,6 +16,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	private void OnEnable()
 	{
 		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
+		DialogueEvents.Instance.AddBlockingCondition(() => GamePaused);
 	}
 
 	private void OnDisable()
@@ -23,6 +24,11 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 		if (InputManager.Instance)
 		{
 			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseGame);
+		}
+
+		if (DialogueEvents.Instance != null)
+		{
+			DialogueEvents.Instance.RemoveBlockingCondition(() => GamePaused);
 		}
 	}
 

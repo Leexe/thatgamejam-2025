@@ -28,6 +28,7 @@ public class DialogueBox : MonoBehaviour
 	private void OnEnable()
 	{
 		DialogueEvents.Instance.OnDisplayDialogue += OnDisplayDialogue;
+		DialogueEvents.Instance.OnTypewriterSkip += SkipTypewriter;
 		_typewriter.onTextShowed.AddListener(DialogueEvents.Instance.TypewriterFinished);
 	}
 
@@ -37,6 +38,15 @@ public class DialogueBox : MonoBehaviour
 		if (DialogueEvents.Instance != null)
 		{
 			DialogueEvents.Instance.OnDisplayDialogue -= OnDisplayDialogue;
+			DialogueEvents.Instance.OnTypewriterSkip -= SkipTypewriter;
+		}
+	}
+
+	private void SkipTypewriter()
+	{
+		if (_canvas.alpha > 0)
+		{
+			_typewriter.SkipTypewriter();
 		}
 	}
 

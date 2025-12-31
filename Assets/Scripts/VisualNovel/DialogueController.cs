@@ -73,14 +73,6 @@ public class DialogueController : MonoBehaviour
 	[FoldoutGroup("Debug")]
 	[Button]
 	[UsedImplicitly]
-	private void StartChudStory()
-	{
-		DialogueEvents.StartStory("Beginning");
-	}
-
-	[FoldoutGroup("Debug")]
-	[Button]
-	[UsedImplicitly]
 	private void StartAnimationTest()
 	{
 		DialogueEvents.StartStory("Testing_Animations");
@@ -138,8 +130,14 @@ public class DialogueController : MonoBehaviour
 	/// </summary>
 	private void ContinueStory()
 	{
-		// Don't continue if story isn't playing or game is paused
-		if (!_storyPlaying || GameManager.Instance.GamePaused)
+		// Check global blocking conditions (Pause, Backlog, etc.)
+		if (!DialogueEvents.CanAdvanceStory)
+		{
+			return;
+		}
+
+		// Don't continue if story isn't currently playing
+		if (!_storyPlaying)
 		{
 			return;
 		}
