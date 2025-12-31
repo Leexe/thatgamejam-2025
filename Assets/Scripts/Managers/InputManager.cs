@@ -9,12 +9,24 @@ public class InputManager : PersistantSingleton<InputManager>
 
 	// Actions
 	private InputAction _movementAction;
+	private InputAction _movement2Action;
+	private InputAction _kickAction;
+	private InputAction _punchAction;
 	private InputAction _interactAction;
 	private InputAction _escapeAction;
 
 	// Events
 	[HideInInspector]
 	public UnityEvent<Vector2> OnMovement;
+
+	[HideInInspector]
+	public UnityEvent<Vector2> OnMovement2;
+
+	[HideInInspector]
+	public UnityEvent OnPunchPerformed;
+
+	[HideInInspector]
+	public UnityEvent OnKickPerformed;
 
 	[HideInInspector]
 	public UnityEvent OnInteractPerformed;
@@ -48,6 +60,9 @@ public class InputManager : PersistantSingleton<InputManager>
 	private void SetupInputActions()
 	{
 		_movementAction = InputSystem.actions.FindAction("Movement");
+		_movement2Action = InputSystem.actions.FindAction("Movement2");
+		_punchAction = InputSystem.actions.FindAction("Punch");
+		_kickAction = InputSystem.actions.FindAction("Kick");
 		_interactAction = InputSystem.actions.FindAction("Interact");
 		_escapeAction = InputSystem.actions.FindAction("Escape");
 	}
@@ -62,6 +77,10 @@ public class InputManager : PersistantSingleton<InputManager>
 	private void UpdateInputs()
 	{
 		UpdateMovementVector(_movementAction, ref OnMovement);
+		UpdateMovementVector(_movement2Action, ref OnMovement2);
+
+		AddEventToAction(_kickAction, ref OnKickPerformed);
+		AddEventToAction(_punchAction, ref OnPunchPerformed);
 
 		AddEventToAction(_interactAction, ref OnInteractPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);

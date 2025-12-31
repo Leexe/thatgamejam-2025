@@ -23,6 +23,33 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Movement2",
+                    "type": "Value",
+                    "id": "c1ebd3e5-309a-4aac-acfd-b8279975c413",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Punch",
+                    "type": "Button",
+                    "id": "05833297-472e-4ca2-bc53-c86c0ca5f053",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Kick",
+                    "type": "Button",
+                    "id": "273d0ea5-d43a-432d-a90d-30b6e3d57b26",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -82,13 +109,24 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "fec444f2-3f0e-48a5-9e0e-efa3f52251d6",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "3D Vector",
                     "id": "e822567b-3171-4a9c-a52c-5cc6afe592e2",
                     "path": "3DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -99,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -110,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -121,7 +159,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -132,18 +170,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "",
-                    "id": "fec444f2-3f0e-48a5-9e0e-efa3f52251d6",
-                    "path": "<Keyboard>/e",
+                    "id": "2c85fc6f-c0b6-48d2-ae9e-77ed0558409c",
+                    "path": "<Keyboard>/j",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse",
-                    "action": "Interact",
+                    "groups": "",
+                    "action": "Punch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "af13f7a2-e9b0-4c8c-a49e-b792273af432",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
