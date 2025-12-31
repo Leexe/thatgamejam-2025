@@ -7,7 +7,7 @@ trim_trailing_whitespace = true
 
 # IMPORTANT - marks Assets/Plugins/** as generated code.
 # the linter doesn't run on their source code, and we don't get squiggles everywhere.
-[Assets/Plugins/**.cs]
+[Assets/Plugins/**]
 generated_code = true
 
 
@@ -138,6 +138,14 @@ dotnet_naming_symbols.locals_and_parameters.applicable_kinds = parameter, local
 dotnet_naming_symbols.locals_and_parameters.applicable_accessibilities = *
 dotnet_naming_style.camel_case.capitalization = camel_case
 
+# Unity Serialized Fields (Inspector variables)
+# Override: Allow _camelCase for these too (Rider defaults to camelCase without underscore)
+dotnet_naming_rule.unity_serialized_fields.symbols = unity_serialized_fields
+dotnet_naming_rule.unity_serialized_fields.style = underscore_camel_case
+dotnet_naming_rule.unity_serialized_fields.severity = silent
+dotnet_naming_symbols.unity_serialized_fields.applicable_kinds = unity_serialized_field
+dotnet_naming_symbols.unity_serialized_fields.applicable_accessibilities = private, protected, internal
+
 # modifier ordering
 csharp_preferred_modifier_order = public,private,protected,internal,static,extern,new,virtual,abstract,sealed,override,readonly,unsafe,volatile,async:error
 
@@ -228,6 +236,7 @@ dotnet_diagnostic.IDE0005.severity = error  # Remove unnecessary imports
 dotnet_diagnostic.IDE0035.severity = error  # Remove unreachable code
 dotnet_diagnostic.IDE0051.severity = warning  # Unused private members (warning for Unity messages)
 dotnet_diagnostic.IDE0052.severity = warning  # Unread private members
+dotnet_diagnostic.IDE0130.severity = none     # Namespace does not match folder structure (Unity doesn't need this)
 dotnet_diagnostic.IDE0080.severity = error  # Remove unnecessary suppression operator
 
 # modifier consistency
