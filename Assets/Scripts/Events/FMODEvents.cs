@@ -2,7 +2,7 @@ using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class FMODEvents : Singleton<FMODEvents>
+public class FMODEvents : MonoSingleton<FMODEvents>
 {
 	#region Music
 

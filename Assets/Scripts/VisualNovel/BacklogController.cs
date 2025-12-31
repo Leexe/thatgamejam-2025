@@ -20,28 +20,22 @@ public class BacklogController : MonoBehaviour
 	private float _tweenDuration = 0.25f;
 
 	private readonly List<string> _backlog = new();
+	private DialogueEvents DialogueEvents => DialogueEvents.Instance;
 	private Tween _opacityTween;
 	private bool _isOpen;
-	private string _currentSpeaker = "";
 
 	private void OnEnable()
 	{
-		GameManager.Instance.DialogueEventsRef.OnNameUpdate += UpdateSpeaker;
-		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += AddToBacklog;
+		DialogueEvents.OnDisplayDialogue += AddToBacklog;
 		InputManager.Instance.OnBacklogPerformed.AddListener(ToggleBacklog);
 
 		CloseBacklog();
-		ClearSpeaker();
 		ClearText();
 	}
 
 	private void OnDisable()
 	{
-		if (GameManager.Instance)
-		{
-			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= UpdateSpeaker;
-			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= AddToBacklog;
-		}
+		DialogueEvents.OnDisplayDialogue -= AddToBacklog;
 
 		if (InputManager.Instance)
 		{
@@ -51,6 +45,11 @@ public class BacklogController : MonoBehaviour
 
 	private void ToggleBacklog()
 	{
+		if (GameManager.Instance.GamePaused)
+		{
+			return;
+		}
+
 		if (_isOpen)
 		{
 			CloseBacklog();
@@ -95,24 +94,14 @@ public class BacklogController : MonoBehaviour
 		_canvas.blocksRaycasts = false;
 	}
 
-	private void UpdateSpeaker(string speaker)
-	{
-		_currentSpeaker = speaker;
-	}
-
-	private void ClearSpeaker()
-	{
-		_currentSpeaker = "";
-	}
-
-	private void AddToBacklog(string backlog)
+	private void AddToBacklog(string characterName, string backlog)
 	{
 		if (_backlog.Count >= _maxBacklog)
 		{
 			_backlog.RemoveAt(0);
 		}
 
-		string entry = string.IsNullOrEmpty(_currentSpeaker) ? backlog : $"{_currentSpeaker}: {backlog}";
+		string entry = string.IsNullOrEmpty(characterName) ? backlog : $"{characterName}: {backlog}";
 
 		_backlog.Add(entry);
 		UpdateText();

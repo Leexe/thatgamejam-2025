@@ -208,16 +208,13 @@ public class VNCharacter : MonoBehaviour
 	public void ShakeHorizontal(float shakeOffset = 20f, float duration = 0.7f)
 	{
 		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
-		_shakeTween = Tween
-			.ShakeLocalPosition(
-				_image.transform,
-				new Vector3(shakeOffset, 0f, 0f),
-				duration,
-				15,
-				easeBetweenShakes: Ease.Default
-			)
-			.OnComplete(() => _layoutElement.ignoreLayout = false);
+		_shakeTween = Tween.ShakeLocalPosition(
+			_image.transform,
+			new Vector3(shakeOffset, 0f, 0f),
+			duration,
+			15,
+			easeBetweenShakes: Ease.Default
+		);
 	}
 
 	/// <summary>
@@ -230,16 +227,13 @@ public class VNCharacter : MonoBehaviour
 	public void ShakeVertical(float shakeOffset = 30f, float duration = 0.7f)
 	{
 		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
-		_shakeTween = Tween
-			.ShakeLocalPosition(
-				_image.transform,
-				new Vector3(0f, shakeOffset, 0f),
-				duration,
-				15,
-				easeBetweenShakes: Ease.Default
-			)
-			.OnComplete(() => _layoutElement.ignoreLayout = false);
+		_shakeTween = Tween.ShakeLocalPosition(
+			_image.transform,
+			new Vector3(0f, shakeOffset, 0f),
+			duration,
+			15,
+			easeBetweenShakes: Ease.Default
+		);
 	}
 
 	/// <summary>
@@ -285,7 +279,6 @@ public class VNCharacter : MonoBehaviour
 	public void Hop(float jumpHeight = 100f, float duration = 0.35f)
 	{
 		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
 		Vector3 startPos = _image.transform.localPosition;
 		_shakeTween = Tween
 			.LocalPosition(
@@ -299,7 +292,6 @@ public class VNCharacter : MonoBehaviour
 			.OnComplete(() =>
 			{
 				_image.transform.localPosition = startPos;
-				_layoutElement.ignoreLayout = false;
 			});
 	}
 
@@ -313,7 +305,6 @@ public class VNCharacter : MonoBehaviour
 	public void ReverseHop(float hopHeight = 33f, float duration = 0.35f)
 	{
 		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
 		Vector3 startPos = _image.transform.localPosition;
 		_shakeTween = Tween
 			.LocalPosition(
@@ -327,7 +318,6 @@ public class VNCharacter : MonoBehaviour
 			.OnComplete(() =>
 			{
 				_image.transform.localPosition = startPos;
-				_layoutElement.ignoreLayout = false;
 			});
 	}
 
@@ -357,7 +347,6 @@ public class VNCharacter : MonoBehaviour
 	public void Dodge(float dodgeDistance = 100f, float duration = 0.35f)
 	{
 		_shakeTween.Complete();
-		_layoutElement.ignoreLayout = true;
 		Vector3 startPos = _image.transform.localPosition;
 		_shakeTween = Tween
 			.LocalPosition(
@@ -371,7 +360,6 @@ public class VNCharacter : MonoBehaviour
 			.OnComplete(() =>
 			{
 				_image.transform.localPosition = startPos;
-				_layoutElement.ignoreLayout = false;
 			});
 	}
 

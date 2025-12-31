@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GameManager : PersistentSingleton<GameManager>
+public class GameManager : PersistentMonoSingleton<GameManager>
 {
 	// Events
 	[HideInInspector]
@@ -9,8 +9,6 @@ public class GameManager : PersistentSingleton<GameManager>
 
 	[HideInInspector]
 	public UnityEvent OnGameResume;
-
-	public readonly DialogueEvents DialogueEventsRef = new DialogueEvents();
 
 	// Private Variables
 	public bool GamePaused { private set; get; }

@@ -15,8 +15,13 @@ public enum CharacterPosition
 /// <summary>
 /// Central event hub for dialogue-related communication between systems.
 /// </summary>
-public class DialogueEvents
+public class DialogueEvents : Singleton<DialogueEvents>
 {
+	/// <summary>
+	/// Private constructor to prevent external instantiation.
+	/// </summary>
+	private DialogueEvents() { }
+
 	#region Visual Events
 
 	/// <summary>
@@ -142,16 +147,18 @@ public class DialogueEvents
 
 	/// <summary>
 	/// Event fired when a new dialogue line should be displayed.
+	/// Parameters: Speaker Name, Dialogue Text
 	/// </summary>
-	public Action<string> OnDisplayDialogue;
+	public Action<string, string> OnDisplayDialogue;
 
 	/// <summary>
-	/// Displays a line of dialogue text.
+	/// Displays a line of dialogue text with the associated speaker name.
 	/// </summary>
+	/// <param name="name">The name of the character speaking.</param>
 	/// <param name="dialogue">The dialogue text to display.</param>
-	public void DisplayDialogue(string dialogue)
+	public void DisplayDialogue(string name, string dialogue)
 	{
-		OnDisplayDialogue?.Invoke(dialogue);
+		OnDisplayDialogue?.Invoke(name, dialogue);
 	}
 
 	/// <summary>

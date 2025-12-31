@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
-public class InputManager : PersistentSingleton<InputManager>
+public class InputManager : PersistentMonoSingleton<InputManager>
 {
 	public InputActionAsset InputActions;
 

@@ -9,7 +9,7 @@ My chud ass was busy thinking about how I can achieve a 150% on my final exam, w
 To numb the pain, I lay in bed, doomscrolling through Reels until my eyes burned...
 It was 12:03 a.m.
 
-"Uhhhhhhh... FMCL." #chc_clown #nm_Chud #d_chud
+"Uhhhhhhh... FMCL." #chc_clown+bounce #nm_Chud #d_chud
 "That stands for 'Fuck My Chungus Life', by the way." #d_chud 
 
 I snicker to myself in my empty room, talking to myself again. #nm_none
@@ -27,8 +27,8 @@ Alright, I can't rot in this bed forever...
 That's what a wise man once told me.
 I have to follow through.
 
-Sliding out of my bed and leaving the protection of my blankie, I feel the crisp winter air assault my skin. #chl_clown_freaky
-Powering through the arctic, I begin my pilgrimage towards the bathroom. #chr_clown
+Sliding out of my bed and leaving the protection of my blankie, I feel the crisp winter air assault my skin. #chl_clown_freaky+shake
+Powering through the arctic, I begin my pilgrimage towards the bathroom. #chr_clown+hop
 
 ... #ch_dude_Clear
 To Be Continued... Or Not
@@ -37,10 +37,10 @@ End -> END
 === Testing ===
 
 #nm_none
-"Uhhhhhhh... FMCL." #chl_clown #nm_Chud #d_chud
-"Don't say that, you look fine." #chr_girl #nm_Girl #d_girl
-"Don't talk to this guy babe, he's a chud." #chr_dude #nm_Dude #chr_girl_eyes_lowered #d_dude
-"AHHHH" #chl_clown_freaky #chl_dude #nm_Chud #chr_girl_eyes_closed #d_chud
+"Uhhhhhhh... FMCL." #chl_clown+pop #nm_Chud #d_chud
+"Don't say that, you look fine." #chr_girl+bounce #nm_Girl #d_girl
+"Don't talk to this guy babe, he's a chud." #chr_dude+bounce #nm_Dude #chr_girl_eyes_lowered+shakevertical #d_dude
+"AHHHH" #chl_clown_freaky+shake #chl_dude #nm_Chud #chr_girl_eyes_closed+shake #d_chud
 
 ... #chr_clown_clear #chl_dude #nm_Chud
 End #nm_none

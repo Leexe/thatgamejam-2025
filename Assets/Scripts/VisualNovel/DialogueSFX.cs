@@ -3,7 +3,7 @@ using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class VisualNovelSFX : MonoBehaviour
+public class DialogueSFX : MonoBehaviour
 {
 	[FoldoutGroup("References")]
 	[SerializeField]
@@ -16,28 +16,26 @@ public class VisualNovelSFX : MonoBehaviour
 	// Private Variables
 	private bool _charactersTalking;
 	private VoiceSO _currentCharacterVoice;
+	private DialogueEvents DialogueEvents => DialogueEvents.Instance;
 
 	private void OnEnable()
 	{
 		_hiddenTypewriter.onCharacterVisible.AddListener(PlayVoice);
-		GameManager.Instance.DialogueEventsRef.OnStartDialogue += ResetVoiceState;
-		GameManager.Instance.DialogueEventsRef.OnDialogueVoice += SetSpeakingCharacter;
-		GameManager.Instance.DialogueEventsRef.OnPlaySFX += PlaySFX;
-		GameManager.Instance.DialogueEventsRef.OnPlayAmbience += PlayAmbience;
-		GameManager.Instance.DialogueEventsRef.OnPlayMusic += PlayMusic;
+		DialogueEvents.OnStartDialogue += ResetVoiceState;
+		DialogueEvents.OnDialogueVoice += SetSpeakingCharacter;
+		DialogueEvents.OnPlaySFX += PlaySFX;
+		DialogueEvents.OnPlayAmbience += PlayAmbience;
+		DialogueEvents.OnPlayMusic += PlayMusic;
 	}
 
 	private void OnDisable()
 	{
 		_hiddenTypewriter.onCharacterVisible.RemoveListener(PlayVoice);
-		if (GameManager.Instance)
-		{
-			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= ResetVoiceState;
-			GameManager.Instance.DialogueEventsRef.OnDialogueVoice -= SetSpeakingCharacter;
-			GameManager.Instance.DialogueEventsRef.OnPlaySFX -= PlaySFX;
-			GameManager.Instance.DialogueEventsRef.OnPlayAmbience -= PlayAmbience;
-			GameManager.Instance.DialogueEventsRef.OnPlayMusic -= PlayMusic;
-		}
+		DialogueEvents.OnStartDialogue -= ResetVoiceState;
+		DialogueEvents.OnDialogueVoice -= SetSpeakingCharacter;
+		DialogueEvents.OnPlaySFX -= PlaySFX;
+		DialogueEvents.OnPlayAmbience -= PlayAmbience;
+		DialogueEvents.OnPlayMusic -= PlayMusic;
 	}
 
 	/// <summary>

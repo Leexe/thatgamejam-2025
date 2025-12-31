@@ -1,14 +1,17 @@
 using UnityEngine;
 
 /// <summary>
-/// Similar to a Singleton except it will override the current instance instead of destroying it
+/// A singleton that overrides the current instance instead of destroying it.
 /// </summary>
-public abstract class StaticInstance<T> : MonoBehaviour
+public abstract class MonoStaticInstance<T> : MonoBehaviour
 	where T : MonoBehaviour
 {
 	public static T Instance { get; private set; }
 
-	protected virtual void Awake() => Instance = this as T;
+	protected virtual void Awake()
+	{
+		Instance = this as T;
+	}
 
 	protected virtual void OnApplicationQuit()
 	{
@@ -18,9 +21,9 @@ public abstract class StaticInstance<T> : MonoBehaviour
 }
 
 /// <summary>
-/// A Singleton that will destroy any existing instances and replace it with a new instance
+/// A standard singleton that destroys any new instances if one already exists.
 /// </summary>
-public abstract class Singleton<T> : StaticInstance<T>
+public abstract class MonoSingleton<T> : MonoStaticInstance<T>
 	where T : MonoBehaviour
 {
 	protected override void Awake()
@@ -30,22 +33,46 @@ public abstract class Singleton<T> : StaticInstance<T>
 			Destroy(gameObject);
 			return;
 		}
+
 		base.Awake();
 	}
 }
 
 /// <summary>
-/// A Singleton that does not get destroyed on scene loads
+/// A persistent singleton that survives scene loads.
 /// </summary>
-/// <summary>
-/// A Singleton that does not get destroyed on scene loads
-/// </summary>
-public abstract class PersistentSingleton<T> : Singleton<T>
+public abstract class PersistentMonoSingleton<T> : MonoSingleton<T>
 	where T : MonoBehaviour
 {
 	protected override void Awake()
 	{
 		base.Awake();
 		DontDestroyOnLoad(gameObject);
+	}
+}
+
+/// <summary>
+/// A standard C# Singleton.
+/// </summary>
+public abstract class Singleton<T>
+	where T : class
+{
+	private static T _instance;
+
+	// ReSharper disable once StaticMemberInGenericType
+	// We want seperate locks for each singleton
+	private static readonly object PadLock = new();
+
+	public static T Instance
+	{
+		get
+		{
+			lock (PadLock)
+			{
+				_instance ??= (T)System.Activator.CreateInstance(typeof(T), true);
+
+				return _instance;
+			}
+		}
 	}
 }
