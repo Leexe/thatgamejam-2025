@@ -68,9 +68,12 @@
         "*.slnx": "*.csproj"
     },
     "dotnet.defaultSolution": "thatgamejam-2025.slnx",
+    "dotnet.autoInsert.enableAutoInsert": false,
     "[csharp]": {
         "editor.defaultFormatter": "csharpier.csharpier-vscode",
         "editor.formatOnSave": true,
-        "editor.formatOnType": false
+        "editor.formatOnType": false,
+        "editor.insertSpaces": false,
+        "editor.detectIndentation": false
     }
 }

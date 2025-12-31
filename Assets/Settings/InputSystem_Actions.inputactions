@@ -14,6 +14,42 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "ContinueStory",
+                    "type": "Button",
+                    "id": "ef386db7-2a40-488d-bf70-184a2bf30831",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Movement2",
+                    "type": "Value",
+                    "id": "c1ebd3e5-309a-4aac-acfd-b8279975c413",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Punch",
+                    "type": "Button",
+                    "id": "05833297-472e-4ca2-bc53-c86c0ca5f053",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Kick",
+                    "type": "Button",
+                    "id": "273d0ea5-d43a-432d-a90d-30b6e3d57b26",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -73,13 +109,24 @@
                     "isPartOfComposite": true
                 },
                 {
+                    "name": "",
+                    "id": "fec444f2-3f0e-48a5-9e0e-efa3f52251d6",
+                    "path": "<Keyboard>/e",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
                     "name": "3D Vector",
                     "id": "e822567b-3171-4a9c-a52c-5cc6afe592e2",
                     "path": "3DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -90,7 +137,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -101,7 +148,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -112,7 +159,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -123,55 +170,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Movement2",
                     "isComposite": false,
                     "isPartOfComposite": true
-                }
-            ]
-        },
-        {
-            "name": "VisualNovel",
-            "id": "a4995e2c-f906-45a3-be86-513102780e63",
-            "actions": [
-                {
-                    "name": "Backlog",
-                    "type": "Button",
-                    "id": "18497c36-5eb5-4e57-ab09-9d99b7afb53a",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "ContinueStory",
-                    "type": "Button",
-                    "id": "f6cefdb9-d190-4fb2-9a3b-9aec70ab9ce0",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                }
-            ],
-            "bindings": [
-                {
-                    "name": "",
-                    "id": "f811e82d-b2cf-4cb1-a5e0-97a405075982",
-                    "path": "<Keyboard>/b",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Backlog",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "c6cea688-a419-463c-88df-e3bb7506530b",
+                    "id": "9ba0dfd0-50a9-4c35-8546-5f496f8b9e12",
                     "path": "<Keyboard>/enter",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
                     "action": "ContinueStory",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c1518ba2-e238-4373-a04b-e41fa261f230",
+                    "path": "<Keyboard>/j",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Punch",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0503dabf-8758-44c2-bf6f-d56abe30a509",
+                    "path": "<Keyboard>/k",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Kick",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
