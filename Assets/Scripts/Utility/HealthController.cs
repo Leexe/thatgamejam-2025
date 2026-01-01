@@ -52,7 +52,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	private float _timeSinceHurt;
 	private float _regeneration;
 	private float _health;
-	private bool _isDead;
+	public bool IsDead { get; private set; }
 
 	private bool CanTakeDamage
 	{
@@ -63,7 +63,7 @@ public class HealthController : MonoBehaviour, IDamageable
 				return false;
 			}
 
-			if (_isDead)
+			if (IsDead)
 			{
 				return false;
 			}
@@ -86,7 +86,7 @@ public class HealthController : MonoBehaviour, IDamageable
 				return false;
 			}
 
-			if (_isDead)
+			if (IsDead)
 			{
 				return false;
 			}
@@ -153,8 +153,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	#region Properties
 
 	// Getters
-	public bool IsAlive => !_isDead;
-	public bool IsDead => _isDead;
+	public bool IsAlive => !IsDead;
 	public bool IsFullHealth => _health >= _maxHealth;
 	public float Health => _health;
 	public float MaxHealth => _maxHealth;
@@ -172,7 +171,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	private void InitializeHealth()
 	{
 		_health = _maxHealth;
-		_isDead = false;
+		IsDead = false;
 
 		_regeneration = _toggleRegeneration ? _baseRegen : 0f;
 		_timeSinceHurt = _invincibilityOnSpawn ? 0f : float.MaxValue;
@@ -212,7 +211,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	[Button("Heal")]
 	public void Heal(float amount)
 	{
-		if (_isDead)
+		if (IsDead)
 		{
 			return;
 		}
@@ -255,14 +254,14 @@ public class HealthController : MonoBehaviour, IDamageable
 	[Button("Kill")]
 	public void Kill()
 	{
-		if (_isDead)
+		if (IsDead)
 		{
 			return;
 		}
 
 		float previousHealth = _health;
 		_health = 0f;
-		_isDead = true;
+		IsDead = true;
 
 		OnDeath?.Invoke();
 		OnHealthChanged?.Invoke(_health - previousHealth, _health, _maxHealth);
@@ -275,7 +274,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	[Button("Revive")]
 	public void Revive(float healthNormalized = 1f)
 	{
-		_isDead = false;
+		IsDead = false;
 		float previousHealth = _health;
 		float healAmount = healthNormalized * _maxHealth;
 		_health = Mathf.Clamp(healAmount, 0, _maxHealth);
