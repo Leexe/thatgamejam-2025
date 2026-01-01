@@ -5,6 +5,7 @@ using UnityEngine.Events;
 public class HealthController : MonoBehaviour, IDamageable
 {
 	#region Settings
+
 	[Header("Max Health")]
 	[Tooltip("How much health the player has")]
 	[SerializeField]
@@ -30,9 +31,19 @@ public class HealthController : MonoBehaviour, IDamageable
 	private float _regenerationDelay;
 
 	[Header("Invincibility")]
-	[Tooltip("How long the i-frames last after getting damaged")]
+	[Tooltip("If true, the player will be invincible for a short time after taking damage")]
 	[SerializeField]
-	private float _invincibilityTime = 1f;
+	private bool _toggleInvincibilityFrames = true;
+
+	[Tooltip("If true, the player will be invincible for a short time after spawning")]
+	[SerializeField]
+	[ShowIf("@_toggleInvincibilityFrames")]
+	private bool _invincibilityOnSpawn;
+
+	[Tooltip("How long the i-frames last after getting damaged")]
+	[ShowIf("@_toggleInvincibilityFrames")]
+	[SerializeField]
+	private float _invincibilityTimeAfterDamage = 1f;
 
 	#endregion
 
@@ -42,8 +53,52 @@ public class HealthController : MonoBehaviour, IDamageable
 	private float _regeneration;
 	private float _health;
 	private bool _isDead;
-	private bool CanTakeDamage => _timeSinceHurt > _invincibilityTime && !_godMode;
-	private bool CanRegenerate => _timeSinceHurt > _regenerationDelay;
+
+	private bool CanTakeDamage
+	{
+		get
+		{
+			if (_godMode)
+			{
+				return false;
+			}
+
+			if (_isDead)
+			{
+				return false;
+			}
+
+			if (_timeSinceHurt <= _invincibilityTimeAfterDamage)
+			{
+				return false;
+			}
+
+			return true;
+		}
+	}
+
+	private bool CanRegenerate
+	{
+		get
+		{
+			if (_godMode)
+			{
+				return false;
+			}
+
+			if (_isDead)
+			{
+				return false;
+			}
+
+			if (!_toggleRegeneration || IsFullHealth || _timeSinceHurt <= _regenerationDelay)
+			{
+				return false;
+			}
+
+			return true;
+		}
+	}
 
 	#endregion
 
@@ -117,8 +172,11 @@ public class HealthController : MonoBehaviour, IDamageable
 	private void InitializeHealth()
 	{
 		_health = _maxHealth;
-		_regeneration = _baseRegen;
 		_isDead = false;
+
+		_regeneration = _toggleRegeneration ? _baseRegen : 0f;
+		_timeSinceHurt = _invincibilityOnSpawn ? 0f : float.MaxValue;
+
 		OnInitiateHealth?.Invoke(_health, _maxHealth);
 		OnHealthChanged?.Invoke(0, _health, _maxHealth);
 	}
@@ -129,17 +187,13 @@ public class HealthController : MonoBehaviour, IDamageable
 
 	private void Update()
 	{
-		if (!_isDead)
-		{
-			HandleRegeneration(Time.deltaTime);
-		}
-
+		HandleRegeneration(Time.deltaTime);
 		_timeSinceHurt += Time.deltaTime;
 	}
 
 	private void HandleRegeneration(float deltaTime)
 	{
-		if (_toggleRegeneration && CanRegenerate && !IsFullHealth && !_isDead)
+		if (CanRegenerate)
 		{
 			float amount = _regeneration * deltaTime;
 			Heal(amount);
@@ -182,13 +236,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	[Button("Take Damage")]
 	public void TakeDamage(float damage)
 	{
-		if (_godMode)
-		{
-			return;
-		}
-
-		// Don't take damage if the player has died
-		if (!_isDead && CanTakeDamage)
+		if (CanTakeDamage)
 		{
 			_health -= damage;
 			_timeSinceHurt = 0f;
@@ -228,11 +276,13 @@ public class HealthController : MonoBehaviour, IDamageable
 	public void Revive(float healthNormalized = 1f)
 	{
 		_isDead = false;
+		float previousHealth = _health;
 		float healAmount = healthNormalized * _maxHealth;
 		_health = Mathf.Clamp(healAmount, 0, _maxHealth);
+		float diff = _health - previousHealth;
 
 		OnRevive?.Invoke(_health, _maxHealth);
-		OnHealthChanged?.Invoke(healAmount, _health, _maxHealth); // Approximation of change
+		OnHealthChanged?.Invoke(diff, _health, _maxHealth);
 	}
 
 	/// <summary>
@@ -265,6 +315,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	[Button("Set Max Health")]
 	public void SetMaxHealth(float newMax, bool healToFull = false)
 	{
+		float previousHealth = _health;
 		_maxHealth = newMax;
 		if (healToFull)
 		{
@@ -279,7 +330,8 @@ public class HealthController : MonoBehaviour, IDamageable
 			}
 		}
 
-		OnHealthChanged?.Invoke(0, _health, _maxHealth);
+		float diff = _health - previousHealth;
+		OnHealthChanged?.Invoke(diff, _health, _maxHealth);
 		OnInitiateHealth?.Invoke(_health, _maxHealth);
 	}
 
