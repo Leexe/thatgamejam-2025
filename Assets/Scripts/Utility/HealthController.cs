@@ -45,6 +45,21 @@ public class HealthController : MonoBehaviour, IDamageable
 	[SerializeField]
 	private bool _godMode;
 
+	private void OnValidate()
+	{
+		if (!_toggleInvincibilityFrames)
+		{
+			_invincibilityTimeAfterDamage = 0f;
+			_invincibilityOnSpawn = false;
+		}
+
+		if (!_toggleRegeneration)
+		{
+			_baseRegen = 0f;
+			_regenerationDelay = 0f;
+		}
+	}
+
 	#endregion
 
 	#region State
@@ -68,7 +83,7 @@ public class HealthController : MonoBehaviour, IDamageable
 				return false;
 			}
 
-			if (_timeSinceHurt <= _invincibilityTimeAfterDamage)
+			if (_toggleInvincibilityFrames && _timeSinceHurt <= _invincibilityTimeAfterDamage)
 			{
 				return false;
 			}
@@ -205,6 +220,25 @@ public class HealthController : MonoBehaviour, IDamageable
 	#region Public API
 
 	/// <summary>
+	/// Kills the entity
+	/// </summary>
+	[Button("Kill")]
+	public void Kill()
+	{
+		if (IsDead)
+		{
+			return;
+		}
+
+		float previousHealth = _health;
+		_health = 0f;
+		IsDead = true;
+
+		OnDeath?.Invoke();
+		OnHealthChanged?.Invoke(_health - previousHealth, _health, _maxHealth);
+	}
+
+	/// <summary>
 	/// Heals the entity by the specified amount
 	/// </summary>
 	/// <param name="amount">Amount to heal.</param>
@@ -249,22 +283,6 @@ public class HealthController : MonoBehaviour, IDamageable
 				Kill();
 			}
 		}
-	}
-
-	[Button("Kill")]
-	public void Kill()
-	{
-		if (IsDead)
-		{
-			return;
-		}
-
-		float previousHealth = _health;
-		_health = 0f;
-		IsDead = true;
-
-		OnDeath?.Invoke();
-		OnHealthChanged?.Invoke(_health - previousHealth, _health, _maxHealth);
 	}
 
 	/// <summary>
