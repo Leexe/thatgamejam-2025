@@ -6,16 +6,12 @@ public class HealthController : MonoBehaviour, IDamageable
 {
 	#region Settings
 
-	[Header("Max Health")]
+	[Title("Max Health")]
 	[Tooltip("How much health the player has")]
 	[SerializeField]
 	private float _maxHealth = 100f;
 
-	[Header("Debug")]
-	[SerializeField]
-	private bool _godMode;
-
-	[Header("Regeneration")]
+	[Title("Regeneration")]
 	[Tooltip("Allows the player to regenerate health over time")]
 	[SerializeField]
 	private bool _toggleRegeneration;
@@ -30,7 +26,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	[SerializeField]
 	private float _regenerationDelay;
 
-	[Header("Invincibility")]
+	[Title("Invincibility")]
 	[Tooltip("If true, the player will be invincible for a short time after taking damage")]
 	[SerializeField]
 	private bool _toggleInvincibilityFrames = true;
@@ -44,6 +40,10 @@ public class HealthController : MonoBehaviour, IDamageable
 	[ShowIf("@_toggleInvincibilityFrames")]
 	[SerializeField]
 	private float _invincibilityTimeAfterDamage = 1f;
+
+	[Title("Debug")]
+	[SerializeField]
+	private bool _godMode;
 
 	#endregion
 
