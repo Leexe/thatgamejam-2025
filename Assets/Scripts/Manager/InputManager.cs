@@ -43,6 +43,9 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 	[HideInInspector]
 	public UnityEvent OnBacklogPerformed;
 
+	[HideInInspector]
+	public UnityEvent OnAnyInputPerformed;
+
 	protected override void Awake()
 	{
 		base.Awake();
@@ -68,6 +71,7 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 			_movementAction.performed -= OnMovementPerformed;
 			_movementAction.canceled -= OnMovementCanceled;
 		}
+
 		if (_movement2Action != null)
 		{
 			_movement2Action.performed -= OnMovementPerformed;
@@ -78,6 +82,7 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 	private void Update()
 	{
 		UpdateInputs();
+		CheckAnyInput();
 	}
 
 	#region Input Setup
@@ -112,6 +117,27 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);
 		AddEventToAction(_backlogAction, ref OnBacklogPerformed);
+	}
+
+	private void CheckAnyInput()
+	{
+		if (Keyboard.current != null && Keyboard.current.anyKey.wasPressedThisFrame)
+		{
+			OnAnyInputPerformed?.Invoke();
+			return;
+		}
+
+		if (
+			Mouse.current != null
+			&& (
+				Mouse.current.leftButton.wasPressedThisFrame
+				|| Mouse.current.rightButton.wasPressedThisFrame
+				|| Mouse.current.middleButton.wasPressedThisFrame
+			)
+		)
+		{
+			OnAnyInputPerformed?.Invoke();
+		}
 	}
 
 	#endregion
