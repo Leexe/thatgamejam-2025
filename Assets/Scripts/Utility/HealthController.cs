@@ -41,6 +41,15 @@ public class HealthController : MonoBehaviour, IDamageable
 	[SerializeField]
 	private float _invincibilityTimeAfterDamage = 1f;
 
+	[Title("Channels")]
+	[SerializeField]
+	private bool _enableChannel;
+
+	[Tooltip("Event channel to raise events")]
+	[SerializeField]
+	[ShowIf("@_enableChannel")]
+	private HealthEventChannelSO _channel;
+
 	[Title("Debug")]
 	[SerializeField]
 	private bool _godMode;
@@ -193,6 +202,8 @@ public class HealthController : MonoBehaviour, IDamageable
 
 		OnInitiateHealth?.Invoke(_health, _maxHealth);
 		OnHealthChanged?.Invoke(0, _health, _maxHealth);
+		_channel?.RaiseInitiateHealth(_health, _maxHealth);
+		_channel?.RaiseHealthChanged(0, _health, _maxHealth);
 	}
 
 	#endregion
@@ -212,6 +223,7 @@ public class HealthController : MonoBehaviour, IDamageable
 			float amount = _regeneration * deltaTime;
 			Heal(amount);
 			OnRegen?.Invoke(amount, _health, _maxHealth);
+			_channel?.RaiseRegen(amount, _health, _maxHealth);
 		}
 	}
 
@@ -236,6 +248,8 @@ public class HealthController : MonoBehaviour, IDamageable
 
 		OnDeath?.Invoke();
 		OnHealthChanged?.Invoke(_health - previousHealth, _health, _maxHealth);
+		_channel?.RaiseDeath();
+		_channel?.RaiseHealthChanged(_health - previousHealth, _health, _maxHealth);
 	}
 
 	/// <summary>
@@ -259,6 +273,8 @@ public class HealthController : MonoBehaviour, IDamageable
 		{
 			OnHeal?.Invoke(diff, _health, _maxHealth);
 			OnHealthChanged?.Invoke(diff, _health, _maxHealth);
+			_channel?.RaiseHeal(diff, _health, _maxHealth);
+			_channel?.RaiseHealthChanged(diff, _health, _maxHealth);
 		}
 	}
 
@@ -276,6 +292,8 @@ public class HealthController : MonoBehaviour, IDamageable
 
 			OnDamage?.Invoke(damage, _health, _maxHealth);
 			OnHealthChanged?.Invoke(-damage, _health, _maxHealth);
+			_channel?.RaiseDamage(damage, _health, _maxHealth);
+			_channel?.RaiseHealthChanged(-damage, _health, _maxHealth);
 
 			// If the player is below a certain threshold of health, trigger death
 			if (_health <= 0.01f)
@@ -300,6 +318,8 @@ public class HealthController : MonoBehaviour, IDamageable
 
 		OnRevive?.Invoke(_health, _maxHealth);
 		OnHealthChanged?.Invoke(diff, _health, _maxHealth);
+		_channel?.RaiseRevive(_health, _maxHealth);
+		_channel?.RaiseHealthChanged(diff, _health, _maxHealth);
 	}
 
 	/// <summary>
@@ -322,6 +342,7 @@ public class HealthController : MonoBehaviour, IDamageable
 		float diff = _health - previousHealth;
 
 		OnHealthChanged?.Invoke(diff, _health, _maxHealth);
+		_channel?.RaiseHealthChanged(diff, _health, _maxHealth);
 	}
 
 	/// <summary>
@@ -350,6 +371,8 @@ public class HealthController : MonoBehaviour, IDamageable
 		float diff = _health - previousHealth;
 		OnHealthChanged?.Invoke(diff, _health, _maxHealth);
 		OnInitiateHealth?.Invoke(_health, _maxHealth);
+		_channel?.RaiseHealthChanged(diff, _health, _maxHealth);
+		_channel?.RaiseInitiateHealth(_health, _maxHealth);
 	}
 
 	#endregion
