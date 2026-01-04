@@ -272,7 +272,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4279048159162233941}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: StartButton
+        m_MethodName: SettingsButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -300,6 +300,13 @@ MonoBehaviour:
   _enableOscillation: 1
   _minOscillateSize: 1.05
   _oscillateDuration: 1.5
+  _hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _useUnscaledTime: 0
 --- !u!1 &852527494889761390
 GameObject:
@@ -924,7 +931,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 4279048159162233941}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: StartButton
+        m_MethodName: ExitButton
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -952,6 +959,13 @@ MonoBehaviour:
   _enableOscillation: 1
   _minOscillateSize: 1.05
   _oscillateDuration: 1.5
+  _hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _useUnscaledTime: 0
 --- !u!1 &2686680545271813493
 GameObject:
@@ -1325,7 +1339,6 @@ MonoBehaviour:
   _introAnimation: {fileID: 7400000, guid: 89f777ff436ab40e4bbf18da8ba8a44a, type: 2}
   _startAnimation: {fileID: 7400000, guid: a3795456f0c4541359e13d9a6699c323, type: 2}
   _skipSpeed: 5
-  _fadeDuration: 0.25
   OnIntroStart:
     m_PersistentCalls:
       m_Calls: []
@@ -1524,6 +1537,13 @@ MonoBehaviour:
   _enableOscillation: 1
   _minOscillateSize: 1.05
   _oscillateDuration: 1.5
+  _hoverSound:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   _useUnscaledTime: 0
 --- !u!1 &5727756587246407224
 GameObject:

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5006252540373732019}
   - component: {fileID: 9210326844115371349}
   - component: {fileID: 7750257266434827323}
+  - component: {fileID: 4702691278985878522}
   m_Layer: 0
   m_Name: FightManager
   m_TagString: Untagged
@@ -47,16 +48,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FightManager
   _p1: {fileID: 0}
   _p2: {fileID: 0}
+  _cameraBrain: {fileID: 0}
   OnGameEnd:
     m_PersistentCalls:
       m_Calls: []
-  OnHealthUpdate:
-    m_PersistentCalls:
-      m_Calls: []
   _freezeFrameCount: 14
-  _arenaHalfWidth: 4
-  _playerSeparation: 2
+  _arenaHalfWidth: 8.304348
+  _playerSeparation: 2.6086957
   _maxSeparationSpeed: 0.14
+  _p1Channel: {fileID: 11400000, guid: b303b065b4c814e5da5f396533717da1, type: 2}
+  _p2Channel: {fileID: 11400000, guid: ed698b654ad8342aeb96f2adf17ee477, type: 2}
 --- !u!114 &7750257266434827323
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -70,3 +71,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MatchupManager
   _fightManager: {fileID: 9210326844115371349}
+  _p1RoundIndicator: {fileID: 0}
+  _p2RoundIndicator: {fileID: 0}
+--- !u!114 &4702691278985878522
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 33610211646582470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: beea2176d1ddb46f78722943656e9c16, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FightingGameMusic

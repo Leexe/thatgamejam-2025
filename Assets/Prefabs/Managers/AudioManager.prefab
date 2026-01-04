@@ -89,3 +89,101 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4e0060f93d14446618958a417b677782, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FMODEvents
+  <Title_Bgm>k__BackingField:
+    Guid:
+      Data1: -532088937
+      Data2: 1266958721
+      Data3: -1933661789
+      Data4: -916725204
+    Path: event:/Title Screen/Title Theme
+  <FightingGame_Bgm>k__BackingField:
+    Guid:
+      Data1: 1767264458
+      Data2: 1186363235
+      Data3: -2007019106
+      Data4: 298240551
+    Path: event:/Fighting/Fight Theme
+  <Jump_Sfx>k__BackingField:
+    Guid:
+      Data1: -807052989
+      Data2: 1101422521
+      Data3: -1514005319
+      Data4: -976653414
+    Path: event:/Fighting/Jump
+  <KickLand_Sfx>k__BackingField:
+    Guid:
+      Data1: 2085607289
+      Data2: 1325968012
+      Data3: 971908482
+      Data4: 2046054693
+    Path: event:/Fighting/Kick Land
+  <Kick_Sfx>k__BackingField:
+    Guid:
+      Data1: 1086438965
+      Data2: 1284954255
+      Data3: 208226445
+      Data4: 1519892152
+    Path: event:/Fighting/Kick Whiff
+  <PunchLand_Sfx>k__BackingField:
+    Guid:
+      Data1: 46269440
+      Data2: 1292071869
+      Data3: -2058086986
+      Data4: -1457490216
+    Path: event:/Fighting/Punch Land
+  <Punch_Sfx>k__BackingField:
+    Guid:
+      Data1: 310427894
+      Data2: 1249121993
+      Data3: 588225176
+      Data4: 855235944
+    Path: event:/Fighting/Punch Whiff
+  <Block_Sfx>k__BackingField:
+    Guid:
+      Data1: 1340659518
+      Data2: 1108441682
+      Data3: -872598371
+      Data4: -71649291
+    Path: event:/Fighting/Block
+  <Dash_Sfx>k__BackingField:
+    Guid:
+      Data1: 5540509
+      Data2: 1210919964
+      Data3: 1041644471
+      Data4: -1170837115
+    Path: event:/Fighting/Dash
+  <TitleDap_Sfx>k__BackingField:
+    Guid:
+      Data1: 1170114099
+      Data2: 1078515202
+      Data3: 893526434
+      Data4: -1572567127
+    Path: event:/Title Screen/Dap
+  <TitleReveal_Sfx>k__BackingField:
+    Guid:
+      Data1: -1778627648
+      Data2: 1152709693
+      Data3: 2130652289
+      Data4: -803697364
+    Path: event:/Title Screen/Title Transition
+  <GameStart_Sfx>k__BackingField:
+    Guid:
+      Data1: -254150746
+      Data2: 1090141272
+      Data3: -1945155442
+      Data4: 1993238489
+    Path: event:/Title Screen/Game Start
+  <ButtonHover_Sfx>k__BackingField:
+    Guid:
+      Data1: -1093513827
+      Data2: 1095621104
+      Data3: 1446421403
+      Data4: -230240731
+    Path: event:/Title Screen/Button Hover
+  <ButtonClick_Sfx>k__BackingField:
+    Guid:
+      Data1: 161282764
+      Data2: 1229754463
+      Data3: 464710307
+      Data4: 1007240553
+    Path: event:/Title Screen/Button Click

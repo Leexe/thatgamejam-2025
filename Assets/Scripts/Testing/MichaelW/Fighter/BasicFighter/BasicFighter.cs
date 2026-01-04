@@ -169,10 +169,15 @@ public class BasicFighter : Fighter
 
 		if (res == AttackResult.Blocked)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Block_Sfx);
 			PlayVFX(_vfxList.BlockVFX, attack.VisualPosition, attack.VisualDirection);
 		}
 		else if (res == AttackResult.Hit)
 		{
+			AudioManager.Instance.PlayOneShot(
+				attack.IsHeavy ? FMODEvents.Instance.KickLand_Sfx : FMODEvents.Instance.PunchLand_Sfx
+			);
+
 			Health -= attack.Damage;
 			if (Health <= 0)
 			{
@@ -300,7 +305,7 @@ public class BasicFighter : Fighter
 	/// </summary>
 	private void State_Anim(AnimationClip clip, State endState = State.StandIdle, bool reverse = false)
 	{
-		if ((_stateCounter + 1) > (clip.length * 60f) - 0.001f)
+		if (_stateCounter + 1 > (clip.length * 60f) - 0.001f)
 		{
 			TransitionState(endState);
 		}
@@ -360,27 +365,33 @@ public class BasicFighter : Fighter
 
 		if (input.PunchButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
 			TransitionState(State.StandPunch);
 			State_Anim(_animsSO.StandPunch);
 			return;
 		}
+
 		if (input.KickButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Kick_Sfx);
 			TransitionState(State.StandKick);
 			State_Anim(_animsSO.StandKick);
 			return;
 		}
+
 		if (_wantsToCrouch)
 		{
 			TransitionState(State.CrouchIdle);
 			State_Anim(_animsSO.CrouchTransition);
 			return;
 		}
+
 		if (_wantsToJump)
 		{
 			// set jump velocity
 			_vel = (_jumpVel * Vector2.up) + (_jumpHorizontalVel * (int)_walkDirection * Vector2.right);
 
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Jump_Sfx);
 			TransitionState(State.JumpIdle);
 			State_Anim(_animsSO.Jump);
 			return;
@@ -399,6 +410,7 @@ public class BasicFighter : Fighter
 			{
 				_walkFrame = 0;
 			}
+
 			if (_walkDirection == Direction.None)
 			{
 				DoFrame(_animsSO.StandIdle, _walkFrame);
@@ -437,16 +449,20 @@ public class BasicFighter : Fighter
 		// note that punches / kicks can be input immediately upon crouching
 		if (input.PunchButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
 			TransitionState(State.CrouchPunch);
 			State_Anim(_animsSO.CrouchPunch);
 			return;
 		}
+
 		if (input.KickButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Kick_Sfx);
 			TransitionState(State.CrouchKick);
 			State_Anim(_animsSO.CrouchKick);
 			return;
 		}
+
 		if (!_wantsToCrouch)
 		{
 			TransitionState(State.StandIdle);
@@ -488,12 +504,15 @@ public class BasicFighter : Fighter
 
 		if (input.PunchButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
 			TransitionState(State.JumpPunch);
 			State_Anim(_animsSO.JumpPunch);
 			return;
 		}
+
 		if (input.KickButton)
 		{
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Kick_Sfx);
 			TransitionState(State.JumpKick);
 			State_Anim(_animsSO.JumpKick);
 			return;

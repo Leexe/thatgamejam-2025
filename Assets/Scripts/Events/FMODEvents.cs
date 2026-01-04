@@ -13,6 +13,10 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: FoldoutGroup("Music", true)]
 	public EventReference Title_Bgm { get; private set; }
 
+	[field: SerializeField]
+	[field: FoldoutGroup("Music", true)]
+	public EventReference FightingGame_Bgm { get; private set; }
+
 	#endregion
 
 	#region Ambience
@@ -44,6 +48,14 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
 	public EventReference Punch_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Block_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Dash_Sfx { get; private set; }
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
