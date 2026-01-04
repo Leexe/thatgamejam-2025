@@ -188,6 +188,8 @@ public class BasicFighter : Fighter
 			case State.StandIdle:
 			case State.StandPunch:
 			case State.StandKick:
+			case State.DashForward:
+			case State.DashBack:
 				res = OnHit_Standing(attack);
 				break;
 			case State.CrouchIdle:
@@ -367,8 +369,7 @@ public class BasicFighter : Fighter
 	private void SpawnAfterImage()
 	{
 		AfterImage afterImage = Instantiate(_afterImagePrefab);
-		Vector2 pos = (Vector2)transform.position + (Random.insideUnitCircle * 0.04f);
-		afterImage.Show(pos, _animDataController.GetCurrentSprite());
+		afterImage.Show(transform, _animDataController.GetCurrentSprite(), 0.1f);
 	}
 
 	#endregion helpers
