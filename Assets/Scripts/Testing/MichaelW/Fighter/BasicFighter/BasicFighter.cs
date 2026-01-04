@@ -375,7 +375,7 @@ public class BasicFighter : Fighter
 	private void SpawnAfterImage()
 	{
 		AfterImage afterImage = Instantiate(_afterImagePrefab);
-		afterImage.Show(transform, _animDataController.GetCurrentSprite(), 0.1f);
+		afterImage.Show(transform, _animDataController.GetCurrentSpriteRenderer(), 0.1f);
 	}
 
 	#endregion helpers

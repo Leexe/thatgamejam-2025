@@ -19,12 +19,13 @@ public class AfterImage : MonoBehaviour
 	private bool _started = false;
 	private int _age;
 
-	public void Show(Transform tr, Sprite sprite, float jitter = 0f)
+	public void Show(Transform tr, SpriteRenderer spriteRenderer, float jitter = 0f)
 	{
 		transform.position = tr.position;
 		transform.localScale = tr.lossyScale;
 		transform.Translate(Random.insideUnitCircle * jitter);
-		_spriteRenderer.sprite = sprite;
+		_spriteRenderer.sprite = spriteRenderer.sprite;
+		_spriteRenderer.material = spriteRenderer.material;
 		_started = true;
 		_age = 0;
 	}
