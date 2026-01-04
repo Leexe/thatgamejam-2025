@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d570f6f03e10b415485344b81165d849, type: 3}
+  m_Name: BasicFighterAnimList
+  m_EditorClassIdentifier: Assembly-CSharp::BasicFighterAnimsSO
+  CrouchBlock: {fileID: 7400000, guid: fdc2bb04ff48748dd9234432500fd6b5, type: 2}
+  CrouchHurt: {fileID: 7400000, guid: 29ba732cd6c82445db4103c0132e40c5, type: 2}
+  CrouchIdle: {fileID: 7400000, guid: a2ea74253c3bd43419cf0f1340c529c4, type: 2}
+  CrouchKick: {fileID: 7400000, guid: 3783e60ed4dd54d5a9e2b17b7a09ee39, type: 2}
+  CrouchPunch: {fileID: 7400000, guid: 2a8c5949b0c244a11b36271cdb80dd25, type: 2}
+  CrouchTransition: {fileID: 7400000, guid: 4cbcdcfab32214917872259bd2d64dd0, type: 2}
+  Grab: {fileID: 7400000, guid: ce44744d93afd472596e653549a5af3e, type: 2}
+  Jump: {fileID: 7400000, guid: ad5c005fad3d043acb5222bd45a13146, type: 2}
+  JumpHurt: {fileID: 7400000, guid: 14177644696ff47f89461df0c020c980, type: 2}
+  JumpKick: {fileID: 7400000, guid: d10b144f19b94459a8b2cd15d35894e8, type: 2}
+  JumpPunch: {fileID: 7400000, guid: 974e774412d2f4c60af415fd5b0ae51f, type: 2}
+  KnockDownGetUp: {fileID: 7400000, guid: 7f72acb68306744449c5d2fcbcf74b7a, type: 2}
+  StandBlock: {fileID: 7400000, guid: 48800807e44ca4125816f3619ee25289, type: 2}
+  StandHurt: {fileID: 7400000, guid: dfb4758328b014d02a73ba7df9b76b95, type: 2}
+  StandIdle: {fileID: 7400000, guid: 3d15a449fa87a4dac9357e3c8ac33d60, type: 2}
+  StandKick: {fileID: 7400000, guid: 617b3f558cf044300b1cc505c8f0134e, type: 2}
+  StandPunch: {fileID: 7400000, guid: 67e251c20886843fdafaeae884a2442d, type: 2}
+  Walk: {fileID: 7400000, guid: dba311ef119d34fb49b02c03a59647e6, type: 2}

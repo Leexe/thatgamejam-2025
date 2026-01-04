@@ -7,8 +7,8 @@ public class GizmoUtils
 	/// </summary>
 	public static void DrawCrossHair(Vector2 pos, float size = 0.2f)
 	{
-		Gizmos.DrawLine(pos * size * Vector2.left, pos * size * Vector2.right);
-		Gizmos.DrawLine(pos * size * Vector2.up, pos * size * Vector2.down);
+		Gizmos.DrawLine(pos + (size * Vector2.left), pos + (size * Vector2.right));
+		Gizmos.DrawLine(pos + (size * Vector2.up), pos + (size * Vector2.down));
 	}
 
 	/// <summary>
