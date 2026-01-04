@@ -1,4 +1,6 @@
+using Sirenix.OdinInspector;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FightManager : MonoBehaviour
 {
@@ -9,6 +11,11 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private Fighter _p2;
 
+	[Header("Events")]
+	// TODO: replace these with event channel refs?
+	public UnityEvent<GameResult> OnGameEnd;
+	public UnityEvent<int, int, int, int> OnHealthUpdate;
+
 	[Header("Parameters")]
 	[SerializeField]
 	private int _freezeFrameCount = 14;
@@ -17,7 +24,6 @@ public class FightManager : MonoBehaviour
 	private readonly float _arenaHalfWidth = 4f;
 	private readonly float _maxSeparationSpeed = 0.14f;
 
-	private int _debugTick = 0;
 	private int _debugDirCooldown = 10;
 	private float _debugP2Dir = 0;
 	private float _debugP2VertDir = 0f;
@@ -79,16 +85,27 @@ public class FightManager : MonoBehaviour
 		_upcomingInput2.Dir = dir;
 	}
 
+	[Button]
+	public void ResetGame()
+	{
+		Vector2 p1StartingPos = new(-2f, 0f);
+		Vector2 p2StartingPos = new(2f, 0f);
+		_p1.Init(p1StartingPos, p2StartingPos);
+		_p2.Init(p2StartingPos, p1StartingPos);
+		_gameStarted = true;
+
+		// stuff for the enemy AI (should be temp)
+		_debugDirCooldown = 10;
+		_debugP2Dir = 0;
+		_debugP2VertDir = 0f;
+		_debugP2PrevPos = Vector2.zero;
+	}
+
 	private void Tick()
 	{
 		if (!_gameStarted)
 		{
-			Vector2 p1StartingPos = new(-2f, 0f);
-			Vector2 p2StartingPos = new(2f, 0f);
-			_p1.Init(p1StartingPos, p2StartingPos);
-			_p2.Init(p2StartingPos, p1StartingPos);
-			_gameStarted = true;
-			_debugTick = 0;
+			ResetGame();
 		}
 
 		// snapshot player positions
@@ -183,6 +200,21 @@ public class FightManager : MonoBehaviour
 		_p2.Tick(p2Input, p1CurrentPos);
 		SeparateColliders();
 		ProcessHits();
+
+		OnHealthUpdate.Invoke(_p1.Health, _p1.MaxHealth, _p2.Health, _p2.MaxHealth);
+
+		if (_p1.Health <= 0 && _p2.Health <= 0)
+		{
+			OnGameEnd.Invoke(GameResult.Draw);
+		}
+		else if (_p1.Health <= 0)
+		{
+			OnGameEnd.Invoke(GameResult.P2Win);
+		}
+		else if (_p2.Health <= 0)
+		{
+			OnGameEnd.Invoke(GameResult.P1Win);
+		}
 	}
 
 	private void SeparateColliders()

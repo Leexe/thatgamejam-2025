@@ -26,7 +26,7 @@ public abstract class Fighter : MonoBehaviour
 	public abstract HitBoxData ReadHitBoxes();
 
 	/// <summary>
-	/// Sets up starting position and state of player. Called at start of fight
+	/// Sets up (OR RESETS) starting position and state of player. Called at start of fight
 	/// </summary>
 	public abstract void Init(Vector2 position, Vector2 opponentPosition);
 
