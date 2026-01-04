@@ -6,68 +6,75 @@ public class HealthController : MonoBehaviour, IDamageable
 {
 	#region Settings
 
-	[Title("Max Health")]
+	[FoldoutGroup("Health")]
 	[Tooltip("How much health the player has")]
 	[SerializeField]
+	[MinValue(0)]
 	private float _maxHealth = 100f;
 
-	[Title("Regeneration")]
+	[FoldoutGroup("Regeneration")]
 	[Tooltip("Allows the player to regenerate health over time")]
 	[SerializeField]
+	[ToggleLeft]
 	private bool _toggleRegeneration;
 
+	[FoldoutGroup("Regeneration")]
 	[Tooltip("How much health the player heals per second")]
 	[ShowIf("_toggleRegeneration")]
 	[SerializeField]
+	[MinValue(0)]
+	[Indent]
 	private float _baseRegen = 1f;
 
+	[FoldoutGroup("Regeneration")]
 	[Tooltip("How long after being hit does regeneration start")]
 	[ShowIf("_toggleRegeneration")]
 	[SerializeField]
+	[MinValue(0)]
+	[SuffixLabel("seconds")]
+	[Indent]
 	private float _regenerationDelay;
 
-	[Title("Invincibility")]
+	[FoldoutGroup("Invincibility")]
 	[Tooltip("If true, the player will be invincible for a short time after taking damage")]
 	[SerializeField]
-	private bool _toggleInvincibilityFrames = true;
+	[ToggleLeft]
+	private bool _toggleInvincibilityFrames;
 
+	[FoldoutGroup("Invincibility")]
 	[Tooltip("If true, the player will be invincible for a short time after spawning")]
 	[SerializeField]
-	[ShowIf("@_toggleInvincibilityFrames")]
-	private bool _invincibilityOnSpawn;
+	[ShowIf("_toggleInvincibilityFrames")]
+	[Indent]
+	private bool _spawnInvincibility;
 
+	[FoldoutGroup("Invincibility")]
 	[Tooltip("How long the i-frames last after getting damaged")]
-	[ShowIf("@_toggleInvincibilityFrames")]
+	[ShowIf("_toggleInvincibilityFrames")]
 	[SerializeField]
+	[MinValue(0)]
+	[SuffixLabel("seconds")]
+	[Indent]
 	private float _invincibilityTimeAfterDamage = 1f;
 
-	[Title("Channels")]
+	[FoldoutGroup("Event Channel")]
+	[Tooltip("Enable broadcasting health events via ScriptableObject channel")]
 	[SerializeField]
+	[ToggleLeft]
 	private bool _enableChannel;
 
+	[FoldoutGroup("Event Channel")]
 	[Tooltip("Event channel to raise events")]
 	[SerializeField]
-	[ShowIf("@_enableChannel")]
+	[ShowIf("_enableChannel")]
+	[Indent]
 	private HealthEventChannelSO _channel;
 
-	[Title("Debug")]
+	[FoldoutGroup("Debug")]
+	[Tooltip("When enabled, the entity cannot take damage")]
 	[SerializeField]
+	[ToggleLeft]
 	private bool _godMode;
-
-	private void OnValidate()
-	{
-		if (!_toggleInvincibilityFrames)
-		{
-			_invincibilityTimeAfterDamage = 0f;
-			_invincibilityOnSpawn = false;
-		}
-
-		if (!_toggleRegeneration)
-		{
-			_baseRegen = 0f;
-			_regenerationDelay = 0f;
-		}
-	}
 
 	#endregion
 
@@ -198,7 +205,7 @@ public class HealthController : MonoBehaviour, IDamageable
 		IsDead = false;
 
 		_regeneration = _toggleRegeneration ? _baseRegen : 0f;
-		_timeSinceHurt = _invincibilityOnSpawn ? 0f : float.MaxValue;
+		_timeSinceHurt = _toggleInvincibilityFrames && _spawnInvincibility ? 0f : float.MaxValue;
 
 		OnInitiateHealth?.Invoke(_health, _maxHealth);
 		OnHealthChanged?.Invoke(0, _health, _maxHealth);
@@ -234,6 +241,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// <summary>
 	/// Kills the entity
 	/// </summary>
+	[FoldoutGroup("Debug")]
 	[Button("Kill")]
 	public void Kill()
 	{
@@ -256,6 +264,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// Heals the entity by the specified amount
 	/// </summary>
 	/// <param name="amount">Amount to heal.</param>
+	[FoldoutGroup("Debug")]
 	[Button("Heal")]
 	public void Heal(float amount)
 	{
@@ -282,6 +291,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// Make the player take the given amount of damage and mark the player as dead when health is less than or equal to 0
 	/// </summary>
 	/// <param name="damage">Damage to take</param>
+	[FoldoutGroup("Debug")]
 	[Button("Take Damage")]
 	public void TakeDamage(float damage)
 	{
@@ -306,7 +316,8 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// <summary>
 	/// Revives the player and sets their health to the normalized health amount
 	/// </summary>
-	/// <param name="healthNormalized">A value from 0-1 that lerps between 0 and max health, setting the player's health to that amount.</param>
+	/// <param name="healthNormalized">A value from 0-1 that lerp between 0 and max health, setting the player's health to that amount.</param>
+	[FoldoutGroup("Debug")]
 	[Button("Revive")]
 	public void Revive(float healthNormalized = 1f)
 	{
@@ -323,7 +334,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	}
 
 	/// <summary>
-	/// Changes the regneration rate
+	/// Changes the regeneration rate
 	/// </summary>
 	/// <param name="regenRate">Amount of healing per second</param>
 	public void SetRegeneration(float regenRate)
@@ -334,7 +345,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// <summary>
 	/// Sets the player's health based on the normalized value
 	/// </summary>
-	/// <param name="healthNormalized">A value from 0-1 that lerps between 0 and max health, setting the player's health to that amount</param>
+	/// <param name="healthNormalized">A value from 0-1 that lerp between 0 and max health, setting the player's health to that amount</param>
 	public void SetHealth(float healthNormalized = 1f)
 	{
 		float previousHealth = _health;
@@ -350,6 +361,7 @@ public class HealthController : MonoBehaviour, IDamageable
 	/// </summary>
 	/// <param name="newMax">The new value for maximum health.</param>
 	/// <param name="healToFull">If true, sets current health to current max health.</param>
+	[FoldoutGroup("Debug")]
 	[Button("Set Max Health")]
 	public void SetMaxHealth(float newMax, bool healToFull = false)
 	{

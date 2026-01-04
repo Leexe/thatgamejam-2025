@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-[CreateAssetMenu(menuName = "Events/Health Event Channel")]
+[CreateAssetMenu(fileName = "HealthEventChannel", menuName = "Events/HealthEventChannel", order = 1)]
 public class HealthEventChannelSO : ScriptableObject
 {
 	/// <summary>

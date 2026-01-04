@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 57369620}
+  - component: {fileID: 57369621}
   m_Layer: 0
   m_Name: Right Healthbar
   m_TagString: Untagged
@@ -156,6 +157,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 825, y: 240}
   m_Pivot: {x: 1, y: 1}
+--- !u!114 &57369621
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 57369619}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ce28ee6612a419788fda4efdfa6cf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
+  _referenceType: 0
+  _channel: {fileID: 11400000, guid: ed698b654ad8342aeb96f2adf17ee477, type: 2}
+  _directController: {fileID: 0}
+  _fillImage: {fileID: 371723105}
 --- !u!1 &157976113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1014,6 +1031,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2080764779}
+  - component: {fileID: 2080764780}
   m_Layer: 0
   m_Name: Left Healthbar
   m_TagString: Untagged
@@ -1042,6 +1060,22 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 825, y: 240}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &2080764780
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2080764778}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24ce28ee6612a419788fda4efdfa6cf7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
+  _referenceType: 0
+  _channel: {fileID: 11400000, guid: b303b065b4c814e5da5f396533717da1, type: 2}
+  _directController: {fileID: 0}
+  _fillImage: {fileID: 640468107}
 --- !u!1001 &1010091052249455829
 PrefabInstance:
   m_ObjectHideFlags: 0

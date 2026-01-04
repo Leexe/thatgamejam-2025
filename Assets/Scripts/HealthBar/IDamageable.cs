@@ -1,5 +1,3 @@
-using UnityEngine;
-
 public interface IDamageable
 {
 	float Health { get; }
