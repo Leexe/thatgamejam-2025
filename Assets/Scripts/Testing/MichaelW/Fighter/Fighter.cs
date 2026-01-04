@@ -22,8 +22,7 @@ public abstract class Fighter : MonoBehaviour
 	public int Health { get; protected set; }
 	public int MaxHealth { get; protected set; }
 
-	public Vector2 Position { get; set; }
-	public HitBoxData HitBoxes { get; protected set; }
+	public abstract HitBoxData ReadHitBoxes();
 
 	/// <summary>
 	/// Sets up starting position and state of player. Called at start of fight
@@ -33,7 +32,7 @@ public abstract class Fighter : MonoBehaviour
 	/// <summary>
 	/// Cleans stuff up.
 	/// </summary>
-	public abstract void Destroy();
+	public virtual void Destroy() { }
 
 	/// <summary>
 	/// Applies state changes and movement according to input
@@ -48,40 +47,37 @@ public abstract class Fighter : MonoBehaviour
 	public abstract AttackResult OnHitByAttack(AttackInfo attack);
 
 	/// <summary>
-	/// TODO: Called by FightManager when this fighter is hit by a grab
-	/// </summary>
-	public abstract AttackResult OnHitByGrab(AttackInfo attack);
-
-	/// <summary>
 	/// Called by FightManager when the attack made contact.
 	/// </summary>
-	public abstract void OnAttackLanded();
+	public abstract void OnAttackLanded(AttackResult result);
 
 	/// <summary>
-	/// Called by FightManager when fighters should update visuals.
+	/// Called by FightManager after performing hitbox separation.
 	/// </summary>
-	public abstract void UpdateVisuals();
+	public virtual void OnPostSeparate() { }
 
 	public virtual void DrawGizmos()
 	{
+		HitBoxData hitboxes = ReadHitBoxes();
+
 		// position
-		Gizmos.color = Color.white;
-		GizmoUtils.DrawCrossHair(Position);
+		Gizmos.color = Color.pink;
+		GizmoUtils.DrawCrossHair(transform.position);
 
 		// collision box
 		Gizmos.color = Color.limeGreen;
-		GizmoUtils.DrawRect(RectUtils.TranslateRect(HitBoxes.CollisionBox, Position));
+		GizmoUtils.DrawRect(hitboxes.CollisionBox);
 
 		// hitboxes
 		Gizmos.color = Color.blue;
-		foreach (Rect hurtBox in HitBoxes.HurtBoxes)
+		foreach (Rect hurtBox in hitboxes.HurtBoxes)
 		{
-			GizmoUtils.DrawRect(RectUtils.TranslateRect(hurtBox, Position));
+			GizmoUtils.DrawRect(hurtBox);
 		}
 		Gizmos.color = Color.red;
-		if (HitBoxes.Attack.HasValue)
+		if (hitboxes.Attack.HasValue)
 		{
-			GizmoUtils.DrawRect(RectUtils.TranslateRect(HitBoxes.Attack.Value.Bounds, Position));
+			GizmoUtils.DrawRect(hitboxes.Attack.Value.Bounds);
 		}
 	}
 }

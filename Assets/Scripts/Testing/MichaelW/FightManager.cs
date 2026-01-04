@@ -1,7 +1,3 @@
-//
-//
-//
-
 using UnityEngine;
 
 public class FightManager : MonoBehaviour
@@ -13,8 +9,16 @@ public class FightManager : MonoBehaviour
 	private Fighter _p2;
 
 	private bool _gameStarted = false;
-	private readonly float _arenaHalfWidth = 5f;
+	private readonly float _arenaHalfWidth = 4f;
 	private readonly float _maxSeparationSpeed = 0.14f;
+
+	private int _debugTick = 0;
+	private int _debugDirCooldown = 10;
+	private float _debugP2Dir = 0;
+	private float _debugP2VertDir = 0f;
+	private Vector2 _debugP2PrevPos = Vector2.zero;
+
+	private int _freezeFrames = 0;
 
 	// player inputs
 	private InputInfo _upcomingInput = new();
@@ -22,7 +26,12 @@ public class FightManager : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		// for now, tick at same interval as fixedupdate
+		if (_freezeFrames > 0)
+		{
+			_freezeFrames--;
+			return;
+		}
+
 		Tick();
 	}
 
@@ -69,16 +78,17 @@ public class FightManager : MonoBehaviour
 	{
 		if (!_gameStarted)
 		{
-			Vector2 p1StartingPos = new(-4f, 0f);
-			Vector2 p2StartingPos = new(4f, 0f);
+			Vector2 p1StartingPos = new(-2f, 0f);
+			Vector2 p2StartingPos = new(2f, 0f);
 			_p1.Init(p1StartingPos, p2StartingPos);
 			_p2.Init(p2StartingPos, p1StartingPos);
 			_gameStarted = true;
+			_debugTick = 0;
 		}
 
 		// snapshot player positions
-		Vector2 p1CurrentPos = _p1.Position;
-		Vector2 p2CurrentPos = _p2.Position;
+		Vector2 p1CurrentPos = _p1.transform.position;
+		Vector2 p2CurrentPos = _p2.transform.position;
 
 		// snapshot player inputs and reset
 		InputInfo p1Input = _upcomingInput;
@@ -88,12 +98,86 @@ public class FightManager : MonoBehaviour
 		_upcomingInput2.KickButton = false;
 		_upcomingInput2.PunchButton = false;
 
+		// for testing: make player 2 kick periodically
+		float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
+
+		if (horzDist < 1.6f)
+		{
+			if (_p2.transform.position.y < 0.01f)
+			{
+				p2Input.KickButton = Random.value < 0.05f;
+				p2Input.PunchButton = Random.value < 0.05f;
+			}
+
+			// toggle crouch randomly
+			if (Random.value < 0.008f)
+			{
+				_debugP2VertDir = _debugP2VertDir < 0f ? 0f : -1f;
+			}
+		}
+
+		// jump randomly
+		if (horzDist < 2.6f)
+		{
+			if (Random.value < 0.006f)
+			{
+				_debugP2VertDir = 1f;
+				if (horzDist > 1.7f)
+				{
+					_debugP2Dir = Mathf.Sign(_p1.transform.position.x - _p2.transform.position.x);
+				}
+				else
+				{
+					_debugP2Dir = 0f;
+				}
+			}
+		}
+
+		// no crouch if too far.
+		if (horzDist > 2.0f && _debugP2VertDir < 0f)
+		{
+			_debugP2VertDir = 0f;
+		}
+		if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
+		{
+			_debugP2VertDir = 0f;
+		}
+
+		bool falling = _debugP2PrevPos.y > _p2.transform.position.y;
+		if (_p2.transform.position.y - _p1.transform.position.y < 2.0f && falling)
+		{
+			p2Input.KickButton = true;
+		}
+
+		_debugDirCooldown--;
+		if (_debugDirCooldown < 1)
+		{
+			_debugP2Dir = 0;
+			float rand = Random.value;
+			if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
+			{
+				_debugP2Dir = -1f;
+				_debugDirCooldown += Random.Range(10, 25);
+			}
+			else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
+			{
+				_debugP2Dir = 1f;
+				_debugDirCooldown += Random.Range(10, 25);
+			}
+			else
+			{
+				_debugDirCooldown += Random.Range(5, 15);
+			}
+		}
+		p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
+		_debugP2PrevPos = _p2.transform.position;
+
+		// Debug.Log(_debugP2VertDir);
+
 		_p1.Tick(p1Input, p2CurrentPos);
 		_p2.Tick(p2Input, p1CurrentPos);
 		SeparateColliders();
 		ProcessHits();
-		_p1.UpdateVisuals();
-		_p2.UpdateVisuals();
 	}
 
 	private void SeparateColliders()
@@ -101,23 +185,22 @@ public class FightManager : MonoBehaviour
 		// ensure that fighters are not out of bounds (L/R walls, and floor)
 		foreach (Fighter p in new[] { _p1, _p2 })
 		{
-			float offsetFromLeft = p.Position.x + p.HitBoxes.CollisionBox.xMin - (-_arenaHalfWidth);
-			float offsetFromRight = p.Position.x + p.HitBoxes.CollisionBox.xMax - _arenaHalfWidth;
-			float yPos = Mathf.Max(p.Position.y, 0f);
+			HitBoxData hitboxes = p.ReadHitBoxes();
 
-			if (offsetFromLeft < 0)
-			{
-				p.Position = new(p.Position.x - offsetFromLeft, yPos);
-			}
-			else if (offsetFromRight > 0)
-			{
-				p.Position = new(p.Position.x - offsetFromRight, yPos);
-			}
+			float leftWallAdjustment = Mathf.Max(0f, -hitboxes.CollisionBox.xMin - _arenaHalfWidth);
+			float rightWallAdjustment = Mathf.Max(0f, hitboxes.CollisionBox.xMax - _arenaHalfWidth);
+			float floorAdjustment = Mathf.Max(0f, -hitboxes.CollisionBox.yMin);
+
+			p.transform.Translate(
+				(leftWallAdjustment * Vector3.right)
+					+ (rightWallAdjustment * Vector3.left)
+					+ (floorAdjustment * Vector3.up)
+			);
 		}
 
 		// separate fighters if they collide.
-		Rect r1 = RectUtils.TranslateRect(_p1.HitBoxes.CollisionBox, _p1.Position);
-		Rect r2 = RectUtils.TranslateRect(_p2.HitBoxes.CollisionBox, _p2.Position);
+		Rect r1 = _p1.ReadHitBoxes().CollisionBox;
+		Rect r2 = _p2.ReadHitBoxes().CollisionBox;
 		Rect leftRect;
 		Rect rightRect;
 		Fighter leftFighter;
@@ -152,25 +235,24 @@ public class FightManager : MonoBehaviour
 				rightOffset -= offsetFromRight;
 			}
 
-			leftFighter.Position = new(leftFighter.Position.x + leftOffset, leftFighter.Position.y);
-			rightFighter.Position = new(rightFighter.Position.x + rightOffset, rightFighter.Position.y);
+			leftFighter.transform.Translate(leftOffset * Vector3.right);
+			rightFighter.transform.Translate(rightOffset * Vector3.right);
 		}
 	}
 
 	private AttackInfo? DetermineHits(Fighter attacker, Fighter target)
 	{
-		if (attacker.HitBoxes.Attack.HasValue)
-		{
-			Rect translatedAttack = RectUtils.TranslateRect(
-				attacker.HitBoxes.Attack.Value.Bounds,
-				attacker.Position - target.Position
-			);
+		AttackInfo? attack = attacker.ReadHitBoxes().Attack;
 
-			foreach (Rect hurtBox in target.HitBoxes.HurtBoxes)
+		if (attack.HasValue)
+		{
+			Rect attackRect = attack.Value.Bounds;
+
+			foreach (Rect hurtBox in target.ReadHitBoxes().HurtBoxes)
 			{
-				if (translatedAttack.Overlaps(hurtBox))
+				if (hurtBox.width > 0f && hurtBox.height > 0f && attackRect.Overlaps(hurtBox))
 				{
-					return attacker.HitBoxes.Attack.Value;
+					return attack.Value;
 				}
 			}
 		}
@@ -196,11 +278,16 @@ public class FightManager : MonoBehaviour
 
 		if (attackOnP1Result != AttackResult.None)
 		{
-			_p2.OnAttackLanded();
+			_p2.OnAttackLanded(attackOnP1Result);
 		}
 		if (attackOnP2Result != AttackResult.None)
 		{
-			_p1.OnAttackLanded();
+			_p1.OnAttackLanded(attackOnP2Result);
+		}
+
+		if (attackOnP1Result != AttackResult.None || attackOnP2Result != AttackResult.None)
+		{
+			_freezeFrames += 12;
 		}
 	}
 
