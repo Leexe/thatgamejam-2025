@@ -228,6 +228,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5147157767157832015, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
   m_PrefabInstance: {fileID: 74477801}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &100865800 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8853651248243821955, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
+  m_PrefabInstance: {fileID: 284048206}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
 --- !u!1001 &284048206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -302,15 +313,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.008693335
+      value: 0.008695602
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1782601
+      value: 0.81663513
       objectReference: {fileID: 0}
     - target: {fileID: 7679445364107872000, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.41720653
+      objectReference: {fileID: 0}
+    - target: {fileID: 7679445364107872000, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7917177885175748797, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: FramingSize
@@ -330,7 +345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8853651248243821955, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: UpdateMethod
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -639,6 +654,10 @@ PrefabInstance:
       propertyPath: _gravity
       value: 0.008
       objectReference: {fileID: 0}
+    - target: {fileID: 5178207690892704405, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
+      propertyPath: MaxHealth
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 8810821223707315613, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
       propertyPath: m_Color.b
       value: 1
@@ -760,6 +779,10 @@ PrefabInstance:
       propertyPath: _p2Channel
       value: 
       objectReference: {fileID: 11400000, guid: ed698b654ad8342aeb96f2adf17ee477, type: 2}
+    - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
+      propertyPath: _cameraBrain
+      value: 
+      objectReference: {fileID: 100865800}
     - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
       propertyPath: _arenaHalfWidth
       value: 8.304348
@@ -1194,6 +1217,10 @@ PrefabInstance:
     - target: {fileID: 3568249356017196552, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
       propertyPath: m_AnchoredPosition.x
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5640256513297432474, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: _visibleFillRange.x
+      value: 0.036
       objectReference: {fileID: 0}
     - target: {fileID: 5964373289916767320, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
       propertyPath: m_UiScaleMode
