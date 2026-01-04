@@ -54,3 +54,10 @@ public struct HitBoxData
 		Attack = null,
 	};
 }
+
+public enum GameResult
+{
+	P1Win,
+	P2Win,
+	Draw,
+}
