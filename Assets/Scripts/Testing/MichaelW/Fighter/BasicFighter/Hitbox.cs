@@ -20,8 +20,8 @@ public class Hitbox : MonoBehaviour
 
 		return new()
 		{
-			width = transform.localScale.x,
-			height = transform.localScale.y,
+			width = Mathf.Abs(transform.lossyScale.x),
+			height = Mathf.Abs(transform.lossyScale.y),
 			center = new(transform.position.x, transform.position.y),
 		};
 	}
