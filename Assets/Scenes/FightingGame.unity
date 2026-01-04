@@ -193,7 +193,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5178207690892704405, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
       propertyPath: _jumpHorizontalVel
-      value: 0.07
+      value: 0.045
       objectReference: {fileID: 0}
     - target: {fileID: 5549822308604225035, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
       propertyPath: Direction
@@ -313,11 +313,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.008691094
+      value: 0.008695525
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.81663513
+      value: 1.1782601
       objectReference: {fileID: 0}
     - target: {fileID: 7679445364107872000, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -657,7 +657,6 @@ PrefabInstance:
     - target: {fileID: 5178207690892704405, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
       propertyPath: MaxHealth
       value: 1000
-      value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 8810821223707315613, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
       propertyPath: m_Color.b
@@ -764,6 +763,14 @@ PrefabInstance:
       propertyPath: _cameraBrain
       value: 
       objectReference: {fileID: 100865800}
+    - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
+      propertyPath: _arenaHalfWidth
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
+      propertyPath: _maxPlayerDistance
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

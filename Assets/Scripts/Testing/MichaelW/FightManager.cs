@@ -25,12 +25,19 @@ public class FightManager : MonoBehaviour
 	private int _freezeFrameCount = 14;
 
 	[SerializeField]
+	[Tooltip("Half the width of the arena")]
 	private float _arenaHalfWidth = 4f;
 
 	[SerializeField]
+	[Tooltip("How far apart the players can move from each other")]
+	private float _maxPlayerDistance = 8.3f;
+
+	[SerializeField]
+	[Tooltip("How far the players spawn from x = 0")]
 	private float _playerSeparation = 2f;
 
 	[SerializeField]
+	[Tooltip("Speed at which overlapping collision boxes are moved apart")]
 	private float _maxSeparationSpeed = 0.14f;
 
 	//
@@ -46,6 +53,10 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	[Indent]
 	private HealthEventChannelSO _p2Channel;
+
+	//
+	private float _leftWall;
+	private float _rightWall;
 
 	//
 
@@ -175,6 +186,8 @@ public class FightManager : MonoBehaviour
 		_p2Channel.RaiseHealthChanged(0f, _p2.Health, _p2.MaxHealth);
 
 		SetSlowMoRate(1);
+
+		ComputeArenaBounds();
 
 		// stuff for the enemy AI (should be temp)
 		_debugDirCooldown = 10;
@@ -324,15 +337,25 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
+	private void ComputeArenaBounds()
+	{
+		float center = 0.5f * (_p1.transform.position.x + _p2.transform.position.x);
+		_leftWall = Mathf.Max(-_arenaHalfWidth, center - (_maxPlayerDistance * 0.5f));
+		_rightWall = Mathf.Min(_arenaHalfWidth, center + (_maxPlayerDistance * 0.5f));
+	}
+
 	private void SeparateColliders()
 	{
+		// the "bounds" are the left/right bounds, or a given distance
+		// from the center of the two players - whichever is tighter.
+
 		// ensure that fighters are not out of bounds (L/R walls, and floor)
 		foreach (Fighter p in new[] { _p1, _p2 })
 		{
 			HitBoxData hitboxes = p.ReadHitBoxes();
 
-			float leftWallAdjustment = Mathf.Max(0f, -hitboxes.CollisionBox.xMin - _arenaHalfWidth);
-			float rightWallAdjustment = Mathf.Max(0f, hitboxes.CollisionBox.xMax - _arenaHalfWidth);
+			float leftWallAdjustment = Mathf.Max(0f, -(hitboxes.CollisionBox.xMin - _leftWall));
+			float rightWallAdjustment = Mathf.Max(0f, hitboxes.CollisionBox.xMax - _rightWall);
 			float floorAdjustment = Mathf.Max(0f, -hitboxes.CollisionBox.yMin);
 
 			p.transform.Translate(
@@ -365,8 +388,8 @@ public class FightManager : MonoBehaviour
 			float rightOffset = separation * 0.5f;
 
 			// ensure that fighters aren't out of bounds, again
-			float offsetFromLeft = leftRect.xMin + leftOffset - (-_arenaHalfWidth);
-			float offsetFromRight = rightRect.xMax + rightOffset - _arenaHalfWidth;
+			float offsetFromLeft = leftRect.xMin + leftOffset - _leftWall;
+			float offsetFromRight = rightRect.xMax + rightOffset - _rightWall;
 
 			if (offsetFromLeft < 0f)
 			{
@@ -382,6 +405,11 @@ public class FightManager : MonoBehaviour
 			leftFighter.transform.Translate(leftOffset * Vector3.right);
 			rightFighter.transform.Translate(rightOffset * Vector3.right);
 		}
+
+		// compute left and right bounds AFTER positions are fully resolved.
+		// this basically means that the bounds are based on the previous frame.
+		// doing it this way prevents players from "dragging" each other using the bounds.
+		ComputeArenaBounds();
 	}
 
 	private AttackInfo? DetermineHits(Fighter attacker, Fighter target)
@@ -449,6 +477,9 @@ public class FightManager : MonoBehaviour
 		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(-_arenaHalfWidth, 20f));
 		Gizmos.DrawLine(new(_arenaHalfWidth, 0f), new(_arenaHalfWidth, 20f));
 		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(_arenaHalfWidth, 0f));
+		Gizmos.color = Color.red;
+		Gizmos.DrawLine(new(_leftWall, 0f), new(_leftWall, 20f));
+		Gizmos.DrawLine(new(_rightWall, 0f), new(_rightWall, 20f));
 
 		if (!Application.isPlaying || !_simulating)
 		{
