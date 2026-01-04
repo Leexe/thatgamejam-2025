@@ -20,10 +20,16 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private int _freezeFrameCount = 14;
 
-	private bool _gameStarted = false;
-	private readonly float _arenaHalfWidth = 4f;
-	private readonly float _maxSeparationSpeed = 0.14f;
+	[SerializeField]
+	private float _arenaHalfWidth = 4f;
 
+	[SerializeField]
+	private float _playerSeparation = 2f;
+
+	[SerializeField]
+	private float _maxSeparationSpeed = 0.14f;
+
+	private bool _gameStarted = false;
 	private int _debugDirCooldown = 10;
 	private float _debugP2Dir = 0;
 	private float _debugP2VertDir = 0f;
@@ -88,8 +94,8 @@ public class FightManager : MonoBehaviour
 	[Button]
 	public void ResetGame()
 	{
-		Vector2 p1StartingPos = new(-2f, 0f);
-		Vector2 p2StartingPos = new(2f, 0f);
+		Vector2 p1StartingPos = new(-_playerSeparation, 0f);
+		Vector2 p2StartingPos = new(_playerSeparation, 0f);
 		_p1.Init(p1StartingPos, p2StartingPos);
 		_p2.Init(p2StartingPos, p1StartingPos);
 		_gameStarted = true;
