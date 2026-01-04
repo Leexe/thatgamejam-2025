@@ -169,10 +169,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ce28ee6612a419788fda4efdfa6cf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
+  _rectTransform: {fileID: 57369620}
+  _fillImage: {fileID: 371723105}
   _referenceType: 0
   _channel: {fileID: 11400000, guid: ed698b654ad8342aeb96f2adf17ee477, type: 2}
   _directController: {fileID: 0}
-  _fillImage: {fileID: 371723105}
+  _enableShakeOnDamage: 1
+  _shakeStrength: {x: 5, y: 5, z: 0}
+  _shakeDuration: 0.3
+  _shakeFrequency: 10
+  _shakeEase: 6
 --- !u!1 &157976113
 GameObject:
   m_ObjectHideFlags: 0
@@ -394,6 +400,81 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &529489801
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 529489803}
+  - component: {fileID: 529489802}
+  m_Layer: 0
+  m_Name: Player Health
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &529489802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529489801}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e472c6354a654be2bbd4063278c7b07b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthController
+  _maxHealth: 100
+  _toggleRegeneration: 0
+  _baseRegen: 0
+  _regenerationDelay: 0
+  _toggleInvincibilityFrames: 0
+  _spawnInvincibility: 0
+  _invincibilityTimeAfterDamage: 0
+  _enableChannel: 1
+  _channel: {fileID: 11400000, guid: b303b065b4c814e5da5f396533717da1, type: 2}
+  _godMode: 0
+  OnInitiateHealth:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRegen:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRevive:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &529489803
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 529489801}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 529.0218, y: 769.78754, z: -908.0576}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,6 +731,81 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1079261368
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1079261370}
+  - component: {fileID: 1079261369}
+  m_Layer: 0
+  m_Name: Enemy Health
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1079261369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079261368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e472c6354a654be2bbd4063278c7b07b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HealthController
+  _maxHealth: 100
+  _toggleRegeneration: 0
+  _baseRegen: 0
+  _regenerationDelay: 0
+  _toggleInvincibilityFrames: 0
+  _spawnInvincibility: 0
+  _invincibilityTimeAfterDamage: 1
+  _enableChannel: 1
+  _channel: {fileID: 11400000, guid: ed698b654ad8342aeb96f2adf17ee477, type: 2}
+  _godMode: 0
+  OnInitiateHealth:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRegen:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHeal:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDamage:
+    m_PersistentCalls:
+      m_Calls: []
+  OnRevive:
+    m_PersistentCalls:
+      m_Calls: []
+  OnDeath:
+    m_PersistentCalls:
+      m_Calls: []
+  OnHealthChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!4 &1079261370
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079261368}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 529.0218, y: 769.78754, z: -908.0576}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1072,10 +1228,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 24ce28ee6612a419788fda4efdfa6cf7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HealthBarUI
+  _rectTransform: {fileID: 2080764779}
+  _fillImage: {fileID: 640468107}
   _referenceType: 0
   _channel: {fileID: 11400000, guid: b303b065b4c814e5da5f396533717da1, type: 2}
   _directController: {fileID: 0}
-  _fillImage: {fileID: 640468107}
+  _enableShakeOnDamage: 1
+  _shakeStrength: {x: 5, y: 5, z: 0}
+  _shakeDuration: 0.3
+  _shakeFrequency: 10
+  _shakeEase: 6
 --- !u!1001 &1010091052249455829
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1317,3 +1479,5 @@ SceneRoots:
   - {fileID: 995368954}
   - {fileID: 1874787673}
   - {fileID: 1876434402}
+  - {fileID: 529489803}
+  - {fileID: 1079261370}
