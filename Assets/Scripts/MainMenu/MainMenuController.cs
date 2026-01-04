@@ -19,6 +19,9 @@ public class MainMenuController : MonoBehaviour
 	[SerializeField]
 	private AnimationClip _startAnimation;
 
+	[SerializeField]
+	private AnimationClip _transitionAnimation;
+
 	[Title("Animation Settings")]
 	[SerializeField]
 	private float _skipSpeed = 2.5f;
@@ -35,15 +38,23 @@ public class MainMenuController : MonoBehaviour
 	[HideInInspector]
 	public UnityEngine.Events.UnityEvent OnPlayEnd;
 
+	[HideInInspector]
+	public UnityEngine.Events.UnityEvent OnTransitionStart;
+
+	[HideInInspector]
+	public UnityEngine.Events.UnityEvent OnTransitionEnd;
+
 	// Private Fields
 	private AnimancerState _activeState;
 	private bool _canSkipAnimation;
+	private bool _isSceneReady;
+	private bool _isStartAnimationFinished;
 
 	private void Start()
 	{
 		InputManager.Instance.OnAnyInputPerformed.AddListener(SkipAnimation);
+		GameManager.Instance.OnSceneReady.AddListener(OnScenePreloaded);
 		OnIntroEnd.AddListener(ResetAnimatorSpeed);
-		OnPlayEnd.AddListener(() => GameManager.Instance.SwitchScenes(GameManager.SceneNames.FightingGame));
 		PlayIntroAnimation();
 	}
 
@@ -52,6 +63,11 @@ public class MainMenuController : MonoBehaviour
 		if (InputManager.Instance != null)
 		{
 			InputManager.Instance.OnAnyInputPerformed.RemoveListener(SkipAnimation);
+		}
+
+		if (GameManager.Instance != null)
+		{
+			GameManager.Instance.OnSceneReady.RemoveListener(OnScenePreloaded);
 		}
 	}
 
@@ -84,6 +100,8 @@ public class MainMenuController : MonoBehaviour
 				OnPlayEnd?.Invoke();
 				_activeState.Stop();
 				_activeState = null;
+				_isStartAnimationFinished = true;
+				TryPlayTransition();
 			};
 
 			OnPlayStart?.Invoke();
@@ -94,6 +112,37 @@ public class MainMenuController : MonoBehaviour
 
 			_canSkipAnimation = false;
 		}
+	}
+
+	private void PlayTransitionAnimation()
+	{
+		if (_transitionAnimation != null)
+		{
+			_activeState = _animancer.Play(_transitionAnimation);
+			_activeState.Events(this).OnEnd = () =>
+			{
+				OnTransitionEnd?.Invoke();
+				_activeState.Stop();
+				ChangeToGameScene();
+				_activeState = null;
+			};
+
+			OnTransitionStart?.Invoke();
+		}
+	}
+
+	private void TryPlayTransition()
+	{
+		if (_isSceneReady && _isStartAnimationFinished)
+		{
+			PlayTransitionAnimation();
+		}
+	}
+
+	private void OnScenePreloaded()
+	{
+		_isSceneReady = true;
+		TryPlayTransition();
 	}
 
 	#endregion
@@ -123,8 +172,12 @@ public class MainMenuController : MonoBehaviour
 
 	public void StartButton()
 	{
+		_isSceneReady = false;
+		_isStartAnimationFinished = false;
+
 		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		PlayStartAnimation();
+		GameManager.Instance.LoadSceneAsync(GameManager.SceneNames.FightingGame);
 	}
 
 	public void SettingsButton()
@@ -138,7 +191,10 @@ public class MainMenuController : MonoBehaviour
 		GameManager.Instance.ExitGame();
 	}
 
-	public void ChangeToGameScene() { }
+	private void ChangeToGameScene()
+	{
+		GameManager.Instance.ActivatePreloadedScene();
+	}
 
 	#endregion
 }

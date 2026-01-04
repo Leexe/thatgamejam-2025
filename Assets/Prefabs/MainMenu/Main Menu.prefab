@@ -191,6 +191,7 @@ GameObject:
   - component: {fileID: 5039389039110716750}
   - component: {fileID: 4734706800168275223}
   - component: {fileID: 8283104097284335319}
+  - component: {fileID: 4345008636009663882}
   m_Layer: 0
   m_Name: Settings
   m_TagString: Untagged
@@ -266,7 +267,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 4851760730406695526}
+  m_TargetGraphic: {fileID: 4345008636009663882}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -302,12 +303,42 @@ MonoBehaviour:
   _oscillateDuration: 1.5
   _hoverSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1093513827
+      Data2: 1095621104
+      Data3: 1446421403
+      Data4: -230240731
+    Path: event:/Title Screen/Button Hover
   _useUnscaledTime: 0
+--- !u!114 &4345008636009663882
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 841901128680361909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &852527494889761390
 GameObject:
   m_ObjectHideFlags: 0
@@ -367,7 +398,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -420,7 +451,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -350}
+  m_AnchoredPosition: {x: 0, y: -325}
   m_SizeDelta: {x: 380.9, y: 354.8}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &5599114381965760813
@@ -525,7 +556,7 @@ RectTransform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6857305098886287449}
   m_Father: {fileID: 3237088965662713648}
@@ -614,7 +645,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -734,6 +765,81 @@ MonoBehaviour:
   _scaleRandomStart: 1
   _scaleDuration: 10
   _useUnscaledTime: 0
+--- !u!1 &2203852333911634618
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3863014718079260237}
+  - component: {fileID: 8241037489816442172}
+  - component: {fileID: 8474649723927903173}
+  m_Layer: 0
+  m_Name: Scrolling Image
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3863014718079260237
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203852333911634618}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 172378532545864010}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 1}
+  m_AnchorMax: {x: 0.5, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1920, y: 3840}
+  m_Pivot: {x: 0.5, y: 1}
+--- !u!222 &8241037489816442172
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203852333911634618}
+  m_CullTransparentMesh: 1
+--- !u!114 &8474649723927903173
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2203852333911634618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 2100000, guid: 806f345409ae04cd1b325ea68c7b85e8, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 05ef8f17d9c454dcca40f17aea39e078, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2271762755327426298
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,6 +956,7 @@ GameObject:
   - component: {fileID: 8816976490681197452}
   - component: {fileID: 3606173717702539511}
   - component: {fileID: 5318395852556877807}
+  - component: {fileID: 2681018804484162857}
   m_Layer: 0
   m_Name: Exit
   m_TagString: Untagged
@@ -925,7 +1032,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 4899525159603771178}
+  m_TargetGraphic: {fileID: 2681018804484162857}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -961,12 +1068,42 @@ MonoBehaviour:
   _oscillateDuration: 1.5
   _hoverSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1093513827
+      Data2: 1095621104
+      Data3: 1446421403
+      Data4: -230240731
+    Path: event:/Title Screen/Button Hover
   _useUnscaledTime: 0
+--- !u!114 &2681018804484162857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2587769358591604390}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2686680545271813493
 GameObject:
   m_ObjectHideFlags: 0
@@ -1338,6 +1475,7 @@ MonoBehaviour:
   - {fileID: 8904814561545797934}
   _introAnimation: {fileID: 7400000, guid: 89f777ff436ab40e4bbf18da8ba8a44a, type: 2}
   _startAnimation: {fileID: 7400000, guid: a3795456f0c4541359e13d9a6699c323, type: 2}
+  _transitionAnimation: {fileID: 7400000, guid: 5ab4b8b60b1fd41baad935c4329f5fa6, type: 2}
   _skipSpeed: 5
   OnIntroStart:
     m_PersistentCalls:
@@ -1349,6 +1487,12 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   OnPlayEnd:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTransitionStart:
+    m_PersistentCalls:
+      m_Calls: []
+  OnTransitionEnd:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &7566201884567051873
@@ -1427,6 +1571,7 @@ GameObject:
   - component: {fileID: 3730897879199080404}
   - component: {fileID: 8693466280209549500}
   - component: {fileID: 579990559410199554}
+  - component: {fileID: 8401139149747075664}
   - component: {fileID: 2122039741933105204}
   m_Layer: 0
   m_Name: Play
@@ -1503,7 +1648,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 1
-  m_TargetGraphic: {fileID: 2557005268550100090}
+  m_TargetGraphic: {fileID: 8401139149747075664}
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
@@ -1519,6 +1664,36 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &8401139149747075664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5000237541715353378}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 0}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!114 &2122039741933105204
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1539,11 +1714,11 @@ MonoBehaviour:
   _oscillateDuration: 1.5
   _hoverSound:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -1093513827
+      Data2: 1095621104
+      Data3: 1446421403
+      Data4: -230240731
+    Path: event:/Title Screen/Button Hover
   _useUnscaledTime: 0
 --- !u!1 &5727756587246407224
 GameObject:
@@ -1611,6 +1786,7 @@ RectTransform:
   m_Children:
   - {fileID: 7721400374617917028}
   - {fileID: 5194561912056358881}
+  - {fileID: 3863014718079260237}
   m_Father: {fileID: 3237088965662713648}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
@@ -1677,7 +1853,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -18,17 +19,21 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	[HideInInspector]
 	public UnityEvent OnGameResume;
 
+	[HideInInspector]
+	public UnityEvent OnSceneReady;
+
 	// Private Variables
 	public bool GamePaused { private set; get; }
+	private AsyncOperation _asyncOperation;
 
 	private void OnEnable()
 	{
 		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
 		DialogueEvents.Instance.AddBlockingCondition(() => GamePaused);
-		SceneManager.sceneLoaded += OnSceneLoaded;
+		SceneManager.sceneLoaded += SceneLoaded;
 	}
 
-	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	private void SceneLoaded(Scene scene, LoadSceneMode mode)
 	{
 		if (scene.buildIndex == (int)SceneNames.FightingGame)
 		{
@@ -47,7 +52,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseGame);
 		}
 
-		SceneManager.sceneLoaded -= OnSceneLoaded;
+		SceneManager.sceneLoaded -= SceneLoaded;
 
 		if (DialogueEvents.Instance != null)
 		{
@@ -123,6 +128,57 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 		Cursor.lockState = CursorLockMode.Locked;
 	}
 
+	public void LoadSceneAsync(SceneNames sceneName)
+	{
+		StartCoroutine(LoadSceneAsyncEnumerator(sceneName));
+	}
+
+	/// <summary>
+	/// Loads a scene asynchronously
+	/// </summary>
+	/// <param name="sceneName">Scene Name To Load</param>
+	private IEnumerator LoadSceneAsyncEnumerator(SceneNames sceneName)
+	{
+		// Start loading the scene asynchronously in the background
+		_asyncOperation = SceneManager.LoadSceneAsync((int)sceneName, LoadSceneMode.Single);
+
+		if (_asyncOperation != null)
+		{
+			// Prevent the scene from activating and displaying immediately
+			_asyncOperation.allowSceneActivation = false;
+
+			while (!_asyncOperation.isDone)
+			{
+				float progress = Mathf.Clamp01(_asyncOperation.progress / 0.9f);
+				Debug.Log("Loading progress: " + (progress * 100) + "%");
+
+				if (_asyncOperation.progress >= 0.9f)
+				{
+					Debug.Log("Scene fully preloaded");
+					OnSceneReady?.Invoke();
+					break;
+				}
+
+				yield return null;
+			}
+		}
+	}
+
+	/// <summary>
+	/// Activates the preloaded scene
+	/// </summary>
+	public void ActivatePreloadedScene()
+	{
+		if (_asyncOperation is { progress: >= 0.9f })
+		{
+			_asyncOperation.allowSceneActivation = true;
+		}
+	}
+
+	/// <summary>
+	/// Switches to a different scene
+	/// </summary>
+	/// <param name="sceneName">Scene Name To Switch To</param>
 	public void SwitchScenes(SceneNames sceneName)
 	{
 		SceneManager.LoadScene((int)sceneName);
