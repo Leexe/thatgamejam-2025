@@ -1,17 +1,20 @@
+using System.Diagnostics.CodeAnalysis;
 using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
+[SuppressMessage("ReSharper", "InconsistentNaming")]
+[SuppressMessage("ReSharper", "Odin.OdinUnknownGroupingPath")]
 public class FMODEvents : MonoSingleton<FMODEvents>
 {
 	#region Music
 
 	[field: SerializeField]
-	[field: FoldoutGroup("Music", expanded: true)]
+	[field: FoldoutGroup("Music", true)]
 	public EventReference RealTitle_Bgm { get; private set; }
-	
+
 	[field: SerializeField]
-	[field: FoldoutGroup("Music", expanded: true)]
+	[field: FoldoutGroup("Music", true)]
 	public EventReference SoftTitle_Bgm { get; private set; }
 
 	#endregion

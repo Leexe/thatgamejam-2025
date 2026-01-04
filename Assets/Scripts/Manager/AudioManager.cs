@@ -106,7 +106,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Resume the current music track
 	/// </summary>
-	public void PlayCurrentMusicTrack()
+	public void ResumeCurrentMusicTrack()
 	{
 		PlayInstance(_currentMusicTrack);
 	}
@@ -128,12 +128,12 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	}
 
 	/// <summary>
-	/// Switches the music track
+	/// Plays the music track
 	/// </summary>
-	public void SwitchMusicTrack(EventReference musicTrack)
+	public void PlayMusicTrack(EventReference musicTrack)
 	{
 		SwitchTrack(musicTrack, ref _currentMusicReference, ref _currentMusicTrack, _musicTrackInstances);
-		PlayCurrentMusicTrack();
+		ResumeCurrentMusicTrack();
 	}
 
 	#endregion
@@ -143,7 +143,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Play the current ambient track
 	/// </summary>
-	public void PlayCurrentAmbientTrack()
+	public void ResumeCurrentAmbientTrack()
 	{
 		PlayInstance(_currentAmbientTrack);
 	}
@@ -167,10 +167,10 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Switches the ambient track
 	/// </summary>
-	public void SwitchAmbienceTrack(EventReference ambienceTrack)
+	public void PlayAmbienceTrack(EventReference ambienceTrack)
 	{
 		SwitchTrack(ambienceTrack, ref _currentAmbientReference, ref _currentAmbientTrack, _ambientTrackInstances);
-		PlayCurrentAmbientTrack();
+		ResumeCurrentAmbientTrack();
 	}
 
 	/// <summary>

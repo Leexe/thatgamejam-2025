@@ -236,7 +236,7 @@ public class HealthBarUI : MonoBehaviour
 			_fadeHealthTween.Stop();
 
 			_fadeHealthTween = Tween.Custom(
-				target:this,
+				target: this,
 				startValue: _tempHealthImage.fillAmount,
 				endValue: targetFill,
 				duration: _fadeDuration,
