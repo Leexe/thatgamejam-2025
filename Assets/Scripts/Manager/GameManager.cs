@@ -25,6 +25,19 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	{
 		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
 		DialogueEvents.Instance.AddBlockingCondition(() => GamePaused);
+		SceneManager.sceneLoaded += OnSceneLoaded;
+	}
+
+	private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+	{
+		if (scene.buildIndex == (int)SceneNames.FightingGame)
+		{
+			HideCursor();
+		}
+		else
+		{
+			ShowCursor();
+		}
 	}
 
 	private void OnDisable()
@@ -33,6 +46,8 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 		{
 			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseGame);
 		}
+
+		SceneManager.sceneLoaded -= OnSceneLoaded;
 
 		if (DialogueEvents.Instance != null)
 		{
@@ -49,6 +64,12 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 			GamePaused = false;
 			OnGameResume?.Invoke();
 			UnfreezeTime();
+
+			// Only hide cursor if we are in the fighting game
+			if (SceneManager.GetActiveScene().buildIndex == (int)SceneNames.FightingGame)
+			{
+				HideCursor();
+			}
 		}
 		else
 		{
@@ -56,6 +77,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 			GamePaused = true;
 			OnGamePaused?.Invoke();
 			FreezeTime();
+			ShowCursor();
 		}
 	}
 
@@ -81,6 +103,24 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	public void ExitGame()
 	{
 		Application.Quit();
+	}
+
+	/// <summary>
+	/// Shows the cursor and unlocks it
+	/// </summary>
+	public void ShowCursor()
+	{
+		Cursor.visible = true;
+		Cursor.lockState = CursorLockMode.None;
+	}
+
+	/// <summary>
+	/// Hides the cursor and locks it to the center of the screen
+	/// </summary>
+	public void HideCursor()
+	{
+		Cursor.visible = false;
+		Cursor.lockState = CursorLockMode.Locked;
 	}
 
 	public void SwitchScenes(SceneNames sceneName)

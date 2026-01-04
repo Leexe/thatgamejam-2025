@@ -145,6 +145,27 @@ MonoBehaviour:
       Data3: 1949674170
       Data4: -57313263
     Path: event:/Fighting/Death
+  <Draw_Sfx>k__BackingField:
+    Guid:
+      Data1: -1698268456
+      Data2: 1096274044
+      Data3: 1949545352
+      Data4: 332020990
+    Path: event:/Fighting/Loss
+  <Lose_Sfx>k__BackingField:
+    Guid:
+      Data1: -1698268456
+      Data2: 1096274044
+      Data3: 1949545352
+      Data4: 332020990
+    Path: event:/Fighting/Loss
+  <Win_Sfx>k__BackingField:
+    Guid:
+      Data1: -254150746
+      Data2: 1090141272
+      Data3: -1945155442
+      Data4: 1993238489
+    Path: event:/Title Screen/Game Start
   <Block_Sfx>k__BackingField:
     Guid:
       Data1: 1340659518
@@ -180,13 +201,6 @@ MonoBehaviour:
       Data3: 1618824865
       Data4: 1070520655
     Path: event:/Title Screen/Jingle
-  <GameStart_Sfx>k__BackingField:
-    Guid:
-      Data1: -254150746
-      Data2: 1090141272
-      Data3: -1945155442
-      Data4: 1993238489
-    Path: event:/Title Screen/Game Start
   <ButtonHover_Sfx>k__BackingField:
     Guid:
       Data1: -1093513827

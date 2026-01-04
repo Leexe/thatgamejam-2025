@@ -55,6 +55,18 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
+	public EventReference Draw_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Lose_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Win_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
 	public EventReference Block_Sfx { get; private set; }
 
 	[field: SerializeField]
@@ -72,10 +84,6 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
 	public EventReference TitleJingle_Sfx { get; private set; }
-
-	[field: SerializeField]
-	[field: FoldoutGroup("SFX")]
-	public EventReference GameStart_Sfx { get; private set; }
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]

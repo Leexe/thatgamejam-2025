@@ -302,16 +302,19 @@ public class FightManager : MonoBehaviour
 				_gameResolved = true;
 				_fightRunning = false;
 
-				if (_p1.Health <= 0 && _p2.Health <= 0)
+				if (_p1.Health <= 0 && _p2.Health <= 0) // Draw
 				{
+					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Draw_Sfx);
 					OnGameEnd.Invoke(GameResult.Draw);
 				}
-				else if (_p1.Health <= 0)
+				else if (_p1.Health <= 0) // Lose
 				{
+					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Lose_Sfx);
 					OnGameEnd.Invoke(GameResult.P2Win);
 				}
-				else if (_p2.Health <= 0)
+				else if (_p2.Health <= 0) // Win
 				{
+					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Win_Sfx);
 					OnGameEnd.Invoke(GameResult.P1Win);
 				}
 			}
