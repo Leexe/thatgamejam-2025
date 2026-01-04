@@ -83,6 +83,7 @@ public class VisualNovelUI : MonoBehaviour
 	private Tween _canvasAlphaTween;
 	private readonly Dictionary<string, VNCharacter> _activeCharacters = new();
 	private Dictionary<string, Action<VNCharacter, string[]>> _animationHandlers;
+	private DialogueEvents DialogueEvents => DialogueEvents.Instance;
 
 	private void Awake()
 	{
@@ -153,38 +154,38 @@ public class VisualNovelUI : MonoBehaviour
 
 	private void OnEnable()
 	{
-		GameManager.Instance.DialogueEventsRef.OnStartStory += EnableStoryPanel;
-		GameManager.Instance.DialogueEventsRef.OnDisplayDialogue += ChangeStoryText;
-		GameManager.Instance.DialogueEventsRef.OnCharacterUpdate += UpdateCharacter;
-		GameManager.Instance.DialogueEventsRef.OnCharacterAnimation += PlayAnimation;
-		GameManager.Instance.DialogueEventsRef.OnCharacterRemove += RemoveCharacter;
-		GameManager.Instance.DialogueEventsRef.OnNameUpdate += ChangeNameText;
-		GameManager.Instance.DialogueEventsRef.OnBackgroundUpdate += ChangeBackground;
-		GameManager.Instance.DialogueEventsRef.OnEndStory += DisableStoryPanel;
-		GameManager.Instance.DialogueEventsRef.OnEndStory += RemoveAllCharacters;
-		GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove += RemoveAllCharacters;
-		GameManager.Instance.DialogueEventsRef.OnTypewriterSkip += SkipTypewriter;
+		DialogueEvents.OnStartStory += EnableStoryPanel;
+		DialogueEvents.OnDisplayDialogue += ChangeStoryText;
+		DialogueEvents.OnCharacterUpdate += UpdateCharacter;
+		DialogueEvents.OnCharacterAnimation += PlayAnimation;
+		DialogueEvents.OnCharacterRemove += RemoveCharacter;
+		DialogueEvents.OnNameUpdate += ChangeNameText;
+		DialogueEvents.OnBackgroundUpdate += ChangeBackground;
+		DialogueEvents.OnEndStory += DisableStoryPanel;
+		DialogueEvents.OnEndStory += RemoveAllCharacters;
+		DialogueEvents.OnAllCharacterRemove += RemoveAllCharacters;
+		DialogueEvents.OnTypewriterSkip += SkipTypewriter;
 		GameManager.Instance.OnGamePaused.AddListener(PauseTypewriter);
 		GameManager.Instance.OnGameResume.AddListener(ResumeTypewriter);
 
-		_typewriter.onTextShowed.AddListener(GameManager.Instance.DialogueEventsRef.TypewriterFinished);
+		_typewriter.onTextShowed.AddListener(DialogueEvents.TypewriterFinished);
 	}
 
 	private void OnDisable()
 	{
+		DialogueEvents.OnStartStory -= EnableStoryPanel;
+		DialogueEvents.OnDisplayDialogue -= ChangeStoryText;
+		DialogueEvents.OnCharacterUpdate -= UpdateCharacter;
+		DialogueEvents.OnCharacterAnimation -= PlayAnimation;
+		DialogueEvents.OnCharacterRemove -= RemoveCharacter;
+		DialogueEvents.OnNameUpdate -= ChangeNameText;
+		DialogueEvents.OnBackgroundUpdate -= ChangeBackground;
+		DialogueEvents.OnEndStory -= DisableStoryPanel;
+		DialogueEvents.OnEndStory -= RemoveAllCharacters;
+		DialogueEvents.OnAllCharacterRemove -= RemoveAllCharacters;
+		DialogueEvents.OnTypewriterSkip -= SkipTypewriter;
 		if (GameManager.Instance)
 		{
-			GameManager.Instance.DialogueEventsRef.OnStartStory -= EnableStoryPanel;
-			GameManager.Instance.DialogueEventsRef.OnDisplayDialogue -= ChangeStoryText;
-			GameManager.Instance.DialogueEventsRef.OnCharacterUpdate -= UpdateCharacter;
-			GameManager.Instance.DialogueEventsRef.OnCharacterAnimation -= PlayAnimation;
-			GameManager.Instance.DialogueEventsRef.OnCharacterRemove -= RemoveCharacter;
-			GameManager.Instance.DialogueEventsRef.OnNameUpdate -= ChangeNameText;
-			GameManager.Instance.DialogueEventsRef.OnBackgroundUpdate -= ChangeBackground;
-			GameManager.Instance.DialogueEventsRef.OnEndStory -= DisableStoryPanel;
-			GameManager.Instance.DialogueEventsRef.OnEndStory -= RemoveAllCharacters;
-			GameManager.Instance.DialogueEventsRef.OnAllCharacterRemove -= RemoveAllCharacters;
-			GameManager.Instance.DialogueEventsRef.OnTypewriterSkip -= SkipTypewriter;
 			GameManager.Instance.OnGamePaused.RemoveListener(PauseTypewriter);
 			GameManager.Instance.OnGameResume.RemoveListener(ResumeTypewriter);
 		}
@@ -213,9 +214,11 @@ public class VisualNovelUI : MonoBehaviour
 	/// <summary>
 	/// Displays a line of dialogue using the typewriter effect.
 	/// </summary>
+	/// <param name="characterName">The name of the character speaking.</param>
 	/// <param name="line">The dialogue line to display.</param>
-	private void ChangeStoryText(string line)
+	private void ChangeStoryText(string characterName, string line)
 	{
+		ChangeNameText(characterName);
 		_typewriter.ShowText(line);
 	}
 
@@ -229,7 +232,7 @@ public class VisualNovelUI : MonoBehaviour
 		_canvasAlphaTween.Stop();
 		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 1, fadeDuration, newVal => _canvasGroup.alpha = newVal);
 		_canvasGroup.interactable = true;
-		_canvasGroup.blocksRaycasts = false;
+		_canvasGroup.blocksRaycasts = true;
 	}
 
 	/// <summary>
@@ -240,7 +243,7 @@ public class VisualNovelUI : MonoBehaviour
 		float fadeDuration = 1f;
 		_canvasAlphaTween.Stop();
 		_canvasAlphaTween = Tween.Custom(_canvasGroup.alpha, 0, fadeDuration, newVal => _canvasGroup.alpha = newVal);
-		_canvasGroup.interactable = true;
+		_canvasGroup.interactable = false;
 		_canvasGroup.blocksRaycasts = false;
 	}
 

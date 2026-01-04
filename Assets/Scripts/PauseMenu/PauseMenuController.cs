@@ -1,6 +1,7 @@
 using PrimeTween;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class PauseMenuController : MonoBehaviour
@@ -27,8 +28,9 @@ public class PauseMenuController : MonoBehaviour
 	[SerializeField]
 	private float _pauseTweenDuration = 0.5f;
 
+	[FormerlySerializedAs("_setttingTweenDuration")]
 	[SerializeField]
-	private float _setttingTweenDuration = 0.3f;
+	private float _settingTweenDuration = 0.3f;
 
 	// Events
 	[HideInInspector]
@@ -40,7 +42,7 @@ public class PauseMenuController : MonoBehaviour
 	// Private Variables
 	private Sequence _transitionSequence;
 	private float _progressID;
-	private const string ProgressName = "Progress";
+	private const string ProgressName = "_Progress";
 
 	private void Start()
 	{
@@ -107,18 +109,10 @@ public class PauseMenuController : MonoBehaviour
 		_transitionSequence.Stop();
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
+			.Group(Tween.Custom(this, _progressID, 1, _pauseTweenDuration, (target, val) => target._progressID = val))
 			.Group(
 				Tween.Custom(
-					target: this,
-					_progressID,
-					1,
-					_pauseTweenDuration,
-					(target, val) => target._progressID = val
-				)
-			)
-			.Group(
-				Tween.Custom(
-					target: this,
+					this,
 					_progressID,
 					1,
 					_pauseTweenDuration,
@@ -127,7 +121,7 @@ public class PauseMenuController : MonoBehaviour
 			)
 			.Group(
 				Tween.Custom(
-					target: this,
+					this,
 					_progressID,
 					1,
 					_pauseTweenDuration,
@@ -146,18 +140,10 @@ public class PauseMenuController : MonoBehaviour
 		// Tweens
 		_transitionSequence = Sequence
 			.Create(useUnscaledTime: true)
+			.Group(Tween.Custom(this, _progressID, 0, _pauseTweenDuration, (target, val) => target._progressID = val))
 			.Group(
 				Tween.Custom(
-					target: this,
-					_progressID,
-					0,
-					_pauseTweenDuration,
-					(target, val) => target._progressID = val
-				)
-			)
-			.Group(
-				Tween.Custom(
-					target: this,
+					this,
 					_progressID,
 					0,
 					_pauseTweenDuration,
@@ -166,7 +152,7 @@ public class PauseMenuController : MonoBehaviour
 			)
 			.Group(
 				Tween.Custom(
-					target: this,
+					this,
 					_progressID,
 					0,
 					_pauseTweenDuration,
@@ -189,19 +175,19 @@ public class PauseMenuController : MonoBehaviour
 			.Create(useUnscaledTime: true)
 			.Group(
 				Tween.Custom(
-					target: this,
+					this,
 					_mainTabCanvasGroup.alpha,
 					0,
-					_setttingTweenDuration,
+					_settingTweenDuration,
 					(target, val) => target._mainTabCanvasGroup.alpha = val
 				)
 			)
 			.Chain(
 				Tween.Custom(
-					target: this,
+					this,
 					_settingsTabCanvasGroup.alpha,
 					1,
-					_setttingTweenDuration,
+					_settingTweenDuration,
 					(target, val) => target._settingsTabCanvasGroup.alpha = val
 				)
 			);
@@ -220,19 +206,19 @@ public class PauseMenuController : MonoBehaviour
 			.Create(useUnscaledTime: true)
 			.Group(
 				Tween.Custom(
-					target: this,
+					this,
 					_settingsTabCanvasGroup.alpha,
 					0,
-					_setttingTweenDuration,
+					_settingTweenDuration,
 					(target, val) => target._settingsTabCanvasGroup.alpha = val
 				)
 			)
 			.Chain(
 				Tween.Custom(
-					target: this,
+					this,
 					_mainTabCanvasGroup.alpha,
 					1,
-					_setttingTweenDuration,
+					_settingTweenDuration,
 					(target, val) => target._mainTabCanvasGroup.alpha = val
 				)
 			);

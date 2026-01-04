@@ -3,7 +3,7 @@ using FMOD.Studio;
 using FMODUnity;
 using UnityEngine;
 
-public class AudioManager : PersistentSingleton<AudioManager>
+public class AudioManager : PersistentMonoSingleton<AudioManager>
 {
 	#region Fields
 
@@ -24,15 +24,13 @@ public class AudioManager : PersistentSingleton<AudioManager>
 
 	// Music Instances
 	private EventInstance _currentMusicTrack;
-	private readonly Dictionary<FMOD.GUID, EventInstance> _musicTrackInstances =
-		new Dictionary<FMOD.GUID, EventInstance>();
-	private readonly Dictionary<FMOD.GUID, EventInstance> _activeSnapshots = new Dictionary<FMOD.GUID, EventInstance>();
+	private readonly Dictionary<FMOD.GUID, EventInstance> _musicTrackInstances = new();
+	private readonly Dictionary<FMOD.GUID, EventInstance> _activeSnapshots = new();
 
 	// Ambient Instances
 	private EventInstance _currentAmbientTrack;
 	private EventReference _currentAmbientReference;
-	private readonly Dictionary<FMOD.GUID, EventInstance> _ambientTrackInstances =
-		new Dictionary<FMOD.GUID, EventInstance>();
+	private readonly Dictionary<FMOD.GUID, EventInstance> _ambientTrackInstances = new();
 
 	#endregion
 
@@ -92,6 +90,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
 			eventInstance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
 			eventInstance.release();
 		}
+
 		_musicTrackInstances.Clear();
 		_ambientTrackInstances.Clear();
 		foreach (StudioEventEmitter emitter in _eventEmitters)
@@ -234,7 +233,7 @@ public class AudioManager : PersistentSingleton<AudioManager>
 	/// <param name="pos">Some position in the world</param>
 	public void PlayOneShot(EventReference sound, Vector3 pos)
 	{
-		RuntimeManager.PlayOneShot(sound, position: pos);
+		RuntimeManager.PlayOneShot(sound, pos);
 	}
 
 	/// <summary>
@@ -475,13 +474,25 @@ public class AudioManager : PersistentSingleton<AudioManager>
 		PlayerPrefs.SetFloat("GameVolume", _gameVolume);
 	}
 
-	public float GetMasterVolume() => _masterVolume;
+	public float GetMasterVolume()
+	{
+		return _masterVolume;
+	}
 
-	public float GetMusicVolume() => _musicVolume;
+	public float GetMusicVolume()
+	{
+		return _musicVolume;
+	}
 
-	public float GetAmbienceVolume() => _ambientVolume;
+	public float GetAmbienceVolume()
+	{
+		return _ambientVolume;
+	}
 
-	public float GetGameVolume() => _gameVolume;
+	public float GetGameVolume()
+	{
+		return _gameVolume;
+	}
 
 	public void SetMasterVolume(float masterVolume)
 	{

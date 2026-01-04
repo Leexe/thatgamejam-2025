@@ -3,41 +3,39 @@ using FMODUnity;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-public class VisualNovelSFX : MonoBehaviour
+public class DialogueSFX : MonoBehaviour
 {
 	[FoldoutGroup("References")]
 	[SerializeField]
-	private TypewriterComponent _typewriter;
+	private TypewriterComponent _hiddenTypewriter;
 
 	[FoldoutGroup("References")]
 	[SerializeField]
 	private VisualNovelDictionarySO _vnDictionary;
 
 	// Private Variables
-	private bool _charactersTalking = false;
+	private bool _charactersTalking;
 	private VoiceSO _currentCharacterVoice;
+	private DialogueEvents DialogueEvents => DialogueEvents.Instance;
 
 	private void OnEnable()
 	{
-		_typewriter.onCharacterVisible.AddListener(PlayVoice);
-		GameManager.Instance.DialogueEventsRef.OnStartDialogue += ResetVoiceState;
-		GameManager.Instance.DialogueEventsRef.OnDialogueVoice += SetSpeakingCharacter;
-		GameManager.Instance.DialogueEventsRef.OnPlaySFX += PlaySFX;
-		GameManager.Instance.DialogueEventsRef.OnPlayAmbience += PlayAmbience;
-		GameManager.Instance.DialogueEventsRef.OnPlayMusic += PlayMusic;
+		_hiddenTypewriter.onCharacterVisible.AddListener(PlayVoice);
+		DialogueEvents.OnStartDialogue += ResetVoiceState;
+		DialogueEvents.OnDialogueVoice += SetSpeakingCharacter;
+		DialogueEvents.OnPlaySFX += PlaySFX;
+		DialogueEvents.OnPlayAmbience += PlayAmbience;
+		DialogueEvents.OnPlayMusic += PlayMusic;
 	}
 
 	private void OnDisable()
 	{
-		_typewriter.onCharacterVisible.RemoveListener(PlayVoice);
-		if (GameManager.Instance)
-		{
-			GameManager.Instance.DialogueEventsRef.OnStartDialogue -= ResetVoiceState;
-			GameManager.Instance.DialogueEventsRef.OnDialogueVoice -= SetSpeakingCharacter;
-			GameManager.Instance.DialogueEventsRef.OnPlaySFX -= PlaySFX;
-			GameManager.Instance.DialogueEventsRef.OnPlayAmbience -= PlayAmbience;
-			GameManager.Instance.DialogueEventsRef.OnPlayMusic -= PlayMusic;
-		}
+		_hiddenTypewriter.onCharacterVisible.RemoveListener(PlayVoice);
+		DialogueEvents.OnStartDialogue -= ResetVoiceState;
+		DialogueEvents.OnDialogueVoice -= SetSpeakingCharacter;
+		DialogueEvents.OnPlaySFX -= PlaySFX;
+		DialogueEvents.OnPlayAmbience -= PlayAmbience;
+		DialogueEvents.OnPlayMusic -= PlayMusic;
 	}
 
 	/// <summary>
@@ -84,7 +82,7 @@ public class VisualNovelSFX : MonoBehaviour
 	/// </summary>
 	private void PlaySFX(string key)
 	{
-		GenericPlayAudio(key, _vnDictionary.SFXMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
+		PlayAudioFromDictonary(key, _vnDictionary.SFXMap, sfx => AudioManager.Instance.PlayOneShot(sfx), "SFX");
 	}
 
 	/// <summary>
@@ -92,7 +90,7 @@ public class VisualNovelSFX : MonoBehaviour
 	/// </summary>
 	private void PlayAmbience(string key)
 	{
-		GenericPlayAudio(
+		PlayAudioFromDictonary(
 			key,
 			_vnDictionary.AmbienceMap,
 			ambience => AudioManager.Instance.SwitchAmbienceTrack(ambience),
@@ -105,13 +103,18 @@ public class VisualNovelSFX : MonoBehaviour
 	/// </summary>
 	private void PlayMusic(string key)
 	{
-		GenericPlayAudio(key, _vnDictionary.MusicMap, music => AudioManager.Instance.SwitchMusicTrack(music), "Music");
+		PlayAudioFromDictonary(
+			key,
+			_vnDictionary.MusicMap,
+			music => AudioManager.Instance.SwitchMusicTrack(music),
+			"Music"
+		);
 	}
 
 	/// <summary>
 	/// Generic helper to look up audio in a dictionary and execute a play action.
 	/// </summary>
-	private void GenericPlayAudio(
+	private void PlayAudioFromDictonary(
 		string key,
 		System.Collections.Generic.Dictionary<string, EventReference> audioMap,
 		System.Action<EventReference> playAction,

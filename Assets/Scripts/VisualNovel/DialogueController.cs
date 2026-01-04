@@ -19,12 +19,13 @@ public class DialogueController : MonoBehaviour
 	[SerializeField]
 	private float _characterFadeDuration = 0.5f;
 
-	private DialogueEvents _dialogueEvents;
+	private DialogueEvents DialogueEvents => DialogueEvents.Instance;
 	private Story _story;
 	private bool _storyPlaying;
 	private bool _typewriterPlaying;
 	private int _choiceIndex = -1;
 	private bool _needToDisplayChoices;
+	private string _currentSpeakerName;
 
 	private bool ChoicesAvailable => _story.currentChoices.Count > 0;
 
@@ -36,23 +37,19 @@ public class DialogueController : MonoBehaviour
 
 	private void OnEnable()
 	{
-		_dialogueEvents = GameManager.Instance.DialogueEventsRef;
-		_dialogueEvents.OnStartStory += StartStory;
-		_dialogueEvents.OnChoiceSelect += ContinueStory;
-		_dialogueEvents.OnTypewriterFinish += SetTypewriterInactive;
-		_dialogueEvents.OnTypewriterFinish += DisplayChoices;
+		DialogueEvents.OnStartStory += StartStory;
+		DialogueEvents.OnChoiceSelect += ContinueStory;
+		DialogueEvents.OnTypewriterFinish += SetTypewriterInactive;
+		DialogueEvents.OnTypewriterFinish += DisplayChoices;
 		InputManager.Instance.OnContinueStoryPerformed.AddListener(ContinueStory);
 	}
 
 	private void OnDisable()
 	{
-		if (GameManager.Instance)
-		{
-			_dialogueEvents.OnStartStory -= StartStory;
-			_dialogueEvents.OnChoiceSelect -= ContinueStory;
-			_dialogueEvents.OnTypewriterFinish -= SetTypewriterInactive;
-			_dialogueEvents.OnTypewriterFinish -= DisplayChoices;
-		}
+		DialogueEvents.OnStartStory -= StartStory;
+		DialogueEvents.OnChoiceSelect -= ContinueStory;
+		DialogueEvents.OnTypewriterFinish -= SetTypewriterInactive;
+		DialogueEvents.OnTypewriterFinish -= DisplayChoices;
 
 		if (InputManager.Instance)
 		{
@@ -62,7 +59,7 @@ public class DialogueController : MonoBehaviour
 
 	private void Start()
 	{
-		_dialogueEvents.RemoveAllCharacters();
+		DialogueEvents.RemoveAllCharacters();
 	}
 
 	[FoldoutGroup("Debug")]
@@ -70,15 +67,7 @@ public class DialogueController : MonoBehaviour
 	[UsedImplicitly]
 	private void StartTestingStory()
 	{
-		_dialogueEvents.StartStory("Testing");
-	}
-
-	[FoldoutGroup("Debug")]
-	[Button]
-	[UsedImplicitly]
-	private void StartChudStory()
-	{
-		_dialogueEvents.StartStory("Beginning");
+		DialogueEvents.StartStory("Testing");
 	}
 
 	[FoldoutGroup("Debug")]
@@ -86,7 +75,7 @@ public class DialogueController : MonoBehaviour
 	[UsedImplicitly]
 	private void StartAnimationTest()
 	{
-		_dialogueEvents.StartStory("Testing_Animations");
+		DialogueEvents.StartStory("Testing_Animations");
 	}
 
 	[FoldoutGroup("Debug")]
@@ -94,7 +83,7 @@ public class DialogueController : MonoBehaviour
 	[UsedImplicitly]
 	private void StartVoiceTest()
 	{
-		_dialogueEvents.StartStory("Testing_Voices");
+		DialogueEvents.StartStory("Testing_Voices");
 	}
 
 	[FoldoutGroup("Debug")]
@@ -102,7 +91,7 @@ public class DialogueController : MonoBehaviour
 	[UsedImplicitly]
 	private void StartTextAnimatorTest()
 	{
-		_dialogueEvents.StartStory("Testing_TextAnimator");
+		DialogueEvents.StartStory("Testing_TextAnimator");
 	}
 
 	#region Story Managers
@@ -118,7 +107,8 @@ public class DialogueController : MonoBehaviour
 			_storyPlaying = false;
 			_typewriterPlaying = false;
 			_choiceIndex = -1;
-			_dialogueEvents.RemoveAllCharacters();
+			_currentSpeakerName = "";
+			DialogueEvents.RemoveAllCharacters();
 		}
 
 		_storyPlaying = true;
@@ -140,8 +130,14 @@ public class DialogueController : MonoBehaviour
 	/// </summary>
 	private void ContinueStory()
 	{
-		// Don't continue if story isn't playing or game is paused
-		if (!_storyPlaying || GameManager.Instance.GamePaused)
+		// Check global blocking conditions (Pause, Backlog, etc.)
+		if (!DialogueEvents.CanAdvanceStory)
+		{
+			return;
+		}
+
+		// Don't continue if story isn't currently playing
+		if (!_storyPlaying)
 		{
 			return;
 		}
@@ -149,7 +145,7 @@ public class DialogueController : MonoBehaviour
 		// If typewriter is playing, skip it instead of continuing
 		if (_typewriterPlaying)
 		{
-			_dialogueEvents.SkipTypewriter();
+			DialogueEvents.SkipTypewriter();
 			return;
 		}
 
@@ -166,7 +162,7 @@ public class DialogueController : MonoBehaviour
 			_typewriterPlaying = true;
 
 			// Signal start of new dialogue line
-			_dialogueEvents.StartDialogue();
+			DialogueEvents.StartDialogue();
 
 			// Parse any tags on this line
 			if (_story.currentTags.Count > 0)
@@ -200,7 +196,7 @@ public class DialogueController : MonoBehaviour
 		_storyPlaying = false;
 		_typewriterPlaying = false;
 
-		GameManager.Instance.DialogueEventsRef.EndStory();
+		DialogueEvents.EndStory();
 	}
 
 	#endregion
@@ -236,7 +232,7 @@ public class DialogueController : MonoBehaviour
 			_needToDisplayChoices = true;
 		}
 
-		_dialogueEvents.DisplayDialogue(storyLine);
+		DialogueEvents.DisplayDialogue(_currentSpeakerName, storyLine);
 	}
 
 	/// <summary>
@@ -246,7 +242,7 @@ public class DialogueController : MonoBehaviour
 	{
 		if (_needToDisplayChoices)
 		{
-			_dialogueEvents.DisplayChoices(_story.currentChoices);
+			DialogueEvents.DisplayChoices(_story.currentChoices);
 		}
 	}
 
@@ -371,7 +367,7 @@ public class DialogueController : MonoBehaviour
 
 		if (firstArg.ToLower() == "clear")
 		{
-			_dialogueEvents.RemoveAllCharacters(_characterFadeDuration);
+			DialogueEvents.RemoveAllCharacters(_characterFadeDuration);
 			return;
 		}
 
@@ -398,7 +394,7 @@ public class DialogueController : MonoBehaviour
 		// Check for clear command
 		if (args.Length > 1 && args[1].ToLower() == "clear")
 		{
-			_dialogueEvents.RemoveCharacter(characterId, _characterFadeDuration);
+			DialogueEvents.RemoveCharacter(characterId, _characterFadeDuration);
 			return;
 		}
 
@@ -425,18 +421,18 @@ public class DialogueController : MonoBehaviour
 			string animationPart = splitParts[1];
 
 			// Update the character with the real sprite key
-			_dialogueEvents.UpdateCharacter(characterId, position, realSpriteKey, _characterFadeDuration);
+			DialogueEvents.UpdateCharacter(characterId, position, realSpriteKey, _characterFadeDuration);
 
 			// Parse animation part (e.g. "shake_10_0.5")
 			string[] animParts = animationPart.Split('_');
 			string animName = animParts[0];
 			string[] animArgs = animParts.Skip(1).ToArray();
 
-			_dialogueEvents.UpdateAnimation(characterId, animName, animArgs);
+			DialogueEvents.UpdateAnimation(characterId, animName, animArgs);
 		}
 		else
 		{
-			_dialogueEvents.UpdateCharacter(characterId, position, spriteKey, _characterFadeDuration);
+			DialogueEvents.UpdateCharacter(characterId, position, spriteKey, _characterFadeDuration);
 		}
 	}
 
@@ -454,7 +450,7 @@ public class DialogueController : MonoBehaviour
 		string animationName = args[1];
 		string[] parameters = args.Skip(2).ToArray();
 
-		_dialogueEvents.UpdateAnimation(characterId, animationName, parameters);
+		DialogueEvents.UpdateAnimation(characterId, animationName, parameters);
 	}
 
 	/// <summary>
@@ -465,12 +461,14 @@ public class DialogueController : MonoBehaviour
 	{
 		if (args.Length == 0 || args[0].ToLower() == "none")
 		{
-			_dialogueEvents.UpdateName("");
+			_currentSpeakerName = "";
+			DialogueEvents.UpdateName("");
 			return;
 		}
 
 		string characterName = args[0];
-		_dialogueEvents.UpdateName(characterName);
+		_currentSpeakerName = characterName;
+		DialogueEvents.UpdateName(characterName);
 	}
 
 	/// <summary>
@@ -486,7 +484,7 @@ public class DialogueController : MonoBehaviour
 		}
 
 		string characterName = args[0].ToLower();
-		_dialogueEvents.SetDialogueVoice(characterName);
+		DialogueEvents.SetDialogueVoice(characterName);
 	}
 
 	/// <summary>
@@ -496,7 +494,7 @@ public class DialogueController : MonoBehaviour
 	private void HandleBackgroundTag(string[] args)
 	{
 		string backgroundKey = string.Join("_", args);
-		_dialogueEvents.UpdateBackground(backgroundKey);
+		DialogueEvents.UpdateBackground(backgroundKey);
 	}
 
 	/// <summary>
@@ -506,7 +504,7 @@ public class DialogueController : MonoBehaviour
 	private void HandleSFXTag(string[] args)
 	{
 		string sfxKey = string.Join("_", args);
-		_dialogueEvents.PlaySFX(sfxKey);
+		DialogueEvents.PlaySFX(sfxKey);
 	}
 
 	/// <summary>
@@ -516,7 +514,7 @@ public class DialogueController : MonoBehaviour
 	private void HandleMusicTag(string[] args)
 	{
 		string musicKey = string.Join("_", args);
-		_dialogueEvents.PlayMusic(musicKey);
+		DialogueEvents.PlayMusic(musicKey);
 	}
 
 	/// <summary>
@@ -526,7 +524,7 @@ public class DialogueController : MonoBehaviour
 	private void HandleAmbienceTag(string[] args)
 	{
 		string ambienceKey = string.Join("_", args);
-		_dialogueEvents.PlayAmbience(ambienceKey);
+		DialogueEvents.PlayAmbience(ambienceKey);
 	}
 
 	#endregion

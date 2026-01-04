@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 
-public class GameManager : PersistentSingleton<GameManager>
+public class GameManager : PersistentMonoSingleton<GameManager>
 {
 	// Events
 	[HideInInspector]
@@ -10,14 +10,13 @@ public class GameManager : PersistentSingleton<GameManager>
 	[HideInInspector]
 	public UnityEvent OnGameResume;
 
-	public readonly DialogueEvents DialogueEventsRef = new DialogueEvents();
-
 	// Private Variables
 	public bool GamePaused { private set; get; }
 
 	private void OnEnable()
 	{
 		InputManager.Instance.OnEscapePerformed.AddListener(TogglePauseGame);
+		DialogueEvents.Instance.AddBlockingCondition(() => GamePaused);
 	}
 
 	private void OnDisable()
@@ -25,6 +24,11 @@ public class GameManager : PersistentSingleton<GameManager>
 		if (InputManager.Instance)
 		{
 			InputManager.Instance.OnEscapePerformed.RemoveListener(TogglePauseGame);
+		}
+
+		if (DialogueEvents.Instance != null)
+		{
+			DialogueEvents.Instance.RemoveBlockingCondition(() => GamePaused);
 		}
 	}
 
