@@ -104,7 +104,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	#region Music Track Control
 
 	/// <summary>
-	/// Resume the current music track
+	/// Play the current music track
 	/// </summary>
 	public void ResumeCurrentMusicTrack()
 	{
@@ -130,10 +130,13 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Plays the music track
 	/// </summary>
-	public void PlayMusicTrack(EventReference musicTrack)
+	public void SwitchMusicTrack(EventReference musicTrack, bool playOnSwitch = true)
 	{
 		SwitchTrack(musicTrack, ref _currentMusicReference, ref _currentMusicTrack, _musicTrackInstances);
-		ResumeCurrentMusicTrack();
+		if (playOnSwitch)
+		{
+			ResumeCurrentMusicTrack();
+		}
 	}
 
 	#endregion
@@ -143,7 +146,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Play the current ambient track
 	/// </summary>
-	public void ResumeCurrentAmbientTrack()
+	public void PlayCurrentAmbientTrack()
 	{
 		PlayInstance(_currentAmbientTrack);
 	}
@@ -167,10 +170,13 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Switches the ambient track
 	/// </summary>
-	public void PlayAmbienceTrack(EventReference ambienceTrack)
+	public void SwitchAmbienceTrack(EventReference ambienceTrack, bool playOnSwitch = true)
 	{
 		SwitchTrack(ambienceTrack, ref _currentAmbientReference, ref _currentAmbientTrack, _ambientTrackInstances);
-		ResumeCurrentAmbientTrack();
+		if (playOnSwitch)
+		{
+			ResumeCurrentMusicTrack();
+		}
 	}
 
 	/// <summary>
