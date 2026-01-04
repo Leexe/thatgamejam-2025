@@ -2,11 +2,16 @@ using UnityEngine;
 
 public class FightManager : MonoBehaviour
 {
+	[Header("Fighters")]
 	[SerializeField]
 	private Fighter _p1;
 
 	[SerializeField]
 	private Fighter _p2;
+
+	[Header("Parameters")]
+	[SerializeField]
+	private int _freezeFrameCount = 14;
 
 	private bool _gameStarted = false;
 	private readonly float _arenaHalfWidth = 4f;
@@ -287,9 +292,11 @@ public class FightManager : MonoBehaviour
 
 		if (attackOnP1Result != AttackResult.None || attackOnP2Result != AttackResult.None)
 		{
-			_freezeFrames += 12;
+			_freezeFrames += _freezeFrameCount;
 		}
 	}
+
+	//
 
 	private void OnDrawGizmos()
 	{

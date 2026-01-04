@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c56d706571d442f390f975b9473c352, type: 3}
+  m_Name: BasicFighterVFXs
+  m_EditorClassIdentifier: Assembly-CSharp::BasicFighterVFXsSO
+  PunchVFX: {fileID: 7400000, guid: deac652f59a854f719128a9869bce060, type: 2}
+  KickVFX: {fileID: 7400000, guid: 91896dbc17238459580adc4a59852701, type: 2}
+  BlockVFX: {fileID: 7400000, guid: d55b0763f54594e44840a98285836732, type: 2}

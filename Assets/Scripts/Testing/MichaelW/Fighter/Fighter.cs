@@ -20,7 +20,8 @@ using UnityEngine;
 public abstract class Fighter : MonoBehaviour
 {
 	public int Health { get; protected set; }
-	public int MaxHealth { get; protected set; }
+
+	public int MaxHealth = 1000;
 
 	public abstract HitBoxData ReadHitBoxes();
 

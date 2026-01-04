@@ -1,0 +1,428 @@
+fileFormatVersion: 2
+guid: 285d0a05919c54d1797ef9b32e5ad0a7
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 4109272022580393760
+    second: block_fx_0
+  - first:
+      213: -4031133742561957804
+    second: block_fx_1
+  - first:
+      213: 3120200162793579583
+    second: block_fx_2
+  - first:
+      213: -2720517456276431291
+    second: block_fx_3
+  - first:
+      213: -4247115604240816623
+    second: block_fx_4
+  - first:
+      213: -1515034574338091202
+    second: block_fx_5
+  - first:
+      213: -6702417888651207990
+    second: block_fx_6
+  - first:
+      213: -5918222480371567650
+    second: block_fx_7
+  - first:
+      213: -1467713135299687443
+    second: block_fx_8
+  - first:
+      213: -4016333342334226645
+    second: block_fx_9
+  - first:
+      213: 6525875705932497916
+    second: block_fx_10
+  - first:
+      213: -2967479341458511173
+    second: block_fx_11
+  - first:
+      213: -4989258180466645281
+    second: block_fx_12
+  - first:
+      213: -3609107136583659707
+    second: block_fx_13
+  - first:
+      213: -7677784287274654380
+    second: block_fx_14
+  - first:
+      213: 2706335963077936276
+    second: block_fx_15
+  - first:
+      213: 2086111141713720133
+    second: block_fx_16
+  - first:
+      213: -3567143062459921189
+    second: block_fx_17
+  - first:
+      213: -993707595233822147
+    second: block_fx_18
+  - first:
+      213: -5702673556668452428
+    second: block_fx_19
+  - first:
+      213: 4610668475557831819
+    second: block_fx_20
+  - first:
+      213: 2238576488882831651
+    second: block_fx_21
+  - first:
+      213: -4943030448788015712
+    second: block_fx_22
+  - first:
+      213: -7542665941605253346
+    second: block_fx_23
+  - first:
+      213: 7123074024996447297
+    second: block_fx_24
+  - first:
+      213: -6537997820429896273
+    second: block_fx_25
+  - first:
+      213: 1407795872440683747
+    second: block_fx_26
+  - first:
+      213: 4600109279267500783
+    second: block_fx_27
+  - first:
+      213: -2297298942917797947
+    second: block_fx_28
+  - first:
+      213: -6304893483084043718
+    second: block_fx_29
+  - first:
+      213: 4361657002354995074
+    second: block_fx_30
+  - first:
+      213: 454542998898158586
+    second: block_fx_31
+  - first:
+      213: -1709398013690940026
+    second: block_fx_32
+  - first:
+      213: 576581115426485641
+    second: block_fx_33
+  - first:
+      213: 2537417831195912702
+    second: block_fx_34
+  - first:
+      213: 4886474796663206903
+    second: block_fx_35
+  - first:
+      213: 2733206233720127705
+    second: block_fx_36
+  - first:
+      213: 7545372377593674601
+    second: block_fx_37
+  - first:
+      213: 2815320610677688528
+    second: block_fx_38
+  - first:
+      213: -3501791625004931277
+    second: block_fx_39
+  - first:
+      213: 1036630216515778349
+    second: block_fx_40
+  - first:
+      213: -7939537943152121020
+    second: block_fx_41
+  - first:
+      213: -5464053322285475751
+    second: block_fx_42
+  - first:
+      213: 8169694772633293390
+    second: block_fx_43
+  - first:
+      213: -4965018697664217138
+    second: block_fx_44
+  - first:
+      213: -7853024258668746160
+    second: block_fx_45
+  - first:
+      213: -7889835601962426445
+    second: block_fx_46
+  - first:
+      213: 7220851787739348808
+    second: block_fx_47
+  - first:
+      213: 4696975784853058270
+    second: block_fx_48
+  - first:
+      213: 5587514325377856670
+    second: block_fx_49
+  - first:
+      213: 8306019045159024053
+    second: block_fx_50
+  - first:
+      213: 8335604120278353444
+    second: block_fx_51
+  - first:
+      213: -3723678517366697896
+    second: block_fx_52
+  - first:
+      213: 5662950084177738990
+    second: block_fx_53
+  - first:
+      213: -3351800562186537983
+    second: block_fx_54
+  - first:
+      213: 4016910816480450612
+    second: block_fx_55
+  - first:
+      213: 4611911612690737292
+    second: block_fx_56
+  - first:
+      213: -1370778264611334599
+    second: block_fx_57
+  - first:
+      213: 7012310790567096464
+    second: block_fx_58
+  - first:
+      213: -6152870244287661210
+    second: block_fx_59
+  - first:
+      213: 3651206588399310758
+    second: block_fx_60
+  - first:
+      213: 3169621648354551135
+    second: block_fx_61
+  - first:
+      213: 9176349702026143869
+    second: block_fx_62
+  - first:
+      213: -3834010818254119227
+    second: block_fx_63
+  - first:
+      213: 753646421425447671
+    second: block_fx_64
+  - first:
+      213: 8139799301292393584
+    second: block_fx_65
+  - first:
+      213: 4255455520966067147
+    second: block_fx_66
+  - first:
+      213: 4817322227628681782
+    second: block_fx_67
+  - first:
+      213: -6485577553183319539
+    second: block_fx_68
+  - first:
+      213: -1494790893838908311
+    second: block_fx_69
+  - first:
+      213: -6347057095558523665
+    second: block_fx_70
+  - first:
+      213: 1937334903548986904
+    second: block_fx_71
+  - first:
+      213: -6649698520579735172
+    second: block_fx_72
+  - first:
+      213: -8591346207011486775
+    second: block_fx_73
+  - first:
+      213: -4746232967691594682
+    second: block_fx_74
+  - first:
+      213: 704725353263826032
+    second: block_fx_75
+  - first:
+      213: -4720044985543033219
+    second: block_fx_76
+  - first:
+      213: 7926561641999658651
+    second: block_fx_77
+  - first:
+      213: -2066089341451611167
+    second: block_fx_78
+  - first:
+      213: -7011526586415508782
+    second: block_fx_79
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 400
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: block_fx_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 027fa57f121170930800000000000000
+      internalID: 4109272022580393760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: block_fx_1
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 458e08018398e08c0800000000000000
+      internalID: -4031133742561957804
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: block_fx_2
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f346d6b348d2d4b20800000000000000
+      internalID: 3120200162793579583
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 4065079343fc34ba79c4acaf84e28e8d
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":482.0,"y":482.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      block_fx_0: 4109272022580393760
+      block_fx_1: -4031133742561957804
+      block_fx_2: 3120200162793579583
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

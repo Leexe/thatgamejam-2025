@@ -9,9 +9,15 @@ public class BasicFighter : Fighter
 	[SerializeField]
 	private BasicFighterAnimsSO _animsSO;
 
+	[SerializeField]
+	private VFX _vfxPrefab;
+
+	[SerializeField]
+	private BasicFighterVFXsSO _vfxList;
+
 	[Header("Parameters")]
 	[SerializeField]
-	private float _moveSpeed = 0.06f;
+	private float _moveSpeed = 0.045f;
 
 	[SerializeField]
 	private float _hitKnockback = 0.1f;
@@ -26,7 +32,7 @@ public class BasicFighter : Fighter
 	private float _jumpVel = 0.16f;
 
 	[SerializeField]
-	private float _jumpHorizontalVel = 0.07f;
+	private float _jumpHorizontalVel = 0.045f;
 
 	//
 
@@ -62,7 +68,7 @@ public class BasicFighter : Fighter
 		transform.position = pos;
 		_facingDirection = opponentPos.x > pos.x ? Direction.Forward : Direction.Backward;
 
-		TransitionState(State.Idle);
+		TransitionState(State.StandIdle);
 	}
 
 	//
@@ -76,46 +82,46 @@ public class BasicFighter : Fighter
 
 		switch (_state)
 		{
-			case State.Idle:
+			case State.StandIdle:
 				State_Idle(input, opponentPosition);
 				break;
-			case State.MidPunch:
-				State_Anim(_animsSO.StandPunch, State.Idle);
+			case State.StandPunch:
+				State_Anim(_animsSO.StandPunch, State.StandIdle);
 				break;
-			case State.MidKick:
-				State_Anim(_animsSO.StandKick, State.Idle);
+			case State.StandKick:
+				State_Anim(_animsSO.StandKick, State.StandIdle);
 				break;
-			case State.HitStunned:
-				State_Knockback(_animsSO.StandHurt, State.Idle);
+			case State.StandHurt:
+				State_Knockback(_animsSO.StandHurt, State.StandIdle);
 				break;
-			case State.HighBlock:
-				State_Knockback(_animsSO.StandBlock, State.Idle);
+			case State.StandBlock:
+				State_Knockback(_animsSO.StandBlock, State.StandIdle);
 				break;
 			case State.CrouchIdle:
 				State_Crouch(input, opponentPosition);
 				break;
-			case State.LowPunch:
+			case State.CrouchPunch:
 				State_Anim(_animsSO.CrouchPunch, State.CrouchIdle);
 				break;
-			case State.LowKick:
+			case State.CrouchKick:
 				State_Anim(_animsSO.CrouchKick, State.CrouchIdle);
 				break;
-			case State.LowStunned:
+			case State.CrouchHurt:
 				State_Knockback(_animsSO.CrouchHurt, State.CrouchIdle);
 				break;
-			case State.LowBlock:
+			case State.CrouchBlock:
 				State_Knockback(_animsSO.CrouchBlock, State.CrouchIdle);
 				break;
 			case State.JumpIdle:
 				State_AirborneIdle(input, opponentPosition);
 				break;
-			case State.HighKick:
+			case State.JumpKick:
 				State_Airborne(_animsSO.JumpKick, State.JumpIdle);
 				break;
-			case State.HighPunch:
+			case State.JumpPunch:
 				State_Airborne(_animsSO.JumpPunch, State.JumpIdle);
 				break;
-			case State.HighStunned:
+			case State.JumpHurt:
 				State_Airborne(_animsSO.JumpHurt, State.JumpIdle);
 				break;
 		}
@@ -123,24 +129,48 @@ public class BasicFighter : Fighter
 
 	public override AttackResult OnHitByAttack(AttackInfo attack)
 	{
+		AttackResult res = AttackResult.None;
+
 		switch (_state)
 		{
-			case State.Idle:
-			case State.MidPunch:
-			case State.MidKick:
-				return OnHit_Standing(attack);
+			case State.StandIdle:
+			case State.StandPunch:
+			case State.StandKick:
+				res = OnHit_Standing(attack);
+				break;
 			case State.CrouchIdle:
-			case State.LowPunch:
-			case State.LowKick:
-				return OnHit_Crouch(attack);
+			case State.CrouchPunch:
+			case State.CrouchKick:
+				res = OnHit_Crouch(attack);
+				break;
 			case State.JumpIdle:
-			case State.HighPunch:
-			case State.HighKick:
-				return OnHit_Airborne(attack);
+			case State.JumpPunch:
+			case State.JumpKick:
+				res = OnHit_Airborne(attack);
+				break;
+			default:
+				Debug.LogError("OnHitByAttack() not handled properly");
+				break;
 		}
 
-		Debug.LogError("OnHitByAttack() not handled properly");
-		return AttackResult.None;
+		if (res == AttackResult.Blocked)
+		{
+			PlayVFX(_vfxList.BlockVFX, attack.VisualPosition, attack.VisualDirection);
+		}
+		else if (res == AttackResult.Hit)
+		{
+			Health -= attack.Damage;
+			if (Health <= 0)
+			{
+				Health = 0;
+				TransitionState(State.Dead);
+			}
+
+			AnimationClip clip = attack.IsHeavy ? _vfxList.KickVFX : _vfxList.PunchVFX;
+			PlayVFX(clip, attack.VisualPosition, attack.VisualDirection);
+		}
+
+		return res;
 	}
 
 	public override void OnAttackLanded(AttackResult result)
@@ -223,13 +253,21 @@ public class BasicFighter : Fighter
 		return _stateCounter - transitionFrameCount;
 	}
 
+	private void PlayVFX(AnimationClip animation, Vector2 position, Vector2 facingDirection)
+	{
+		VFX vfxObject = Instantiate(_vfxPrefab);
+		var rot = Quaternion.Euler(0f, 0f, Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg);
+		vfxObject.transform.SetPositionAndRotation(position, rot);
+		vfxObject.Play(animation);
+	}
+
 	#endregion helpers
 
 	#region statemachine
 
 	private void TransitionState(State state)
 	{
-		if (_state is State.Idle or State.CrouchIdle or State.JumpIdle)
+		if (_state is State.StandIdle or State.CrouchIdle or State.JumpIdle)
 		{
 			_prevIdleState = _state;
 		}
@@ -242,7 +280,7 @@ public class BasicFighter : Fighter
 	/// Generic state handler for animations.
 	/// The state handler processes the animation and does nothing else.
 	/// </summary>
-	private void State_Anim(AnimationClip clip, State endState = State.Idle, bool reverse = false)
+	private void State_Anim(AnimationClip clip, State endState = State.StandIdle, bool reverse = false)
 	{
 		if ((_stateCounter + 1) > (clip.length * 60f) - 0.001f)
 		{
@@ -258,7 +296,7 @@ public class BasicFighter : Fighter
 	/// <summary>
 	/// Generic state handler for animations with knockback.
 	/// </summary>
-	private void State_Knockback(AnimationClip clip, State endState = State.Idle)
+	private void State_Knockback(AnimationClip clip, State endState = State.StandIdle)
 	{
 		transform.Translate(_vel);
 		_vel = Vector2.MoveTowards(_vel, Vector2.zero, _knockbackGroundDecel);
@@ -268,7 +306,7 @@ public class BasicFighter : Fighter
 	/// <summary>
 	/// Generic state handler for animations performed in the air
 	/// </summary>
-	private void State_Airborne(AnimationClip clip, State endState = State.Idle)
+	private void State_Airborne(AnimationClip clip, State endState = State.StandIdle)
 	{
 		if (HandleAirbornePhysics())
 		{
@@ -304,13 +342,13 @@ public class BasicFighter : Fighter
 
 		if (input.PunchButton)
 		{
-			TransitionState(State.MidPunch);
+			TransitionState(State.StandPunch);
 			State_Anim(_animsSO.StandPunch);
 			return;
 		}
 		if (input.KickButton)
 		{
-			TransitionState(State.MidKick);
+			TransitionState(State.StandKick);
 			State_Anim(_animsSO.StandKick);
 			return;
 		}
@@ -371,7 +409,7 @@ public class BasicFighter : Fighter
 		int frameCounter = _stateCounter;
 		bool doneTransitioning = true;
 
-		if (_prevIdleState == State.Idle)
+		if (_prevIdleState == State.StandIdle)
 		{
 			frameCounter = PlayTransitionAnimation(_animsSO.CrouchTransition, false);
 			doneTransitioning = frameCounter >= 0;
@@ -381,20 +419,20 @@ public class BasicFighter : Fighter
 		// note that punches / kicks can be input immediately upon crouching
 		if (input.PunchButton)
 		{
-			TransitionState(State.LowPunch);
+			TransitionState(State.CrouchPunch);
 			State_Anim(_animsSO.CrouchPunch);
 			return;
 		}
 		if (input.KickButton)
 		{
-			TransitionState(State.LowKick);
+			TransitionState(State.CrouchKick);
 			State_Anim(_animsSO.CrouchKick);
 			return;
 		}
 		if (!_wantsToCrouch)
 		{
-			TransitionState(State.Idle);
-			State_Anim(_animsSO.CrouchTransition, State.Idle, true);
+			TransitionState(State.StandIdle);
+			State_Anim(_animsSO.CrouchTransition, State.StandIdle, true);
 			return;
 		}
 
@@ -415,8 +453,8 @@ public class BasicFighter : Fighter
 	{
 		if (HandleAirbornePhysics())
 		{
-			TransitionState(State.Idle);
-			State_Anim(_animsSO.Jump, State.Idle, true);
+			TransitionState(State.StandIdle);
+			State_Anim(_animsSO.Jump, State.StandIdle, true);
 			return;
 		}
 
@@ -424,7 +462,7 @@ public class BasicFighter : Fighter
 		int frameCounter = _stateCounter;
 		bool doneTransitioning = true;
 
-		if (_prevIdleState == State.Idle)
+		if (_prevIdleState == State.StandIdle)
 		{
 			frameCounter = PlayTransitionAnimation(_animsSO.Jump, false);
 			doneTransitioning = frameCounter >= 0;
@@ -432,13 +470,13 @@ public class BasicFighter : Fighter
 
 		if (input.PunchButton)
 		{
-			TransitionState(State.HighPunch);
+			TransitionState(State.JumpPunch);
 			State_Anim(_animsSO.JumpPunch);
 			return;
 		}
 		if (input.KickButton)
 		{
-			TransitionState(State.HighKick);
+			TransitionState(State.JumpKick);
 			State_Anim(_animsSO.JumpKick);
 			return;
 		}
@@ -456,13 +494,13 @@ public class BasicFighter : Fighter
 
 		if (_isReadyToBlock && (attack.Type == AttackType.High || attack.Type == AttackType.Mid))
 		{
-			TransitionState(State.HighBlock);
+			TransitionState(State.StandBlock);
 			State_Anim(_animsSO.StandBlock);
 			return AttackResult.Blocked;
 		}
 		else
 		{
-			TransitionState(State.HitStunned);
+			TransitionState(State.StandHurt);
 			State_Anim(_animsSO.StandHurt);
 			return AttackResult.Hit;
 		}
@@ -472,13 +510,13 @@ public class BasicFighter : Fighter
 	{
 		if (_isReadyToBlock && (attack.Type == AttackType.Low || attack.Type == AttackType.Mid))
 		{
-			TransitionState(State.LowBlock);
+			TransitionState(State.CrouchBlock);
 			State_Anim(_animsSO.CrouchBlock);
 			return AttackResult.Blocked;
 		}
 		else
 		{
-			TransitionState(State.LowStunned);
+			TransitionState(State.CrouchHurt);
 			State_Anim(_animsSO.CrouchHurt);
 			return AttackResult.Hit;
 		}
@@ -486,7 +524,7 @@ public class BasicFighter : Fighter
 
 	private AttackResult OnHit_Airborne(AttackInfo attack)
 	{
-		TransitionState(State.HighStunned);
+		TransitionState(State.JumpHurt);
 		State_Anim(_animsSO.JumpHurt);
 		return AttackResult.Hit;
 	}
@@ -497,28 +535,27 @@ public class BasicFighter : Fighter
 
 	private enum State
 	{
-		Idle,
+		StandIdle,
+		StandPunch,
+		StandKick,
+		StandBlock,
+		StandHurt,
+
 		CrouchIdle,
+		CrouchPunch,
+		CrouchKick,
+		CrouchBlock,
+		CrouchHurt,
 
-		LowPunch,
-		MidPunch,
-		HighPunch,
-		LowKick,
-		MidKick,
-		HighKick,
-		SpecialAttack, // ???
-
-		HitStunned,
-		HeavyHitStunned,
-		LowStunned,
-		HighBlock,
-		LowBlock,
-		HighStunned,
+		JumpIdle,
+		JumpPunch,
+		JumpKick,
+		JumpHurt,
 
 		Grab,
 		Grabbed,
 
-		JumpIdle,
+		Dead,
 	}
 
 	#endregion types
