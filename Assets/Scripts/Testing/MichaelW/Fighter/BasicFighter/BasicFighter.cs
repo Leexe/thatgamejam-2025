@@ -68,7 +68,17 @@ public class BasicFighter : Fighter
 		transform.position = pos;
 		_facingDirection = opponentPos.x > pos.x ? Direction.Forward : Direction.Backward;
 
+		// reset all the state-related vars, just in case...
+		_walkDirection = Direction.None;
+		_prevWalkDirection = Direction.None;
+		_wantsToCrouch = false;
+		_wantsToJump = false;
+		_walkFrame = 0;
+		_vel = Vector2.zero;
+		_isReadyToBlock = false;
+
 		TransitionState(State.StandIdle);
+		State_Anim(_animsSO.StandIdle);
 	}
 
 	//

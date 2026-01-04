@@ -12,8 +12,10 @@ public class FightManager : MonoBehaviour
 	private Fighter _p2;
 
 	[Header("Events")]
-	// TODO: replace these with event channel refs?
+	[HideInInspector]
 	public UnityEvent<GameResult> OnGameEnd;
+
+	[HideInInspector]
 	public UnityEvent<int, int, int, int> OnHealthUpdate;
 
 	[Header("Parameters")]
@@ -29,13 +31,17 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private float _maxSeparationSpeed = 0.14f;
 
-	private bool _gameStarted = false;
+	private bool _simulating = false; // whether or not the whole simulation is running
+	private bool _fightRunning = false;
+	private bool _gameResolved = false; // set to true on win/draw. does not stop simulation
 	private int _debugDirCooldown = 10;
 	private float _debugP2Dir = 0;
 	private float _debugP2VertDir = 0f;
 	private Vector2 _debugP2PrevPos = Vector2.zero;
 
 	private int _freezeFrames = 0;
+	private int _slowMoRate = 1;
+	private int _rawTickCounter = 0;
 
 	// player inputs
 	private InputInfo _upcomingInput = new();
@@ -43,13 +49,22 @@ public class FightManager : MonoBehaviour
 
 	private void FixedUpdate()
 	{
+		if (!_simulating)
+		{
+			return;
+		}
+
 		if (_freezeFrames > 0)
 		{
 			_freezeFrames--;
 			return;
 		}
 
-		Tick();
+		_rawTickCounter++;
+		if (_rawTickCounter % _slowMoRate == 0)
+		{
+			Tick();
+		}
 	}
 
 	private void OnEnable()
@@ -91,6 +106,15 @@ public class FightManager : MonoBehaviour
 		_upcomingInput2.Dir = dir;
 	}
 
+	public void SetSlowMoRate(int rate)
+	{
+		if (rate >= 1)
+		{
+			_rawTickCounter = 0;
+			_slowMoRate = rate;
+		}
+	}
+
 	[Button]
 	public void ResetGame()
 	{
@@ -98,109 +122,122 @@ public class FightManager : MonoBehaviour
 		Vector2 p2StartingPos = new(_playerSeparation, 0f);
 		_p1.Init(p1StartingPos, p2StartingPos);
 		_p2.Init(p2StartingPos, p1StartingPos);
-		_gameStarted = true;
+
+		SetSlowMoRate(1);
 
 		// stuff for the enemy AI (should be temp)
 		_debugDirCooldown = 10;
 		_debugP2Dir = 0;
 		_debugP2VertDir = 0f;
 		_debugP2PrevPos = Vector2.zero;
+
+		OnHealthUpdate.Invoke(_p1.Health, _p1.MaxHealth, _p2.Health, _p2.MaxHealth);
+
+		_gameResolved = false;
+		_fightRunning = false;
+		_simulating = true;
+	}
+
+	public void StartFight()
+	{
+		_fightRunning = true;
 	}
 
 	private void Tick()
 	{
-		if (!_gameStarted)
-		{
-			ResetGame();
-		}
-
 		// snapshot player positions
 		Vector2 p1CurrentPos = _p1.transform.position;
 		Vector2 p2CurrentPos = _p2.transform.position;
 
-		// snapshot player inputs and reset
-		InputInfo p1Input = _upcomingInput;
-		InputInfo p2Input = _upcomingInput2;
+		InputInfo p1Input = default;
+		InputInfo p2Input = default;
+
+		if (_fightRunning)
+		{
+			// snapshot player inputs and reset
+			p1Input = _upcomingInput;
+			p2Input = _upcomingInput2;
+
+			// for testing: make player 2 kick periodically
+			float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
+
+			if (horzDist < 1.6f)
+			{
+				if (_p2.transform.position.y < 0.01f)
+				{
+					p2Input.KickButton = Random.value < 0.05f;
+					p2Input.PunchButton = Random.value < 0.05f;
+				}
+
+				// toggle crouch randomly
+				if (Random.value < 0.008f)
+				{
+					_debugP2VertDir = _debugP2VertDir < 0f ? 0f : -1f;
+				}
+			}
+
+			// jump randomly
+			if (horzDist < 2.6f)
+			{
+				if (Random.value < 0.006f)
+				{
+					_debugP2VertDir = 1f;
+					if (horzDist > 1.7f)
+					{
+						_debugP2Dir = Mathf.Sign(_p1.transform.position.x - _p2.transform.position.x);
+					}
+					else
+					{
+						_debugP2Dir = 0f;
+					}
+				}
+			}
+
+			// no crouch if too far.
+			if (horzDist > 2.0f && _debugP2VertDir < 0f)
+			{
+				_debugP2VertDir = 0f;
+			}
+			if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
+			{
+				_debugP2VertDir = 0f;
+			}
+
+			bool falling = _debugP2PrevPos.y > _p2.transform.position.y;
+			if (_p2.transform.position.y - _p1.transform.position.y < 2.0f && falling)
+			{
+				p2Input.KickButton = true;
+			}
+
+			_debugDirCooldown--;
+			if (_debugDirCooldown < 1)
+			{
+				_debugP2Dir = 0;
+				float rand = Random.value;
+				if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
+				{
+					_debugP2Dir = -1f;
+					_debugDirCooldown += Random.Range(10, 25);
+				}
+				else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
+				{
+					_debugP2Dir = 1f;
+					_debugDirCooldown += Random.Range(10, 25);
+				}
+				else
+				{
+					_debugDirCooldown += Random.Range(5, 15);
+				}
+			}
+			p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
+		}
+
+		_debugP2PrevPos = _p2.transform.position;
+
 		_upcomingInput.KickButton = false;
 		_upcomingInput.PunchButton = false;
 		_upcomingInput2.KickButton = false;
 		_upcomingInput2.PunchButton = false;
-
-		// for testing: make player 2 kick periodically
-		float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
-
-		if (horzDist < 1.6f)
-		{
-			if (_p2.transform.position.y < 0.01f)
-			{
-				p2Input.KickButton = Random.value < 0.05f;
-				p2Input.PunchButton = Random.value < 0.05f;
-			}
-
-			// toggle crouch randomly
-			if (Random.value < 0.008f)
-			{
-				_debugP2VertDir = _debugP2VertDir < 0f ? 0f : -1f;
-			}
-		}
-
-		// jump randomly
-		if (horzDist < 2.6f)
-		{
-			if (Random.value < 0.006f)
-			{
-				_debugP2VertDir = 1f;
-				if (horzDist > 1.7f)
-				{
-					_debugP2Dir = Mathf.Sign(_p1.transform.position.x - _p2.transform.position.x);
-				}
-				else
-				{
-					_debugP2Dir = 0f;
-				}
-			}
-		}
-
-		// no crouch if too far.
-		if (horzDist > 2.0f && _debugP2VertDir < 0f)
-		{
-			_debugP2VertDir = 0f;
-		}
-		if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
-		{
-			_debugP2VertDir = 0f;
-		}
-
-		bool falling = _debugP2PrevPos.y > _p2.transform.position.y;
-		if (_p2.transform.position.y - _p1.transform.position.y < 2.0f && falling)
-		{
-			p2Input.KickButton = true;
-		}
-
-		_debugDirCooldown--;
-		if (_debugDirCooldown < 1)
-		{
-			_debugP2Dir = 0;
-			float rand = Random.value;
-			if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
-			{
-				_debugP2Dir = -1f;
-				_debugDirCooldown += Random.Range(10, 25);
-			}
-			else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
-			{
-				_debugP2Dir = 1f;
-				_debugDirCooldown += Random.Range(10, 25);
-			}
-			else
-			{
-				_debugDirCooldown += Random.Range(5, 15);
-			}
-		}
-		p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
-		_debugP2PrevPos = _p2.transform.position;
-
-		// Debug.Log(_debugP2VertDir);
 
 		_p1.Tick(p1Input, p2CurrentPos);
 		_p2.Tick(p2Input, p1CurrentPos);
@@ -209,17 +246,26 @@ public class FightManager : MonoBehaviour
 
 		OnHealthUpdate.Invoke(_p1.Health, _p1.MaxHealth, _p2.Health, _p2.MaxHealth);
 
-		if (_p1.Health <= 0 && _p2.Health <= 0)
+		if (!_gameResolved)
 		{
-			OnGameEnd.Invoke(GameResult.Draw);
-		}
-		else if (_p1.Health <= 0)
-		{
-			OnGameEnd.Invoke(GameResult.P2Win);
-		}
-		else if (_p2.Health <= 0)
-		{
-			OnGameEnd.Invoke(GameResult.P1Win);
+			if (_p1.Health <= 0 || _p2.Health <= 0)
+			{
+				SetSlowMoRate(2);
+				_gameResolved = true;
+
+				if (_p1.Health <= 0 && _p2.Health <= 0)
+				{
+					OnGameEnd.Invoke(GameResult.Draw);
+				}
+				else if (_p1.Health <= 0)
+				{
+					OnGameEnd.Invoke(GameResult.P2Win);
+				}
+				else if (_p2.Health <= 0)
+				{
+					OnGameEnd.Invoke(GameResult.P1Win);
+				}
+			}
 		}
 	}
 
@@ -344,7 +390,7 @@ public class FightManager : MonoBehaviour
 		Gizmos.DrawLine(new(_arenaHalfWidth, 0f), new(_arenaHalfWidth, 20f));
 		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(_arenaHalfWidth, 0f));
 
-		if (!Application.isPlaying || !_gameStarted)
+		if (!Application.isPlaying || !_simulating)
 		{
 			return;
 		}
