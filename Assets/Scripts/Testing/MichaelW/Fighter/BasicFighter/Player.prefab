@@ -53,13 +53,17 @@ MonoBehaviour:
   _animDataController: {fileID: 8548725415980465770}
   _animsSO: {fileID: 11400000, guid: 23c6b9d272a874fe691740657ac1d8dd, type: 2}
   _vfxPrefab: {fileID: 2587733037587487456, guid: 2f42e8fe0302a4d2b815e69aefaed13e, type: 3}
+  _afterImagePrefab: {fileID: 5407099476437980654, guid: 755e6d95b548c470586d3a8f06587841, type: 3}
   _vfxList: {fileID: 11400000, guid: bf5fe4dbb939e44b691a8b86706909fd, type: 2}
+  _inputBufferDuration: 12
+  _doubleTapDuration: 16
   _moveSpeed: 0.045
   _hitKnockback: 0.1
   _knockbackGroundDecel: 0.008
   _gravity: 0.008
   _jumpVel: 0.16
   _jumpHorizontalVel: 0.045
+  _dashSpeed: 0.16
 --- !u!95 &1190460351265534367
 Animator:
   serializedVersion: 7
@@ -95,6 +99,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimationController
   _animationController: {fileID: 4542520026573244690}
+  _spriteRenderer: {fileID: 8810821223707315613}
   _hurtBoxes:
   - {fileID: 3207004158095166232}
   - {fileID: 8191018260264570308}

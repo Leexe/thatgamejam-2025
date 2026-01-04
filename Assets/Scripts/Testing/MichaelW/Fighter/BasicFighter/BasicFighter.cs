@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BasicFighter : Fighter
@@ -14,9 +13,18 @@ public class BasicFighter : Fighter
 	private VFX _vfxPrefab;
 
 	[SerializeField]
+	private AfterImage _afterImagePrefab;
+
+	[SerializeField]
 	private BasicFighterVFXsSO _vfxList;
 
 	[Header("Parameters")]
+	[SerializeField]
+	private int _inputBufferDuration = 12; // 12 -> 0.2s
+
+	[SerializeField]
+	private int _doubleTapDuration = 16;
+
 	[SerializeField]
 	private float _moveSpeed = 0.045f;
 
@@ -35,12 +43,24 @@ public class BasicFighter : Fighter
 	[SerializeField]
 	private float _jumpHorizontalVel = 0.045f;
 
+	[SerializeField]
+	private float _dashSpeed = 0.16f;
+
 	//
 
 	public override HitBoxData ReadHitBoxes()
 	{
 		return _animDataController.GetAbsoluteHitBoxData(this);
 	}
+
+	// input buffering / dash vars
+	private InputInfo _prevInput = default;
+	private int _tickCounter = 0;
+	private Direction _lastDirInput = Direction.None;
+	private int _lastDirInputTime = -1000;
+	private int _lastPunchInput = -1000;
+	private int _lastKickInput = -1000;
+	private int _lastJumpInput = -1000;
 
 	//
 
@@ -51,8 +71,11 @@ public class BasicFighter : Fighter
 	// idle state vars
 	private Direction _walkDirection = Direction.None;
 	private Direction _prevWalkDirection = Direction.None;
+	private bool _wantsPunch = false;
+	private bool _wantsKick = false;
 	private bool _wantsToCrouch = false;
 	private bool _wantsToJump = false;
+	private bool _wantsDash = false;
 	private int _walkFrame = 0;
 
 	// block/damage state vars
@@ -68,6 +91,13 @@ public class BasicFighter : Fighter
 		Health = MaxHealth;
 		transform.position = pos;
 		_facingDirection = opponentPos.x > pos.x ? Direction.Forward : Direction.Backward;
+
+		_prevInput = default;
+		_lastDirInput = Direction.None;
+		_lastDirInputTime = -1000;
+		_lastPunchInput = -1000;
+		_lastKickInput = -1000;
+		_tickCounter = 0;
 
 		// reset all the state-related vars, just in case...
 		_walkDirection = Direction.None;
@@ -87,9 +117,11 @@ public class BasicFighter : Fighter
 	public override void Tick(in InputInfo input, in Vector2 opponentPosition)
 	{
 		_stateCounter++;
+		_tickCounter++;
 		_isReadyToBlock = false;
 
 		SetWalkDirectionAndCrouch(input);
+		_prevInput = input;
 
 		switch (_state)
 		{
@@ -137,6 +169,12 @@ public class BasicFighter : Fighter
 				break;
 			case State.Dead:
 				State_Dead();
+				break;
+			case State.DashForward:
+				State_Dash(_animsSO.DashForward, State.StandIdle);
+				break;
+			case State.DashBack:
+				State_Dash(_animsSO.DashBack, State.StandIdle);
 				break;
 		}
 	}
@@ -221,25 +259,66 @@ public class BasicFighter : Fighter
 		transform.localScale = scale;
 	}
 
-	private void SetWalkDirectionAndCrouch(in InputInfo input)
+	private Direction GetHDir(Vector2 dir)
 	{
-		_prevWalkDirection = _walkDirection;
-
-		if (input.Dir.x > 0f)
+		if (dir.x > 0f)
 		{
-			_walkDirection = Direction.Forward;
+			return Direction.Forward;
 		}
-		else if (input.Dir.x < 0f)
+		else if (dir.x < 0f)
 		{
-			_walkDirection = Direction.Backward;
+			return Direction.Backward;
 		}
 		else
 		{
-			_walkDirection = Direction.None;
+			return Direction.None;
+		}
+	}
+
+	private void SetWalkDirectionAndCrouch(in InputInfo input)
+	{
+		_prevWalkDirection = _walkDirection;
+		_walkDirection = GetHDir(input.Dir);
+
+		// look through input history to see if dash (double tap)
+		_wantsDash = false;
+		if (_walkDirection != Direction.None && _prevWalkDirection == Direction.None)
+		{
+			int gap = _tickCounter - _lastDirInputTime;
+			if (gap < _doubleTapDuration && _walkDirection == _lastDirInput)
+			{
+				_wantsDash = true;
+				_lastDirInputTime = -5000;
+			}
+			else
+			{
+				_lastDirInput = _walkDirection;
+				_lastDirInputTime = _tickCounter;
+			}
 		}
 
+		// jumping
+		if (input.Dir.y > 0f && _prevInput.Dir.y <= 0f)
+		{
+			_lastJumpInput = _tickCounter;
+		}
+		_wantsToJump = _tickCounter - _lastJumpInput < _inputBufferDuration;
+
+		// crouching
 		_wantsToCrouch = input.Dir.y < 0f;
-		_wantsToJump = input.Dir.y > 0f;
+
+		// punching, kicking
+		if (input.PunchButton)
+		{
+			_lastPunchInput = _tickCounter;
+		}
+		_wantsPunch = _tickCounter - _lastPunchInput < _inputBufferDuration;
+
+		if (input.KickButton)
+		{
+			_lastKickInput = _tickCounter;
+		}
+		_wantsKick = _tickCounter - _lastKickInput < _inputBufferDuration;
 	}
 
 	private void SetBlockReadiness()
@@ -283,6 +362,13 @@ public class BasicFighter : Fighter
 		var rot = Quaternion.Euler(0f, 0f, Mathf.Atan2(facingDirection.y, facingDirection.x) * Mathf.Rad2Deg);
 		vfxObject.transform.SetPositionAndRotation(position, rot);
 		vfxObject.Play(animation);
+	}
+
+	private void SpawnAfterImage()
+	{
+		AfterImage afterImage = Instantiate(_afterImagePrefab);
+		Vector2 pos = (Vector2)transform.position + (Random.insideUnitCircle * 0.04f);
+		afterImage.Show(pos, _animDataController.GetCurrentSprite());
 	}
 
 	#endregion helpers
@@ -342,6 +428,17 @@ public class BasicFighter : Fighter
 		}
 	}
 
+	private void State_Dash(AnimationClip clip, State endState = State.StandIdle)
+	{
+		if (_stateCounter % 2 == 0)
+		{
+			SpawnAfterImage();
+		}
+
+		transform.Translate(_vel);
+		State_Anim(clip, endState);
+	}
+
 	/// <summary>
 	/// State handler for the standing idle state.
 	/// </summary>
@@ -364,17 +461,18 @@ public class BasicFighter : Fighter
 			doneTransitioning = frameCounter >= 0;
 		}
 
-		if (input.PunchButton)
+		if (_wantsPunch)
 		{
 			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
+			_lastPunchInput = -1000;
 			TransitionState(State.StandPunch);
 			State_Anim(_animsSO.StandPunch);
 			return;
 		}
-
-		if (input.KickButton)
+		if (_wantsKick)
 		{
 			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Kick_Sfx);
+			_lastPunchInput = -1000;
 			TransitionState(State.StandKick);
 			State_Anim(_animsSO.StandKick);
 			return;
@@ -389,12 +487,25 @@ public class BasicFighter : Fighter
 
 		if (_wantsToJump)
 		{
+			_lastJumpInput = -1000;
+
 			// set jump velocity
 			_vel = (_jumpVel * Vector2.up) + (_jumpHorizontalVel * (int)_walkDirection * Vector2.right);
 
 			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Jump_Sfx);
 			TransitionState(State.JumpIdle);
 			State_Anim(_animsSO.Jump);
+			return;
+		}
+		if (_wantsDash)
+		{
+			if (_walkDirection != Direction.None)
+			{
+				_vel = _dashSpeed * (int)_walkDirection * Vector2.right;
+				bool forward = _walkDirection == _facingDirection;
+				TransitionState(forward ? State.DashForward : State.DashBack);
+				State_Anim(forward ? _animsSO.DashForward : _animsSO.DashBack);
+			}
 			return;
 		}
 
@@ -448,17 +559,18 @@ public class BasicFighter : Fighter
 
 		// possible inputs
 		// note that punches / kicks can be input immediately upon crouching
-		if (input.PunchButton)
+		if (_wantsPunch)
 		{
 			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
+			_lastPunchInput = -1000;
 			TransitionState(State.CrouchPunch);
 			State_Anim(_animsSO.CrouchPunch);
 			return;
 		}
-
-		if (input.KickButton)
+		if (_wantsKick)
 		{
 			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Kick_Sfx);
+			_lastKickInput = -1000;
 			TransitionState(State.CrouchKick);
 			State_Anim(_animsSO.CrouchKick);
 			return;
@@ -540,7 +652,7 @@ public class BasicFighter : Fighter
 		}
 
 		int animLength = Mathf.FloorToInt((_animsSO.Die.length * 60f) - 0.5f);
-		int frame = Math.Min(_stateCounter, animLength - 1);
+		int frame = Mathf.Min(_stateCounter, animLength - 1);
 
 		DoFrame(_animsSO.Die, frame);
 	}
@@ -597,6 +709,9 @@ public class BasicFighter : Fighter
 		StandKick,
 		StandBlock,
 		StandHurt,
+
+		DashForward,
+		DashBack,
 
 		CrouchIdle,
 		CrouchPunch,

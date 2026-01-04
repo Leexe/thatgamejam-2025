@@ -11,6 +11,9 @@ public class AnimationDataController : MonoBehaviour
 	[SerializeField]
 	private AnimancerComponent _animationController;
 
+	[SerializeField]
+	private SpriteRenderer _spriteRenderer;
+
 	[Header("Hitbox References")]
 	[SerializeField]
 	private Hitbox[] _hurtBoxes;
@@ -73,5 +76,10 @@ public class AnimationDataController : MonoBehaviour
 			CollisionBox = _collisionBox.GetBoundsAsRect(),
 			Attack = attack,
 		};
+	}
+
+	public Sprite GetCurrentSprite()
+	{
+		return _spriteRenderer.sprite;
 	}
 }

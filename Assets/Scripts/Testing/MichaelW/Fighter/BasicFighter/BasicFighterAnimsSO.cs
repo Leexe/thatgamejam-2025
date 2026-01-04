@@ -13,6 +13,9 @@ public class BasicFighterAnimsSO : ScriptableObject
 	public AnimationClip CrouchKick;
 	public AnimationClip CrouchPunch;
 	public AnimationClip CrouchTransition;
+	public AnimationClip DashBack;
+	public AnimationClip DashForward;
+	public AnimationClip Die;
 	public AnimationClip Grab;
 	public AnimationClip Jump;
 	public AnimationClip JumpHurt;
@@ -25,5 +28,4 @@ public class BasicFighterAnimsSO : ScriptableObject
 	public AnimationClip StandKick;
 	public AnimationClip StandPunch;
 	public AnimationClip Walk;
-	public AnimationClip Die;
 }

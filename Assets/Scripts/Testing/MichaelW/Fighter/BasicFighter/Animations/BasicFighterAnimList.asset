@@ -18,6 +18,9 @@ MonoBehaviour:
   CrouchKick: {fileID: 7400000, guid: 3783e60ed4dd54d5a9e2b17b7a09ee39, type: 2}
   CrouchPunch: {fileID: 7400000, guid: 2a8c5949b0c244a11b36271cdb80dd25, type: 2}
   CrouchTransition: {fileID: 7400000, guid: 4cbcdcfab32214917872259bd2d64dd0, type: 2}
+  DashBack: {fileID: 7400000, guid: 4e6e2ba59dd1f43e28da2e66f5a5d034, type: 2}
+  DashForward: {fileID: 7400000, guid: 5772b8f572b804b84a7c634a10cd7e98, type: 2}
+  Die: {fileID: 7400000, guid: 07736de25d4214940b1e948a22d23bbf, type: 2}
   Grab: {fileID: 7400000, guid: ce44744d93afd472596e653549a5af3e, type: 2}
   Jump: {fileID: 7400000, guid: ad5c005fad3d043acb5222bd45a13146, type: 2}
   JumpHurt: {fileID: 7400000, guid: 14177644696ff47f89461df0c020c980, type: 2}
@@ -30,4 +33,3 @@ MonoBehaviour:
   StandKick: {fileID: 7400000, guid: 617b3f558cf044300b1cc505c8f0134e, type: 2}
   StandPunch: {fileID: 7400000, guid: 67e251c20886843fdafaeae884a2442d, type: 2}
   Walk: {fileID: 7400000, guid: dba311ef119d34fb49b02c03a59647e6, type: 2}
-  Die: {fileID: 7400000, guid: 07736de25d4214940b1e948a22d23bbf, type: 2}

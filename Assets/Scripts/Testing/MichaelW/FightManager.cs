@@ -207,78 +207,81 @@ public class FightManager : MonoBehaviour
 			p1Input = _upcomingInput;
 			p2Input = _upcomingInput2;
 
-			// for testing: make player 2 kick periodically
-			float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
-
-			if (horzDist < 1.6f)
+			if (true)
 			{
-				if (_p2.transform.position.y < 0.01f)
-				{
-					p2Input.KickButton = Random.value < 0.05f;
-					p2Input.PunchButton = Random.value < 0.05f;
-				}
+				// for testing: make player 2 kick periodically
+				float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
 
-				// toggle crouch randomly
-				if (Random.value < 0.008f)
+				if (horzDist < 1.6f)
 				{
-					_debugP2VertDir = _debugP2VertDir < 0f ? 0f : -1f;
-				}
-			}
-
-			// jump randomly
-			if (horzDist < 2.6f)
-			{
-				if (Random.value < 0.006f)
-				{
-					_debugP2VertDir = 1f;
-					if (horzDist > 1.7f)
+					if (_p2.transform.position.y < 0.01f)
 					{
-						_debugP2Dir = Mathf.Sign(_p1.transform.position.x - _p2.transform.position.x);
+						p2Input.KickButton = Random.value < 0.05f;
+						p2Input.PunchButton = Random.value < 0.05f;
+					}
+
+					// toggle crouch randomly
+					if (Random.value < 0.008f)
+					{
+						_debugP2VertDir = _debugP2VertDir < 0f ? 0f : -1f;
+					}
+				}
+
+				// jump randomly
+				if (horzDist < 2.6f)
+				{
+					if (Random.value < 0.006f)
+					{
+						_debugP2VertDir = 1f;
+						if (horzDist > 1.7f)
+						{
+							_debugP2Dir = Mathf.Sign(_p1.transform.position.x - _p2.transform.position.x);
+						}
+						else
+						{
+							_debugP2Dir = 0f;
+						}
+					}
+				}
+
+				// no crouch if too far.
+				if (horzDist > 2.0f && _debugP2VertDir < 0f)
+				{
+					_debugP2VertDir = 0f;
+				}
+				if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
+				{
+					_debugP2VertDir = 0f;
+				}
+
+				bool falling = _debugP2PrevPos.y > _p2.transform.position.y;
+				if (_p2.transform.position.y - _p1.transform.position.y < 2.0f && falling)
+				{
+					p2Input.KickButton = true;
+				}
+
+				_debugDirCooldown--;
+				if (_debugDirCooldown < 1)
+				{
+					_debugP2Dir = 0;
+					float rand = Random.value;
+					if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
+					{
+						_debugP2Dir = -1f;
+						_debugDirCooldown += Random.Range(10, 25);
+					}
+					else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
+					{
+						_debugP2Dir = 1f;
+						_debugDirCooldown += Random.Range(10, 25);
 					}
 					else
 					{
-						_debugP2Dir = 0f;
+						_debugDirCooldown += Random.Range(5, 15);
 					}
 				}
+				p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
 			}
-
-			// no crouch if too far.
-			if (horzDist > 2.0f && _debugP2VertDir < 0f)
-			{
-				_debugP2VertDir = 0f;
-			}
-			if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
-			{
-				_debugP2VertDir = 0f;
-			}
-
-			bool falling = _debugP2PrevPos.y > _p2.transform.position.y;
-			if (_p2.transform.position.y - _p1.transform.position.y < 2.0f && falling)
-			{
-				p2Input.KickButton = true;
-			}
-
-			_debugDirCooldown--;
-			if (_debugDirCooldown < 1)
-			{
-				_debugP2Dir = 0;
-				float rand = Random.value;
-				if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
-				{
-					_debugP2Dir = -1f;
-					_debugDirCooldown += Random.Range(10, 25);
-				}
-				else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
-				{
-					_debugP2Dir = 1f;
-					_debugDirCooldown += Random.Range(10, 25);
-				}
-				else
-				{
-					_debugDirCooldown += Random.Range(5, 15);
-				}
-			}
-			p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
 		}
 
 		_debugP2PrevPos = _p2.transform.position;
