@@ -1,3 +1,4 @@
+using FMODUnity;
 using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
@@ -34,6 +35,11 @@ public class PopOutButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 	private float _oscillateDuration = 1.5f;
 
 	[Tooltip("If enabled, animations will ignore Time.timeScale")]
+	[Title("Sound")]
+	[SerializeField]
+	private EventReference _hoverSound;
+
+	[Tooltip("If enabled, animations will ignore Time.timeScale")]
 	[Title("General Settings")]
 	[SerializeField]
 	private bool _useUnscaledTime;
@@ -60,6 +66,7 @@ public class PopOutButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 		_oscillateSequence.Stop();
 
 		Vector3 maxScale = _originalScale * _maxSize;
+		AudioManager.Instance.PlayOneShot(_hoverSound);
 
 		_scaleTween = Tween
 			.Scale(transform, maxScale, _tweenDuration, _ease, useUnscaledTime: _useUnscaledTime)
@@ -88,7 +95,7 @@ public class PopOutButtonUI : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 		Vector3 minScale = _originalScale * _minOscillateSize;
 
 		_oscillateSequence = Sequence
-			.Create(cycles: -1, useUnscaledTime: _useUnscaledTime)
+			.Create(-1, useUnscaledTime: _useUnscaledTime)
 			.Chain(Tween.Scale(transform, minScale, _oscillateDuration / 2, Ease.InOutSine))
 			.Chain(Tween.Scale(transform, maxScale, _oscillateDuration / 2, Ease.InOutSine));
 	}

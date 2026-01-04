@@ -21,10 +21,7 @@ public class MainMenuController : MonoBehaviour
 
 	[Title("Animation Settings")]
 	[SerializeField]
-	private float _skipSpeed = 5f;
-
-	[SerializeField]
-	private float _fadeDuration = 0.25f;
+	private float _skipSpeed = 2.5f;
 
 	[HideInInspector]
 	public UnityEngine.Events.UnityEvent OnIntroStart;
@@ -125,13 +122,18 @@ public class MainMenuController : MonoBehaviour
 
 	public void StartButton()
 	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		PlayStartAnimation();
 	}
 
-	public void SettingsButton() { }
+	public void SettingsButton()
+	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
+	}
 
 	public void ExitButton()
 	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		GameManager.Instance.ExitGame();
 	}
 

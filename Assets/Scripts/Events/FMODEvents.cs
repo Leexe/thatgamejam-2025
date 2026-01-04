@@ -11,11 +11,7 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	[field: SerializeField]
 	[field: FoldoutGroup("Music", true)]
-	public EventReference RealTitle_Bgm { get; private set; }
-
-	[field: SerializeField]
-	[field: FoldoutGroup("Music", true)]
-	public EventReference SoftTitle_Bgm { get; private set; }
+	public EventReference Title_Bgm { get; private set; }
 
 	#endregion
 
@@ -48,6 +44,26 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
 	public EventReference Punch_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference TitleDap_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference TitleReveal_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference GameStart_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference ButtonHover_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference ButtonClick_Sfx { get; private set; }
 
 	#endregion
 

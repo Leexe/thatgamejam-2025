@@ -606,6 +606,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2122039741933105204, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Path
+      value: event:/Title Screen/Button Hover
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122039741933105204, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data1
+      value: -1093513827
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122039741933105204, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data2
+      value: 1095621104
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122039741933105204, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data3
+      value: 1446421403
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122039741933105204, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data4
+      value: -230240731
+      objectReference: {fileID: 0}
+    - target: {fileID: 2122774692887344284, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2557005268550100090, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -618,6 +642,10 @@ PrefabInstance:
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 770688382}
+    - target: {fileID: 3606173717702539511, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ExitButton
+      objectReference: {fileID: 0}
     - target: {fileID: 3730897879199080404, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -638,6 +666,10 @@ PrefabInstance:
       propertyPath: m_TargetGraphic
       value: 
       objectReference: {fileID: 1760547055}
+    - target: {fileID: 4734706800168275223, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: SettingsButton
+      objectReference: {fileID: 0}
     - target: {fileID: 4851760730406695526, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
@@ -645,6 +677,26 @@ PrefabInstance:
     - target: {fileID: 4899525159603771178, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_RaycastTarget
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318395852556877807, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Path
+      value: event:/Title Screen/Button Hover
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318395852556877807, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data1
+      value: -1093513827
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318395852556877807, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data2
+      value: 1095621104
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318395852556877807, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data3
+      value: 1446421403
+      objectReference: {fileID: 0}
+    - target: {fileID: 5318395852556877807, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data4
+      value: -230240731
       objectReference: {fileID: 0}
     - target: {fileID: 8013853627396885506, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_AnchorMax.y
@@ -665,6 +717,26 @@ PrefabInstance:
     - target: {fileID: 8159333460445250150, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: -325
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283104097284335319, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Path
+      value: event:/Title Screen/Button Hover
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283104097284335319, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data1
+      value: -1093513827
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283104097284335319, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data2
+      value: 1095621104
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283104097284335319, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data3
+      value: 1446421403
+      objectReference: {fileID: 0}
+    - target: {fileID: 8283104097284335319, guid: ed25dd452f34f461395f2c72915deed5, type: 3}
+      propertyPath: _hoverSound.Guid.Data4
+      value: -230240731
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -889,8 +961,20 @@ PrefabInstance:
       value: event:/Fighting/Punch Whiff
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <Title_Bgm>k__BackingField.Path
+      value: event:/Title Screen/Title Theme
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <KickLand_Sfx>k__BackingField.Path
       value: event:/Fighting/Kick Land
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleDap_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Dap
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <GameStart_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Game Start
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <PunchLand_Sfx>k__BackingField.Path
@@ -898,11 +982,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <RealTitle_Bgm>k__BackingField.Path
-      value: event:/Title Screen/Real Title
+      value: event:/Title Screen/Title Theme
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <SoftTitle_Bgm>k__BackingField.Path
-      value: event:/Title Screen/Soft Title
+      value: event:/Title Screen/Title Theme
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Jump_Sfx>k__BackingField.Guid.Data1
@@ -937,6 +1021,14 @@ PrefabInstance:
       value: 1519892152
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonClick_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Button Click
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonHover_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Button Hover
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <Punch_Sfx>k__BackingField.Guid.Data1
       value: 310427894
       objectReference: {fileID: 0}
@@ -953,6 +1045,30 @@ PrefabInstance:
       value: 855235944
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleImpact_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Title Transition
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleReveal_Sfx>k__BackingField.Path
+      value: event:/Title Screen/Title Transition
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <Title_Bgm>k__BackingField.Guid.Data1
+      value: -532088937
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <Title_Bgm>k__BackingField.Guid.Data2
+      value: 1266958721
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <Title_Bgm>k__BackingField.Guid.Data3
+      value: -1933661789
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <Title_Bgm>k__BackingField.Guid.Data4
+      value: -916725204
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <KickLand_Sfx>k__BackingField.Guid.Data1
       value: 2085607289
       objectReference: {fileID: 0}
@@ -967,6 +1083,38 @@ PrefabInstance:
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <KickLand_Sfx>k__BackingField.Guid.Data4
       value: 2046054693
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleDap_Sfx>k__BackingField.Guid.Data1
+      value: 1170114099
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleDap_Sfx>k__BackingField.Guid.Data2
+      value: 1078515202
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleDap_Sfx>k__BackingField.Guid.Data3
+      value: 893526434
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleDap_Sfx>k__BackingField.Guid.Data4
+      value: -1572567127
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <GameStart_Sfx>k__BackingField.Guid.Data1
+      value: -254150746
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <GameStart_Sfx>k__BackingField.Guid.Data2
+      value: 1090141272
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <GameStart_Sfx>k__BackingField.Guid.Data3
+      value: -1945155442
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <GameStart_Sfx>k__BackingField.Guid.Data4
+      value: 1993238489
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <PunchLand_Sfx>k__BackingField.Guid.Data1
@@ -986,19 +1134,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <RealTitle_Bgm>k__BackingField.Guid.Data1
-      value: 1767264458
+      value: -532088937
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <RealTitle_Bgm>k__BackingField.Guid.Data2
-      value: 1186363235
+      value: 1266958721
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <RealTitle_Bgm>k__BackingField.Guid.Data3
-      value: -2007019106
+      value: -1933661789
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <RealTitle_Bgm>k__BackingField.Guid.Data4
-      value: 298240551
+      value: -916725204
       objectReference: {fileID: 0}
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <SoftTitle_Bgm>k__BackingField.Guid.Data1
@@ -1015,6 +1163,70 @@ PrefabInstance:
     - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
       propertyPath: <SoftTitle_Bgm>k__BackingField.Guid.Data4
       value: -916725204
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonClick_Sfx>k__BackingField.Guid.Data1
+      value: 161282764
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonClick_Sfx>k__BackingField.Guid.Data2
+      value: 1229754463
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonClick_Sfx>k__BackingField.Guid.Data3
+      value: 464710307
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonClick_Sfx>k__BackingField.Guid.Data4
+      value: 1007240553
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonHover_Sfx>k__BackingField.Guid.Data1
+      value: -1093513827
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonHover_Sfx>k__BackingField.Guid.Data2
+      value: 1095621104
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonHover_Sfx>k__BackingField.Guid.Data3
+      value: 1446421403
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <ButtonHover_Sfx>k__BackingField.Guid.Data4
+      value: -230240731
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleImpact_Sfx>k__BackingField.Guid.Data1
+      value: -1778627648
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleImpact_Sfx>k__BackingField.Guid.Data2
+      value: 1152709693
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleImpact_Sfx>k__BackingField.Guid.Data3
+      value: 2130652289
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleImpact_Sfx>k__BackingField.Guid.Data4
+      value: -803697364
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleReveal_Sfx>k__BackingField.Guid.Data1
+      value: -1778627648
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleReveal_Sfx>k__BackingField.Guid.Data2
+      value: 1152709693
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleReveal_Sfx>k__BackingField.Guid.Data3
+      value: 2130652289
+      objectReference: {fileID: 0}
+    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
+      propertyPath: <TitleReveal_Sfx>k__BackingField.Guid.Data4
+      value: -803697364
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

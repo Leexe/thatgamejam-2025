@@ -18,7 +18,6 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	private Bus _gameBus;
 
 	private List<EventInstance> _eventInstances;
-	private List<StudioEventEmitter> _eventEmitters;
 
 	private EventReference _currentMusicReference;
 
@@ -41,7 +40,6 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 		base.Awake();
 
 		_eventInstances = new List<EventInstance>();
-		_eventEmitters = new List<StudioEventEmitter>();
 
 		// Get Bus Names
 		TryGetBus("bus:/", out _masterBus);
@@ -65,7 +63,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Attempts to get an FMOD bus by path, logging a warning if not found.
 	/// </summary>
-	private bool TryGetBus(string busPath, out Bus bus)
+	public bool TryGetBus(string busPath, out Bus bus)
 	{
 		try
 		{
@@ -93,10 +91,6 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 
 		_musicTrackInstances.Clear();
 		_ambientTrackInstances.Clear();
-		foreach (StudioEventEmitter emitter in _eventEmitters)
-		{
-			emitter.Stop();
-		}
 	}
 
 	#endregion
@@ -122,9 +116,9 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Stop the current music track
 	/// </summary>
-	public void StopCurrentMusicTrack()
+	public void StopCurrentMusicTrack(bool fadeOut = true)
 	{
-		StopInstance(_currentMusicTrack);
+		StopInstance(_currentMusicTrack, fadeOut);
 	}
 
 	/// <summary>
@@ -162,9 +156,9 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <summary>
 	/// Stop the current ambient track
 	/// </summary>
-	public void StopCurrentAmbientTrack()
+	public void StopCurrentAmbientTrack(bool fadeOut = true)
 	{
-		StopInstance(_currentAmbientTrack, true);
+		StopInstance(_currentAmbientTrack, fadeOut);
 	}
 
 	/// <summary>
@@ -226,10 +220,10 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// Plays a sound effect attached to a game object
 	/// </summary>
 	/// <param name="sound">The FMOD event reference of the sound</param>
-	/// <param name="gameObject">The game object to be attached to</param>
-	public void PlayOneShot(EventReference sound, GameObject gameObject)
+	/// <param name="gameObjectRef">The game object to be attached to</param>
+	public void PlayOneShot(EventReference sound, GameObject gameObjectRef)
 	{
-		RuntimeManager.PlayOneShotAttached(sound, gameObject);
+		RuntimeManager.PlayOneShotAttached(sound, gameObjectRef);
 	}
 
 	/// <summary>
@@ -272,7 +266,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	#region Event Instance
 
 	/// <summary>
-	/// Creates an event instance of a sound, which allows a sound to be looped or it's FMOD parameters to be modified
+	/// Creates an event instance of a sound, which allows a sound to be looped, or it's FMOD parameters to be modified
 	/// </summary>
 	/// <param name="sound">The FMOD event reference of the sound</param>
 	/// <returns>Returns a cached event instance of the sound, that can be used to modify the sound at runtime</returns>
@@ -288,12 +282,12 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// Creates an event instance of a sound and attaches it to a game object
 	/// </summary>
 	/// <param name="sound">The FMOD event reference of the sound</param>
-	/// <param name="gameObject">The game object to attach to</param>
+	/// <param name="gameObjectRef">The game object to attach to</param>
 	/// <returns>Returns a cached event instance of the sound, that can be used to modify the sound at runtime</returns>
-	public EventInstance CreateInstance(EventReference sound, GameObject gameObject)
+	public EventInstance CreateInstance(EventReference sound, GameObject gameObjectRef)
 	{
 		EventInstance eventInstance = RuntimeManager.CreateInstance(sound);
-		RuntimeManager.AttachInstanceToGameObject(eventInstance, gameObject);
+		RuntimeManager.AttachInstanceToGameObject(eventInstance, gameObjectRef);
 		_eventInstances.Add(eventInstance);
 		return eventInstance;
 	}
@@ -372,14 +366,7 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 	/// <param name="allowFadeOut">Allow the sound to fade out or not</param>
 	public void StopInstance(EventInstance instance, bool allowFadeOut = true)
 	{
-		if (allowFadeOut)
-		{
-			instance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
-		}
-		else
-		{
-			instance.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
-		}
+		instance.stop(allowFadeOut ? FMOD.Studio.STOP_MODE.ALLOWFADEOUT : FMOD.Studio.STOP_MODE.IMMEDIATE);
 	}
 
 	/// <summary>

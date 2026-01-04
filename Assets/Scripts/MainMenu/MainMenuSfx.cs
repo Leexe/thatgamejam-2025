@@ -19,11 +19,17 @@ public class MainMenuMusic : MonoBehaviour
 
 	private void PlaySoftTitle()
 	{
-		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.SoftTitle_Bgm);
+		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.Title_Bgm);
 	}
 
 	private void PlayRealTitle()
 	{
-		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.RealTitle_Bgm);
+		AudioManager.Instance.StopCurrentMusicTrack();
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleDap_Sfx);
+	}
+
+	public void PlayTitleRevealSfx()
+	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleReveal_Sfx);
 	}
 }
