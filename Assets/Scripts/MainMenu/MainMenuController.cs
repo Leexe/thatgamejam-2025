@@ -80,7 +80,7 @@ public class MainMenuController : MonoBehaviour
 	{
 		if (_startAnimation != null)
 		{
-			_activeState = _animancer.Play(_startAnimation, _fadeDuration);
+			_activeState = _animancer.Play(_startAnimation);
 			_activeState.Events(this).OnEnd = () =>
 			{
 				OnPlayEnd?.Invoke();
