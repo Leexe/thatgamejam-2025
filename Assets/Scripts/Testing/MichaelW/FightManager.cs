@@ -292,6 +292,7 @@ public class FightManager : MonoBehaviour
 		{
 			if (_p1.Health <= 0 || _p2.Health <= 0)
 			{
+				_freezeFrames = 8;
 				SetSlowMoRate(2, 20);
 				_gameResolved = true;
 				_fightRunning = false;
