@@ -1,0 +1,302 @@
+fileFormatVersion: 2
+guid: 8853aae4656674ac2afc9e14136251c3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: 349104629067537349
+    second: punch_hit_fx_0
+  - first:
+      213: 587975817307364203
+    second: punch_hit_fx_1
+  - first:
+      213: -1425071643577411271
+    second: punch_hit_fx_2
+  - first:
+      213: -7871376979790777303
+    second: punch_hit_fx_3
+  - first:
+      213: 3001734196814362677
+    second: punch_hit_fx_4
+  - first:
+      213: -7057068984266982308
+    second: punch_hit_fx_5
+  - first:
+      213: -8053531398718197834
+    second: punch_hit_fx_6
+  - first:
+      213: 3443220576355936688
+    second: punch_hit_fx_7
+  - first:
+      213: 3789953420735591807
+    second: punch_hit_fx_8
+  - first:
+      213: -3920867131245392687
+    second: punch_hit_fx_9
+  - first:
+      213: -3516565418785264959
+    second: punch_hit_fx_10
+  - first:
+      213: 8906062962130293762
+    second: punch_hit_fx_11
+  - first:
+      213: 2961803923929961774
+    second: punch_hit_fx_12
+  - first:
+      213: 1166818333910228676
+    second: punch_hit_fx_13
+  - first:
+      213: -2695525073131972277
+    second: punch_hit_fx_14
+  - first:
+      213: 1789705736997708476
+    second: punch_hit_fx_15
+  - first:
+      213: 4914844206660856576
+    second: punch_hit_fx_16
+  - first:
+      213: 8552148935197256997
+    second: punch_hit_fx_17
+  - first:
+      213: 7652186633238689804
+    second: punch_hit_fx_18
+  - first:
+      213: 380436786436224337
+    second: punch_hit_fx_19
+  - first:
+      213: -4408280211949000105
+    second: punch_hit_fx_20
+  - first:
+      213: 5838315166644302600
+    second: punch_hit_fx_21
+  - first:
+      213: 9064756800416085424
+    second: punch_hit_fx_22
+  - first:
+      213: 3676007060765435475
+    second: punch_hit_fx_23
+  - first:
+      213: 5011180071556943148
+    second: punch_hit_fx_24
+  - first:
+      213: -2928566195415309058
+    second: punch_hit_fx_25
+  - first:
+      213: 96866210192201087
+    second: punch_hit_fx_26
+  - first:
+      213: -4898356609270574019
+    second: punch_hit_fx_27
+  - first:
+      213: -3570559000099144649
+    second: punch_hit_fx_28
+  - first:
+      213: 7993458491220716664
+    second: punch_hit_fx_29
+  - first:
+      213: 6914688961549286616
+    second: punch_hit_fx_30
+  - first:
+      213: 2199384882143974877
+    second: punch_hit_fx_31
+  - first:
+      213: 1639514448380138323
+    second: punch_hit_fx_32
+  - first:
+      213: 3063352359464575891
+    second: punch_hit_fx_33
+  - first:
+      213: -8971942312496719513
+    second: punch_hit_fx_34
+  - first:
+      213: -4546198603533390569
+    second: punch_hit_fx_35
+  - first:
+      213: 4550421478970064381
+    second: punch_hit_fx_36
+  - first:
+      213: 8692866843074286409
+    second: punch_hit_fx_37
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 400
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: punch_hit_fx_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5cbd30d7fc448d400800000000000000
+      internalID: 349104629067537349
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: punch_hit_fx_1
+      rect:
+        serializedVersion: 2
+        x: 482
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b6b102ff3e8e82800800000000000000
+      internalID: 587975817307364203
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: punch_hit_fx_2
+      rect:
+        serializedVersion: 2
+        x: 964
+        y: 0
+        width: 482
+        height: 482
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9391619f3e0293ce0800000000000000
+      internalID: -1425071643577411271
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: fe9487b160a4c4d06a14ca57d1bfea20
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":482.0,"y":482.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.5,"y":0.5},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":0,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+    nameFileIdTable:
+      punch_hit_fx_0: 349104629067537349
+      punch_hit_fx_1: 587975817307364203
+      punch_hit_fx_2: -1425071643577411271
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

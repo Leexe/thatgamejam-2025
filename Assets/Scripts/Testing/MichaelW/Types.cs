@@ -33,9 +33,11 @@ public struct AttackInfo
 	public Fighter From;
 	public Rect Bounds;
 	public Direction Direction;
+	public Vector2 VisualPosition;
 	public Vector2 VisualDirection;
 	public AttackType Type;
 	public int Damage;
+	public bool IsHeavy;
 	public bool IsGrab;
 }
 

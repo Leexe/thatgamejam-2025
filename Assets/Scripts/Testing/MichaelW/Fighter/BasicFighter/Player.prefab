@@ -51,6 +51,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BasicFighter
   _animDataController: {fileID: 8548725415980465770}
   _animsSO: {fileID: 11400000, guid: 23c6b9d272a874fe691740657ac1d8dd, type: 2}
+  _vfxPrefab: {fileID: 2587733037587487456, guid: 2f42e8fe0302a4d2b815e69aefaed13e, type: 3}
+  _vfxList: {fileID: 11400000, guid: bf5fe4dbb939e44b691a8b86706909fd, type: 2}
+  _moveSpeed: 0.045
+  _hitKnockback: 0.1
+  _knockbackGroundDecel: 0.008
+  _gravity: 0.008
+  _jumpVel: 0.16
+  _jumpHorizontalVel: 0.045
 --- !u!95 &1190460351265534367
 Animator:
   serializedVersion: 7
@@ -107,6 +115,37 @@ MonoBehaviour:
   _Animator: {fileID: 1190460351265534367}
   _Transitions: {fileID: 0}
   _ActionOnDisable: 0
+--- !u!1 &2955377454297759946
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2392380714428616226}
+  m_Layer: 0
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2392380714428616226
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2955377454297759946}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1861767748902274276}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6153136554527848264
 GameObject:
   m_ObjectHideFlags: 0
@@ -397,7 +436,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 764132378869198751, guid: 93a7b9baad9fa426ab46dea2c251e9a0, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2392380714428616226}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 135131174620027873, guid: 93a7b9baad9fa426ab46dea2c251e9a0, type: 3}
       insertIndex: -1
@@ -421,9 +463,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AttackData
   Hitbox: {fileID: 8719595194968229658}
+  VisualPoint: {fileID: 2392380714428616226}
   VisualDirection: {x: 0, y: 0}
   Direction: 1
   AttackType: 1
+  IsGrab: 0
+  IsHeavy: 0
   Damage: 100
 --- !u!4 &1861767748902274276 stripped
 Transform:
