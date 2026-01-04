@@ -13,7 +13,7 @@ public class RoundIndicatorUI : MonoBehaviour
 	[SerializeField]
 	private List<Image> _images;
 
-	private void Start()
+	private void Awake()
 	{
 		foreach (Image image in _images)
 		{
@@ -21,11 +21,11 @@ public class RoundIndicatorUI : MonoBehaviour
 		}
 	}
 
-	private void UpdateDisplay(int wins)
+	public void UpdateDisplay(int wins)
 	{
-		for (int i = 0; i < _images.Count || i < wins; i++)
+		for (int i = 0; i < _images.Count; i++)
 		{
-			_images[i].sprite = _winIndicator;
+			_images[i].sprite = i < wins ? _winIndicator : _neutralIndicator;
 		}
 	}
 }

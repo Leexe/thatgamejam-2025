@@ -1,4 +1,5 @@
 using Sirenix.OdinInspector;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -11,12 +12,13 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private Fighter _p2;
 
+	[Header("References")]
+	[SerializeField]
+	private CinemachineBrain _cameraBrain;
+
 	[Header("Events")]
 	[HideInInspector]
 	public UnityEvent<GameResult> OnGameEnd;
-
-	[HideInInspector]
-	public UnityEvent<int, int, int, int> OnHealthUpdate;
 
 	[Header("Parameters")]
 	[SerializeField]
@@ -31,6 +33,22 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private float _maxSeparationSpeed = 0.14f;
 
+	//
+
+	[FoldoutGroup("Event Channel")]
+	[Tooltip("Player 1 health channel")]
+	[SerializeField]
+	[Indent]
+	private HealthEventChannelSO _p1Channel;
+
+	[FoldoutGroup("Event Channel")]
+	[Tooltip("Player 2 health channel")]
+	[SerializeField]
+	[Indent]
+	private HealthEventChannelSO _p2Channel;
+
+	//
+
 	private bool _simulating = false; // whether or not the whole simulation is running
 	private bool _fightRunning = false;
 	private bool _gameResolved = false; // set to true on win/draw. does not stop simulation
@@ -41,7 +59,10 @@ public class FightManager : MonoBehaviour
 
 	private int _freezeFrames = 0;
 	private int _slowMoRate = 1;
+	private int _slowMoCounter = 0;
 	private int _rawTickCounter = 0;
+
+	private bool _newFrame = false;
 
 	// player inputs
 	private InputInfo _upcomingInput = new();
@@ -64,6 +85,25 @@ public class FightManager : MonoBehaviour
 		if (_rawTickCounter % _slowMoRate == 0)
 		{
 			Tick();
+			_newFrame = true;
+
+			_slowMoCounter--;
+			if (_slowMoCounter == 0)
+			{
+				SetSlowMoRate(1, 0);
+			}
+		}
+	}
+
+	private void LateUpdate()
+	{
+		if (_newFrame)
+		{
+			// manually update the camera, instead of having it update every FixedUpdate.
+			// setting it to update on FixedUpdate stops jitter, but the problem comes back
+			// during slowmo as we are only changing position every nth frame.
+			_cameraBrain.ManualUpdate();
+			_newFrame = false;
 		}
 	}
 
@@ -106,12 +146,13 @@ public class FightManager : MonoBehaviour
 		_upcomingInput2.Dir = dir;
 	}
 
-	public void SetSlowMoRate(int rate)
+	public void SetSlowMoRate(int rate, int duration = 0)
 	{
 		if (rate >= 1)
 		{
 			_rawTickCounter = 0;
 			_slowMoRate = rate;
+			_slowMoCounter = duration;
 		}
 	}
 
@@ -123,6 +164,11 @@ public class FightManager : MonoBehaviour
 		_p1.Init(p1StartingPos, p2StartingPos);
 		_p2.Init(p2StartingPos, p1StartingPos);
 
+		_p1Channel.RaiseInitiateHealth(_p1.Health, _p1.MaxHealth);
+		_p1Channel.RaiseHealthChanged(0f, _p1.Health, _p1.MaxHealth);
+		_p2Channel.RaiseInitiateHealth(_p2.Health, _p2.MaxHealth);
+		_p2Channel.RaiseHealthChanged(0f, _p2.Health, _p2.MaxHealth);
+
 		SetSlowMoRate(1);
 
 		// stuff for the enemy AI (should be temp)
@@ -130,8 +176,6 @@ public class FightManager : MonoBehaviour
 		_debugP2Dir = 0;
 		_debugP2VertDir = 0f;
 		_debugP2PrevPos = Vector2.zero;
-
-		OnHealthUpdate.Invoke(_p1.Health, _p1.MaxHealth, _p2.Health, _p2.MaxHealth);
 
 		_gameResolved = false;
 		_fightRunning = false;
@@ -244,14 +288,13 @@ public class FightManager : MonoBehaviour
 		SeparateColliders();
 		ProcessHits();
 
-		OnHealthUpdate.Invoke(_p1.Health, _p1.MaxHealth, _p2.Health, _p2.MaxHealth);
-
 		if (!_gameResolved)
 		{
 			if (_p1.Health <= 0 || _p2.Health <= 0)
 			{
-				SetSlowMoRate(2);
+				SetSlowMoRate(2, 20);
 				_gameResolved = true;
+				_fightRunning = false;
 
 				if (_p1.Health <= 0 && _p2.Health <= 0)
 				{
@@ -358,11 +401,16 @@ public class FightManager : MonoBehaviour
 
 		if (attackOnP1.HasValue)
 		{
+			// yikes
+			int oldHealth = _p1.Health;
 			attackOnP1Result = _p1.OnHitByAttack(attackOnP1.Value);
+			_p1Channel.RaiseHealthChanged(_p1.Health - oldHealth, _p1.Health, _p1.MaxHealth);
 		}
 		if (attackOnP2.HasValue)
 		{
+			int oldHealth = _p2.Health;
 			attackOnP2Result = _p2.OnHitByAttack(attackOnP2.Value);
+			_p2Channel.RaiseHealthChanged(_p2.Health - oldHealth, _p2.Health, _p2.MaxHealth);
 		}
 
 		if (attackOnP1Result != AttackResult.None)

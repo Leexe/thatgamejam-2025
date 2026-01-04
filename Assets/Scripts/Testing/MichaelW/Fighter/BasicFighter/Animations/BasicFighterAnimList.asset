@@ -30,3 +30,4 @@ MonoBehaviour:
   StandKick: {fileID: 7400000, guid: 617b3f558cf044300b1cc505c8f0134e, type: 2}
   StandPunch: {fileID: 7400000, guid: 67e251c20886843fdafaeae884a2442d, type: 2}
   Walk: {fileID: 7400000, guid: dba311ef119d34fb49b02c03a59647e6, type: 2}
+  Die: {fileID: 7400000, guid: 07736de25d4214940b1e948a22d23bbf, type: 2}

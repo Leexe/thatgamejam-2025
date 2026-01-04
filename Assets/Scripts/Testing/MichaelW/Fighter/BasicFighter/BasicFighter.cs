@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class BasicFighter : Fighter
@@ -134,6 +135,9 @@ public class BasicFighter : Fighter
 			case State.JumpHurt:
 				State_Airborne(_animsSO.JumpHurt, State.JumpIdle);
 				break;
+			case State.Dead:
+				State_Dead();
+				break;
 		}
 	}
 
@@ -173,6 +177,7 @@ public class BasicFighter : Fighter
 			if (Health <= 0)
 			{
 				Health = 0;
+				_vel = (_hitKnockback * (int)attack.Direction * Vector3.right) + (0.08f * Vector3.up);
 				TransitionState(State.Dead);
 			}
 
@@ -499,6 +504,25 @@ public class BasicFighter : Fighter
 			// visual is just the last frame of the jump animation.
 			DoFrame(_animsSO.Jump, -1);
 		}
+	}
+
+	private void State_Dead()
+	{
+		if (transform.position.y > 0f)
+		{
+			HandleAirbornePhysics();
+		}
+		else
+		{
+			// slide for a bit when we hit the ground (LOL)
+			transform.Translate(_vel);
+			_vel = Vector2.MoveTowards(_vel, Vector2.zero, _knockbackGroundDecel);
+		}
+
+		int animLength = Mathf.FloorToInt((_animsSO.Die.length * 60f) - 0.5f);
+		int frame = Math.Min(_stateCounter, animLength - 1);
+
+		DoFrame(_animsSO.Die, frame);
 	}
 
 	private AttackResult OnHit_Standing(AttackInfo attack)

@@ -25,4 +25,5 @@ public class BasicFighterAnimsSO : ScriptableObject
 	public AnimationClip StandKick;
 	public AnimationClip StandPunch;
 	public AnimationClip Walk;
+	public AnimationClip Die;
 }
