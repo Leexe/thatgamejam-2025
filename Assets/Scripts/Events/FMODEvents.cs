@@ -6,9 +6,13 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 {
 	#region Music
 
-	// [field: SerializeField]
-	// [field: FoldoutGroup("Music", expanded: true)]
-	// public EventReference IceBossa_Bgm { get; private set; }
+	[field: SerializeField]
+	[field: FoldoutGroup("Music", expanded: true)]
+	public EventReference RealTitle_Bgm { get; private set; }
+	
+	[field: SerializeField]
+	[field: FoldoutGroup("Music", expanded: true)]
+	public EventReference SoftTitle_Bgm { get; private set; }
 
 	#endregion
 
@@ -22,9 +26,25 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	#region SFX
 
-	// [field: SerializeField]
-	// [field: FoldoutGroup("SFX")]
-	// public EventReference Voice_SFX { get; private set; }
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Jump_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference KickLand_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Kick_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference PunchLand_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Punch_Sfx { get; private set; }
 
 	#endregion
 
