@@ -99,6 +99,11 @@ public class FightManager : MonoBehaviour
 	{
 		if (_newFrame)
 		{
+			if (_cameraBrain.UpdateMethod != CinemachineBrain.UpdateMethods.ManualUpdate)
+			{
+				_cameraBrain.UpdateMethod = CinemachineBrain.UpdateMethods.ManualUpdate;
+			}
+
 			// manually update the camera, instead of having it update every FixedUpdate.
 			// setting it to update on FixedUpdate stops jitter, but the problem comes back
 			// during slowmo as we are only changing position every nth frame.
