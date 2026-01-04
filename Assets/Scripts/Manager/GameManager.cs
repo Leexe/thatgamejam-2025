@@ -1,8 +1,16 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class GameManager : PersistentMonoSingleton<GameManager>
 {
+	public enum SceneNames
+	{
+		MainMenu,
+		FightingGame,
+		Loading,
+	}
+
 	// Events
 	[HideInInspector]
 	public UnityEvent OnGamePaused;
@@ -73,5 +81,10 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	public void ExitGame()
 	{
 		Application.Quit();
+	}
+
+	public void SwitchScenes(SceneNames sceneName)
+	{
+		SceneManager.LoadScene((int)sceneName);
 	}
 }

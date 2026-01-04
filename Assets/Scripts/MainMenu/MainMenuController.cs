@@ -43,6 +43,7 @@ public class MainMenuController : MonoBehaviour
 	{
 		InputManager.Instance.OnAnyInputPerformed.AddListener(SkipAnimation);
 		OnIntroEnd.AddListener(ResetAnimatorSpeed);
+		OnPlayEnd.AddListener(() => GameManager.Instance.SwitchScenes(GameManager.SceneNames.FightingGame));
 		PlayIntroAnimation();
 	}
 
