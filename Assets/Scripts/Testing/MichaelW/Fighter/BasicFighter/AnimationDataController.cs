@@ -58,8 +58,10 @@ public class AnimationDataController : MonoBehaviour
 				Bounds = _attackBox.Hitbox.GetBoundsAsRect(),
 				Damage = _attackBox.Damage,
 				Direction = dir,
+				VisualPosition = _attackBox.VisualPoint.position,
 				VisualDirection = visualDir,
 				Type = _attackBox.AttackType,
+				IsHeavy = _attackBox.IsHeavy,
 				IsGrab = _attackBox.IsGrab,
 			};
 		}
