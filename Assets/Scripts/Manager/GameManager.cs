@@ -6,9 +6,9 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 {
 	public enum SceneNames
 	{
+		Loading,
 		MainMenu,
 		FightingGame,
-		Loading,
 	}
 
 	// Events
