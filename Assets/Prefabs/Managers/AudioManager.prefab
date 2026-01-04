@@ -138,6 +138,13 @@ MonoBehaviour:
       Data3: 588225176
       Data4: 855235944
     Path: event:/Fighting/Punch Whiff
+  <Death_Sfx>k__BackingField:
+    Guid:
+      Data1: 1268263422
+      Data2: 1321482226
+      Data3: 1949674170
+      Data4: -57313263
+    Path: event:/Fighting/Death
   <Block_Sfx>k__BackingField:
     Guid:
       Data1: 1340659518
@@ -166,6 +173,13 @@ MonoBehaviour:
       Data3: 2130652289
       Data4: -803697364
     Path: event:/Title Screen/Title Transition
+  <TitleJingle_Sfx>k__BackingField:
+    Guid:
+      Data1: -486894080
+      Data2: 1108674747
+      Data3: 1618824865
+      Data4: 1070520655
+    Path: event:/Title Screen/Jingle
   <GameStart_Sfx>k__BackingField:
     Guid:
       Data1: -254150746

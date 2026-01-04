@@ -183,6 +183,7 @@ public class BasicFighter : Fighter
 			{
 				Health = 0;
 				_vel = (_hitKnockback * (int)attack.Direction * Vector3.right) + (0.08f * Vector3.up);
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Death_Sfx);
 				TransitionState(State.Dead);
 			}
 

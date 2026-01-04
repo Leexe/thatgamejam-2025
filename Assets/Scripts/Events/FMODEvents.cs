@@ -51,6 +51,10 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
+	public EventReference Death_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
 	public EventReference Block_Sfx { get; private set; }
 
 	[field: SerializeField]
@@ -64,6 +68,10 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
 	public EventReference TitleReveal_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference TitleJingle_Sfx { get; private set; }
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
