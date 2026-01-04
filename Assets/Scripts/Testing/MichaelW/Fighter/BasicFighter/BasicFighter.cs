@@ -194,7 +194,10 @@ public class BasicFighter : Fighter
 	{
 		// determine facing direction
 		_facingDirection = targetPos.x > transform.position.x ? Direction.Forward : Direction.Backward;
-		transform.localScale = new(_facingDirection == Direction.Forward ? 1f : -1f, 1f, 1f);
+		Vector3 scale = transform.localScale;
+		float absXScale = Mathf.Abs(scale.x);
+		scale.x = _facingDirection == Direction.Forward ? absXScale : -absXScale;
+		transform.localScale = scale;
 	}
 
 	private void SetWalkDirectionAndCrouch(in InputInfo input)

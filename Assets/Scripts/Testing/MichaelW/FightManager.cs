@@ -338,16 +338,16 @@ public class FightManager : MonoBehaviour
 
 	private void OnDrawGizmos()
 	{
-		if (!Application.isPlaying || !_gameStarted)
-		{
-			return;
-		}
-
 		// world bounds
 		Gizmos.color = Color.pink;
 		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(-_arenaHalfWidth, 20f));
 		Gizmos.DrawLine(new(_arenaHalfWidth, 0f), new(_arenaHalfWidth, 20f));
 		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(_arenaHalfWidth, 0f));
+
+		if (!Application.isPlaying || !_gameStarted)
+		{
+			return;
+		}
 
 		if (_p1 != null)
 		{
