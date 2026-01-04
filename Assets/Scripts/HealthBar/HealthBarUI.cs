@@ -23,7 +23,11 @@ public class HealthBarUI : MonoBehaviour
 
 	[FoldoutGroup("References")]
 	[SerializeField]
-	private Image _fillImage;
+	private Image _healthImage;
+
+	[FoldoutGroup("References")]
+	[SerializeField]
+	private Image _tempHealthImage;
 
 	[FoldoutGroup("Data Source")]
 	[Tooltip("Use to toggle event channel mode and off for direct reference")]
@@ -41,6 +45,27 @@ public class HealthBarUI : MonoBehaviour
 	[ShowIf("@_referenceType == ReferenceType.DirectReference")]
 	[Indent]
 	private HealthController _directController;
+
+	[FoldoutGroup("Fade Out Health")]
+	[SerializeField]
+	[ToggleLeft]
+	private bool _enableFadeOutHealth = true;
+
+	[FoldoutGroup("Fade Out Health")]
+	[SerializeField]
+	[ShowIf("_enableFadeOutHealth")]
+	[Indent]
+	[Tooltip("How long the fade out takes")]
+	[SuffixLabel("seconds")]
+	private float _fadeDuration = 0.5f;
+
+	[FoldoutGroup("Fade Out Health")]
+	[SerializeField]
+	[ShowIf("_enableFadeOutHealth")]
+	[Indent]
+	[Tooltip("How long it takes after damage for the fade out to start")]
+	[SuffixLabel("seconds")]
+	private float _fadeDelay = 1f;
 
 	[FoldoutGroup("Shake Effect")]
 	[SerializeField]
@@ -73,13 +98,21 @@ public class HealthBarUI : MonoBehaviour
 	[SerializeField]
 	[ShowIf("_enableShakeOnDamage")]
 	[Indent]
+	[Tooltip("Easing for the shake")]
 	private Ease _shakeEase = Ease.OutQuad;
+
+	[FoldoutGroup("Misc")]
+	[SerializeField]
+	[MinMaxSlider(0f, 1f, true)]
+	[Tooltip("The range of the health bar's fill amount that is visible")]
+	private Vector2 _visibleFillRange = new Vector2(0f, 1f);
 
 	#endregion
 
 	#region State
 
 	private Tween _shakeTween;
+	private Tween _fadeHealthTween;
 
 	#endregion
 
@@ -140,7 +173,7 @@ public class HealthBarUI : MonoBehaviour
 			_directController.OnHealthChanged.AddListener(OnHealthChanged);
 			_directController.OnDeath.AddListener(OnDeath);
 
-			UpdateHealthBar(_directController.Health, _directController.MaxHealth);
+			UpdateHealthBar(0f, _directController.Health, _directController.MaxHealth);
 		}
 	}
 
@@ -150,7 +183,7 @@ public class HealthBarUI : MonoBehaviour
 
 	private void OnHealthChanged(float delta, float currentHealth, float maxHealth)
 	{
-		UpdateHealthBar(currentHealth, maxHealth);
+		UpdateHealthBar(delta, currentHealth, maxHealth);
 
 		if (delta < 0)
 		{
@@ -160,7 +193,7 @@ public class HealthBarUI : MonoBehaviour
 
 	private void OnChannelHealthChanged(float delta, float currentHealth, float maxHealth)
 	{
-		UpdateHealthBar(currentHealth, maxHealth);
+		UpdateHealthBar(delta, currentHealth, maxHealth);
 
 		if (delta < 0)
 		{
@@ -173,15 +206,46 @@ public class HealthBarUI : MonoBehaviour
 		gameObject.SetActive(false);
 	}
 
-	private void UpdateHealthBar(float currentHealth, float maxHealth)
+	private void UpdateHealthBar(float delta, float currentHealth, float maxHealth)
 	{
 		if (maxHealth > 0)
 		{
-			_fillImage.fillAmount = currentHealth / maxHealth;
+			float normalizedHealth = currentHealth / maxHealth;
+			float targetFill = Mathf.Lerp(_visibleFillRange.x, _visibleFillRange.y, normalizedHealth);
+
+			_healthImage.fillAmount = targetFill;
+			FadeOutHealth(delta, targetFill);
 		}
 	}
 
-	// ReSharper disable Unity.PerformanceAnalysis
+	private void FadeOutHealth(float delta, float targetFill)
+	{
+		if (!_enableFadeOutHealth)
+		{
+			return;
+		}
+
+		// Don't fade out health if the target fill is higher than the current temp health
+		if (targetFill > _tempHealthImage.fillAmount)
+		{
+			_fadeHealthTween.Stop();
+			_tempHealthImage.fillAmount = targetFill;
+		}
+		else
+		{
+			_fadeHealthTween.Stop();
+
+			_fadeHealthTween = Tween.Custom(
+				target:this,
+				startValue: _tempHealthImage.fillAmount,
+				endValue: targetFill,
+				duration: _fadeDuration,
+				onValueChange: (target, val) => target._tempHealthImage.fillAmount = val,
+				startDelay: delta > 0 ? 0f : _fadeDelay // No delay for healing
+			);
+		}
+	}
+
 	private void ShakeUI()
 	{
 		if (!_enableShakeOnDamage)
