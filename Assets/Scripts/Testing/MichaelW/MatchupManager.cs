@@ -44,7 +44,10 @@ public class MatchupManager : MonoBehaviour
 
 	private void OnDisable()
 	{
-		_fightManager?.OnGameEnd.RemoveListener(OnGameEnd);
+		if (_fightManager)
+		{
+			_fightManager.OnGameEnd.RemoveListener(OnGameEnd);
+		}
 	}
 
 	private void Start()
@@ -71,6 +74,11 @@ public class MatchupManager : MonoBehaviour
 	}
 
 	private void OnGameEnd(GameResult result)
+	{
+		Tween.Delay(this, duration: 2f, () => ProcessGameEnd(result));
+	}
+
+	private void ProcessGameEnd(GameResult result)
 	{
 		bool matchOver = false;
 
