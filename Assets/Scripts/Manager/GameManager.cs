@@ -140,7 +140,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 	private IEnumerator LoadSceneAsyncEnumerator(SceneNames sceneName)
 	{
 		// Start loading the scene asynchronously in the background
-		_asyncOperation = SceneManager.LoadSceneAsync((int)sceneName, LoadSceneMode.Single);
+		_asyncOperation = SceneManager.LoadSceneAsync((int)sceneName, LoadSceneMode.Additive);
 
 		if (_asyncOperation != null)
 		{
@@ -161,6 +161,14 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 
 				yield return null;
 			}
+		}
+	}
+
+	public void UnloadSceneAsync(SceneNames sceneName)
+	{
+		if (SceneManager.GetSceneByBuildIndex((int)sceneName).isLoaded)
+		{
+			SceneManager.UnloadSceneAsync((int)sceneName);
 		}
 	}
 

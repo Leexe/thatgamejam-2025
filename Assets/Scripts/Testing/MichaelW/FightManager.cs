@@ -123,6 +123,12 @@ public class FightManager : MonoBehaviour
 		}
 	}
 
+	private void Start()
+	{
+		// Unload the main menu scene
+		GameManager.Instance.UnloadSceneAsync(GameManager.SceneNames.MainMenu);
+	}
+
 	private void OnEnable()
 	{
 		InputManager.Instance.OnMovement.AddListener(OnMovement);
