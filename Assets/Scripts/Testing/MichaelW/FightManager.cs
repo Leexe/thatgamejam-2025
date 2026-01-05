@@ -248,6 +248,18 @@ public class FightManager : MonoBehaviour
 							p2Input.GrabButton = Random.value < 0.026f;
 						}
 						p2Input.PunchButton = Random.value < 0.05f;
+
+						var p = (BasicFighter)_p2;
+						if (p.GetState() == BasicFighter.State.Knocked)
+						{
+							// Debug.Log("NONONO");
+							p2Input.PunchButton = Random.value < 0.5f;
+							if (horzDist < 1.2f)
+							{
+								p2Input.GrabButton = Random.value < 0.026f;
+							}
+							p2Input.KickButton = Random.value < 0.05f;
+						}
 					}
 
 					// toggle crouch randomly

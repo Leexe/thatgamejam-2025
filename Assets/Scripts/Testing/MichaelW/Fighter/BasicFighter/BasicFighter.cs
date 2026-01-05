@@ -69,6 +69,11 @@ public class BasicFighter : Fighter
 	private State _prevIdleState;
 	private int _stateCounter;
 
+	public State GetState()
+	{
+		return _state;
+	}
+
 	// idle state vars
 	private Direction _walkDirection = Direction.None;
 	private Direction _prevWalkDirection = Direction.None;
@@ -870,7 +875,7 @@ public class BasicFighter : Fighter
 
 	#region types
 
-	private enum State
+	public enum State
 	{
 		StandIdle,
 		StandPunch,
