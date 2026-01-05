@@ -61,6 +61,7 @@ public class BasicFighter : Fighter
 	private int _lastPunchInput = -1000;
 	private int _lastKickInput = -1000;
 	private int _lastJumpInput = -1000;
+	private int _lastGrabInput = -1000;
 
 	//
 
@@ -73,6 +74,7 @@ public class BasicFighter : Fighter
 	private Direction _prevWalkDirection = Direction.None;
 	private bool _wantsPunch = false;
 	private bool _wantsKick = false;
+	private bool _wantsGrab = false;
 	private bool _wantsToCrouch = false;
 	private bool _wantsToJump = false;
 	private bool _wantsDash = false;
@@ -97,6 +99,7 @@ public class BasicFighter : Fighter
 		_lastDirInputTime = -1000;
 		_lastPunchInput = -1000;
 		_lastKickInput = -1000;
+		_lastGrabInput = -1000;
 		_lastJumpInput = -1000;
 		_tickCounter = 0;
 
@@ -105,6 +108,9 @@ public class BasicFighter : Fighter
 		_prevWalkDirection = Direction.None;
 		_wantsToCrouch = false;
 		_wantsToJump = false;
+		_wantsKick = false;
+		_wantsPunch = false;
+		_wantsGrab = false;
 		_walkFrame = 0;
 		_vel = Vector2.zero;
 		_isReadyToBlock = false;
@@ -236,7 +242,7 @@ public class BasicFighter : Fighter
 					res = OnHit_Grabbed(attack);
 					break;
 				default:
-					Debug.LogError("OnHitByAttack() not handled properly");
+					Debug.Log("OnHitByAttack() not handled properly");
 					break;
 			}
 
@@ -304,7 +310,7 @@ public class BasicFighter : Fighter
 					res = AttackResult.None;
 					break;
 				default:
-					Debug.LogError("OnHitByAttack() grab not handled properly");
+					Debug.Log("OnHitByAttack() grab not handled properly");
 					break;
 			}
 
@@ -410,6 +416,12 @@ public class BasicFighter : Fighter
 			_lastKickInput = _tickCounter;
 		}
 		_wantsKick = _tickCounter - _lastKickInput < _inputBufferDuration;
+
+		if (input.GrabButton)
+		{
+			_lastGrabInput = _tickCounter;
+		}
+		_wantsGrab = _tickCounter - _lastGrabInput < _inputBufferDuration;
 	}
 
 	private void SetBlockReadiness()
@@ -553,22 +565,18 @@ public class BasicFighter : Fighter
 
 		if (_wantsPunch)
 		{
-			float distanceToOpponent = Mathf.Abs(transform.position.x - opponentPos.x);
-			if (opponentPos.y < 0.01f && distanceToOpponent < 1f && _walkDirection == _facingDirection)
-			{
-				_lastPunchInput = -1000;
-				TransitionState(State.Grab);
-				State_Anim(_animsSO.Grab);
-				return;
-			}
-			else
-			{
-				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
-				_lastPunchInput = -1000;
-				TransitionState(State.StandPunch);
-				State_Anim(_animsSO.StandPunch);
-				return;
-			}
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
+			_lastPunchInput = -1000;
+			TransitionState(State.StandPunch);
+			State_Anim(_animsSO.StandPunch);
+			return;
+		}
+		if (_wantsGrab)
+		{
+			_lastGrabInput = -1000;
+			TransitionState(State.Grab);
+			State_Anim(_animsSO.Grab);
+			return;
 		}
 		if (_wantsKick)
 		{
