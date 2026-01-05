@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 
 public class GameManager : PersistentMonoSingleton<GameManager>
@@ -35,6 +36,8 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 
 	private void SceneLoaded(Scene scene, LoadSceneMode mode)
 	{
+		RemoveDuplicateEventSystems(scene);
+
 		if (scene.buildIndex == (int)SceneNames.FightingGame)
 		{
 			HideCursor();
@@ -57,6 +60,21 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 		if (DialogueEvents.Instance != null)
 		{
 			DialogueEvents.Instance.RemoveBlockingCondition(() => GamePaused);
+		}
+	}
+
+	/// <summary>
+	/// Destroys duplicate EventSystems that are not in the current active scene
+	/// </summary>
+	private void RemoveDuplicateEventSystems(Scene currentScene)
+	{
+		EventSystem[] eventSystems = FindObjectsByType<EventSystem>(FindObjectsSortMode.None);
+		foreach (EventSystem es in eventSystems)
+		{
+			if (es.gameObject.scene != currentScene && es.gameObject.scene.name != "DontDestroyOnLoad")
+			{
+				Destroy(es.gameObject);
+			}
 		}
 	}
 

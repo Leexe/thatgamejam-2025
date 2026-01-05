@@ -4,6 +4,7 @@ root = true
 charset = utf-8
 insert_final_newline = true
 trim_trailing_whitespace = true
+spelling_languages = en-US
 
 # IMPORTANT - marks Assets/Plugins/** as generated code.
 # the linter doesn't run on their source code, and we don't get squiggles everywhere.
