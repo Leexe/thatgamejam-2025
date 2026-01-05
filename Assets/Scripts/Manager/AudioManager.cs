@@ -52,6 +52,12 @@ public class AudioManager : PersistentMonoSingleton<AudioManager>
 		_musicVolume = PlayerPrefs.GetFloat("MusicVolume", 0.7f);
 		_ambientVolume = PlayerPrefs.GetFloat("AmbientVolume", 1f);
 		_gameVolume = PlayerPrefs.GetFloat("GameVolume", 0.7f);
+
+		// Apply audio preferences
+		SetMasterVolume(_masterVolume);
+		SetMusicVolume(_musicVolume);
+		SetAmbienceVolume(_ambientVolume);
+		SetGameVolume(_gameVolume);
 	}
 
 	private void OnDestroy()
