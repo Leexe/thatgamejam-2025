@@ -25,6 +25,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 
 	// Private Variables
 	public bool GamePaused { private set; get; }
+	public bool PreventCursorHide { get; set; }
 	private AsyncOperation _asyncOperation;
 
 	private void OnEnable()
@@ -89,7 +90,7 @@ public class GameManager : PersistentMonoSingleton<GameManager>
 			UnfreezeTime();
 
 			// Only hide cursor if we are in the fighting game
-			if (SceneManager.GetActiveScene().buildIndex == (int)SceneNames.FightingGame)
+			if (!PreventCursorHide && SceneManager.GetActiveScene().buildIndex == (int)SceneNames.FightingGame)
 			{
 				HideCursor();
 			}
