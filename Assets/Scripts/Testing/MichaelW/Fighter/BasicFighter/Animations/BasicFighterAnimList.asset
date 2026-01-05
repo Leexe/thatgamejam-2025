@@ -22,6 +22,8 @@ MonoBehaviour:
   DashForward: {fileID: 7400000, guid: 5772b8f572b804b84a7c634a10cd7e98, type: 2}
   Die: {fileID: 7400000, guid: 07736de25d4214940b1e948a22d23bbf, type: 2}
   Grab: {fileID: 7400000, guid: ce44744d93afd472596e653549a5af3e, type: 2}
+  Grabbed: {fileID: 7400000, guid: 8c4226bf9373d481b9b274a823c1fe36, type: 2}
+  GrabSuccess: {fileID: 7400000, guid: 6710c7e3df75f41cf9088db9fdf475d9, type: 2}
   Jump: {fileID: 7400000, guid: ad5c005fad3d043acb5222bd45a13146, type: 2}
   JumpHurt: {fileID: 7400000, guid: 14177644696ff47f89461df0c020c980, type: 2}
   JumpKick: {fileID: 7400000, guid: d10b144f19b94459a8b2cd15d35894e8, type: 2}
