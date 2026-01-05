@@ -147,11 +147,11 @@ MonoBehaviour:
     Path: event:/Fighting/Death
   <Draw_Sfx>k__BackingField:
     Guid:
-      Data1: -1698268456
-      Data2: 1096274044
-      Data3: 1949545352
-      Data4: 332020990
-    Path: event:/Fighting/Loss
+      Data1: -641636833
+      Data2: 1088898717
+      Data3: -2025548119
+      Data4: -1533194984
+    Path: event:/Fighting/Draw
   <Lose_Sfx>k__BackingField:
     Guid:
       Data1: -1698268456
@@ -187,6 +187,20 @@ MonoBehaviour:
       Data3: 893526434
       Data4: -1572567127
     Path: event:/Title Screen/Dap
+  <TitleLift_Sfx>k__BackingField:
+    Guid:
+      Data1: -2033021295
+      Data2: 1340967972
+      Data3: -1790402886
+      Data4: -1969245089
+    Path: event:/Title Screen/Title Scroll Up
+  <TitleDrop_Sfx>k__BackingField:
+    Guid:
+      Data1: 1616737985
+      Data2: 1195177824
+      Data3: -65993311
+      Data4: -2059707231
+    Path: event:/Title Screen/Title Scroll Down
   <TitleReveal_Sfx>k__BackingField:
     Guid:
       Data1: -1778627648
@@ -215,3 +229,10 @@ MonoBehaviour:
       Data3: 464710307
       Data4: 1007240553
     Path: event:/Title Screen/Button Click
+  <Lose_LoopSFX>k__BackingField:
+    Guid:
+      Data1: -608145482
+      Data2: 1260325007
+      Data3: -1684644709
+      Data4: -300822237
+    Path: event:/Fighting/Lose Screen Theme

@@ -79,6 +79,14 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
+	public EventReference TitleLift_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference TitleDrop_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
 	public EventReference TitleReveal_Sfx { get; private set; }
 
 	[field: SerializeField]
@@ -97,11 +105,9 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	#region Looping SFX
 
-	// Loop SFX
-
-	// [field: SerializeField]
-	// [field: FoldoutGroup("Loop SFX", expanded: true)]
-	// public EventReference Reel_LoopSFX { get; private set; }
+	[field: SerializeField]
+	[field: FoldoutGroup("Loop SFX", true)]
+	public EventReference Lose_LoopSFX { get; private set; }
 
 	#endregion
 }

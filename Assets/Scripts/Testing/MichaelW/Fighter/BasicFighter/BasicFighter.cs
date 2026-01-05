@@ -510,6 +510,7 @@ public class BasicFighter : Fighter
 			{
 				_vel = _dashSpeed * (int)_walkDirection * Vector2.right;
 				bool forward = _walkDirection == _facingDirection;
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Dash_Sfx);
 				TransitionState(forward ? State.DashForward : State.DashBack);
 				State_Anim(forward ? _animsSO.DashForward : _animsSO.DashBack);
 			}

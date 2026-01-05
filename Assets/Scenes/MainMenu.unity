@@ -663,46 +663,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Win_Sfx>k__BackingField.Path
-      value: event:/Title Screen/Game Start
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Lose_Sfx>k__BackingField.Path
-      value: event:/Fighting/Loss
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Win_Sfx>k__BackingField.Guid.Data1
-      value: -254150746
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Win_Sfx>k__BackingField.Guid.Data2
-      value: 1090141272
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Win_Sfx>k__BackingField.Guid.Data3
-      value: -1945155442
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Win_Sfx>k__BackingField.Guid.Data4
-      value: 1993238489
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Lose_Sfx>k__BackingField.Guid.Data1
-      value: -1698268456
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Lose_Sfx>k__BackingField.Guid.Data2
-      value: 1096274044
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Lose_Sfx>k__BackingField.Guid.Data3
-      value: 1949545352
-      objectReference: {fileID: 0}
-    - target: {fileID: 7563036816957310737, guid: 6a5f3e89e4b804becae8e917db750e27, type: 3}
-      propertyPath: <Lose_Sfx>k__BackingField.Guid.Data4
-      value: 332020990
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

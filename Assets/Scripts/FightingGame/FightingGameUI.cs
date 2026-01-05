@@ -200,16 +200,17 @@ public class FightingGameUI : MonoBehaviour
 
 	public void RetryButtonPress()
 	{
-		AudioManager.Instance.PlaySFX(AudioManager.SFXNames.ButtonPress);
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
+		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm);
 		GameManager.Instance.PreventCursorHide = false;
-		_matchupManager.ResetGame();
+		_matchupManager.Reset();
 		PlayScreenOutAnimation();
 		GameManager.Instance.HideCursor();
 	}
 
 	public void MenuButtonPress()
 	{
-		AudioManager.Instance.PlaySFX(AudioManager.SFXNames.ButtonPress);
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		GameManager.Instance.PreventCursorHide = false;
 		GameManager.Instance.SwitchScenes(GameManager.SceneNames.MainMenu);
 	}

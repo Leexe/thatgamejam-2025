@@ -743,6 +743,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FightManager
       objectReference: {fileID: 0}
+    - target: {fileID: 4702691278985878522, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
+      propertyPath: _matchupManager
+      value: 
+      objectReference: {fileID: 821878337}
     - target: {fileID: 5006252540373732019, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0.41631
@@ -1190,9 +1194,57 @@ PrefabInstance:
       propertyPath: m_Name
       value: Fighting Game UI
       objectReference: {fileID: 0}
+    - target: {fileID: 2113808017387135053, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2113808017387135053, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2113808017387135053, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2113808017387135053, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2195598509818272101, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
       propertyPath: m_Alpha
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684009695627661699, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684009695627661699, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684009695627661699, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2684009695627661699, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846427233430222458, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846427233430222458, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846427233430222458, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6846427233430222458, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7042968440552138307, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1238,6 +1290,22 @@ PrefabInstance:
       propertyPath: _matchupManager
       value: 
       objectReference: {fileID: 821878337}
+    - target: {fileID: 7451523218915444660, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451523218915444660, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451523218915444660, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7451523218915444660, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

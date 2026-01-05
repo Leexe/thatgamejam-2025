@@ -33,4 +33,9 @@ public class MainMenuMusic : MonoBehaviour
 		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleReveal_Sfx);
 		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleJingle_Sfx);
 	}
+
+	public void PlayTitleDropSFX()
+	{
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleDrop_Sfx);
+	}
 }

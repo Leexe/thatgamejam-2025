@@ -2,6 +2,27 @@ using UnityEngine;
 
 public class FightingGameMusic : MonoBehaviour
 {
+	[SerializeField]
+	private MatchupManager _matchupManager;
+
+	private void OnEnable()
+	{
+		if (_matchupManager != null)
+		{
+			_matchupManager.OnGameWin.AddListener(PlayWinSong);
+			_matchupManager.OnGameLose.AddListener(PlayLoseSong);
+		}
+	}
+
+	private void OnDisable()
+	{
+		if (_matchupManager != null)
+		{
+			_matchupManager.OnGameWin.RemoveListener(PlayWinSong);
+			_matchupManager.OnGameLose.RemoveListener(PlayLoseSong);
+		}
+	}
+
 	private void Start()
 	{
 		PlayFightingGameMusic();
@@ -12,8 +33,16 @@ public class FightingGameMusic : MonoBehaviour
 		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm, true);
 	}
 
-	private void PauseFightingGameMusic()
+	private void PlayWinSong()
 	{
-		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm);
+		AudioManager.Instance.StopCurrentMusicTrack();
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleJingle_Sfx);
+	}
+
+	private void PlayLoseSong()
+	{
+		Debug.Log("Play Lose Song");
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Lose_Sfx);
+		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.Lose_LoopSFX);
 	}
 }

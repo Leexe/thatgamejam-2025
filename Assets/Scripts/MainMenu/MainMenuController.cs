@@ -175,8 +175,9 @@ public class MainMenuController : MonoBehaviour
 		_isSceneReady = false;
 		_isStartAnimationFinished = false;
 
-		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		PlayStartAnimation();
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
+		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.TitleLift_Sfx);
 		GameManager.Instance.LoadSceneAsync(GameManager.SceneNames.FightingGame);
 	}
 
