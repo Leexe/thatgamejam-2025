@@ -214,8 +214,14 @@ public class BasicFighter : Fighter
 		}
 		else if (res == AttackResult.Hit)
 		{
+			bool isKick = false;
+			if (attack.From is BasicFighter attacker)
+			{
+				isKick = attacker._state is State.StandKick or State.CrouchKick or State.JumpKick;
+			}
+
 			AudioManager.Instance.PlayOneShot(
-				attack.IsHeavy ? FMODEvents.Instance.KickLand_Sfx : FMODEvents.Instance.PunchLand_Sfx
+				isKick ? FMODEvents.Instance.KickLand_Sfx : FMODEvents.Instance.PunchLand_Sfx
 			);
 
 			Health -= attack.Damage;
@@ -227,7 +233,7 @@ public class BasicFighter : Fighter
 				TransitionState(State.Dead);
 			}
 
-			AnimationClip clip = attack.IsHeavy ? _vfxList.KickVFX : _vfxList.PunchVFX;
+			AnimationClip clip = isKick ? _vfxList.KickVFX : _vfxList.PunchVFX;
 			PlayVFX(clip, attack.VisualPosition, attack.VisualDirection);
 		}
 

@@ -268,6 +268,7 @@ public class FightManager : MonoBehaviour
 				{
 					_debugP2VertDir = 0f;
 				}
+
 				if (_p2.transform.position.y > 0.01f && _debugP2VertDir > 0f)
 				{
 					_debugP2VertDir = 0f;
@@ -299,7 +300,8 @@ public class FightManager : MonoBehaviour
 						_debugDirCooldown += Random.Range(5, 15);
 					}
 				}
-				p2Input.Dir = new(_debugP2Dir, _debugP2VertDir);
+
+				p2Input.Dir = new Vector2(_debugP2Dir, _debugP2VertDir);
 			}
 		}
 
@@ -324,17 +326,17 @@ public class FightManager : MonoBehaviour
 				_gameResolved = true;
 				_fightRunning = false;
 
-				if (_p1.Health <= 0 && _p2.Health <= 0) // Draw
+				if (_p1.Health <= 0 && _p2.Health <= 0) // Draw Round
 				{
 					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Draw_Sfx);
 					OnGameEnd.Invoke(GameResult.Draw);
 				}
-				else if (_p1.Health <= 0) // Lose
+				else if (_p1.Health <= 0) // Lose Round
 				{
-					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Lose_Sfx);
+					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Death_Sfx);
 					OnGameEnd.Invoke(GameResult.P2Win);
 				}
-				else if (_p2.Health <= 0) // Win
+				else if (_p2.Health <= 0) // Win Round
 				{
 					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Win_Sfx);
 					OnGameEnd.Invoke(GameResult.P1Win);
@@ -452,6 +454,7 @@ public class FightManager : MonoBehaviour
 			attackOnP1Result = _p1.OnHitByAttack(attackOnP1.Value);
 			_p1Channel.RaiseHealthChanged(_p1.Health - oldHealth, _p1.Health, _p1.MaxHealth);
 		}
+
 		if (attackOnP2.HasValue)
 		{
 			int oldHealth = _p2.Health;
@@ -463,6 +466,7 @@ public class FightManager : MonoBehaviour
 		{
 			_p2.OnAttackLanded(attackOnP1Result);
 		}
+
 		if (attackOnP2Result != AttackResult.None)
 		{
 			_p1.OnAttackLanded(attackOnP2Result);
@@ -480,12 +484,12 @@ public class FightManager : MonoBehaviour
 	{
 		// world bounds
 		Gizmos.color = Color.pink;
-		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(-_arenaHalfWidth, 20f));
-		Gizmos.DrawLine(new(_arenaHalfWidth, 0f), new(_arenaHalfWidth, 20f));
-		Gizmos.DrawLine(new(-_arenaHalfWidth, 0f), new(_arenaHalfWidth, 0f));
+		Gizmos.DrawLine(new Vector3(-_arenaHalfWidth, 0f), new Vector3(-_arenaHalfWidth, 20f));
+		Gizmos.DrawLine(new Vector3(_arenaHalfWidth, 0f), new Vector3(_arenaHalfWidth, 20f));
+		Gizmos.DrawLine(new Vector3(-_arenaHalfWidth, 0f), new Vector3(_arenaHalfWidth, 0f));
 		Gizmos.color = Color.red;
-		Gizmos.DrawLine(new(_leftWall, 0f), new(_leftWall, 20f));
-		Gizmos.DrawLine(new(_rightWall, 0f), new(_rightWall, 20f));
+		Gizmos.DrawLine(new Vector3(_leftWall, 0f), new Vector3(_leftWall, 20f));
+		Gizmos.DrawLine(new Vector3(_rightWall, 0f), new Vector3(_rightWall, 20f));
 
 		if (!Application.isPlaying || !_simulating)
 		{
@@ -496,6 +500,7 @@ public class FightManager : MonoBehaviour
 		{
 			_p1.DrawGizmos();
 		}
+
 		if (_p2 != null)
 		{
 			_p2.DrawGizmos();

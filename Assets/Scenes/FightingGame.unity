@@ -321,11 +321,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.008691102
+      value: 0.008695513
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.1782601
+      value: 0.81663513
       objectReference: {fileID: 0}
     - target: {fileID: 7679445364107872000, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -720,17 +720,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5147157767157832015, guid: a1c465f092d0c4190bc7973beebce16a, type: 3}
   m_PrefabInstance: {fileID: 1201676757}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1631805487 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4741852072939145132, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
-  m_PrefabInstance: {fileID: 8343761891940803205}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ad50f81b1d25c441943c37a89ba23f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Kybernetik.Animancer::Animancer.AnimancerComponent
 --- !u!1001 &1744372534
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1238,6 +1227,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6949154579019124451, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: c7d87c034f0c34c459bc19053472db03, type: 3}
     - target: {fileID: 7042968440552138307, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1295,13 +1288,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9138323745310692972, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
-      propertyPath: _animancer
+      propertyPath: _popUpAnimation
       value: 
-      objectReference: {fileID: 1631805487}
-    - target: {fileID: 9138323745310692972, guid: b398728b0b7994963ac3d3995bfae27f, type: 3}
-      propertyPath: _introAnimation
-      value: 
-      objectReference: {fileID: 7400000, guid: 8875e761be9414f11b80507f71813ef6, type: 2}
+      objectReference: {fileID: 7400000, guid: a19dc57245167483cb218f17687998a1, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

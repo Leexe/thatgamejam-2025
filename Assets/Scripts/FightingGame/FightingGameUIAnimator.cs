@@ -12,6 +12,9 @@ public class FightingGameUIAnimator : MonoBehaviour
 	[SerializeField]
 	private AnimationClip _introAnimation;
 
+	[SerializeField]
+	private AnimationClip _popUpAnimation;
+
 	[HideInInspector]
 	public UnityEvent OnIntroStart;
 
@@ -38,6 +41,19 @@ public class FightingGameUIAnimator : MonoBehaviour
 			};
 
 			OnIntroStart?.Invoke();
+		}
+	}
+
+	private void PlayPopUpAnimation()
+	{
+		if (_popUpAnimation != null)
+		{
+			_activeState = _animancer.Play(_popUpAnimation);
+			_activeState.Events(this).OnEnd = () =>
+			{
+				_activeState.Stop();
+				_activeState = null;
+			};
 		}
 	}
 }
