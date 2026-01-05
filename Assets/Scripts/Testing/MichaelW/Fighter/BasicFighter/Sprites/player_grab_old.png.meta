@@ -1,40 +1,37 @@
 fileFormatVersion: 2
-guid: 0067603d556ca48b58c002c59afd3058
+guid: e8fe93acaf88c448ba5cce256ec41b1b
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2120960366139509843
-    second: player_grab 1_0
+      213: 3581296519226428117
+    second: player_grab_0
   - first:
-      213: 7270732860278235917
-    second: player_grab 1_1
+      213: -1233970002912985991
+    second: player_grab_1
   - first:
-      213: 5636005691001330427
-    second: player_grab 1_2
+      213: -4527203188699967291
+    second: player_grab_2
   - first:
-      213: -2005275303503682796
-    second: player_grab 1_3
+      213: 4441788537494968400
+    second: player_grab_3
   - first:
-      213: 1017201485899851711
-    second: player_grab 1_4
+      213: 7664395487645551461
+    second: player_grab_4
   - first:
-      213: -4813632871287671642
-    second: player_grab 1_5
+      213: -8484323735330948009
+    second: player_grab_5
   - first:
-      213: -2840308542944991300
-    second: player_grab 1_6
+      213: 7370925059981609001
+    second: player_grab_6
   - first:
-      213: 4933410972730911431
-    second: player_grab 1_7
+      213: -6200952913760154171
+    second: player_grab_7
   - first:
-      213: -6936178261095898318
-    second: player_grab 1_8
+      213: 3817745888113892368
+    second: player_grab_8
   - first:
-      213: 5476812993813816156
-    second: player_grab 1_9
-  - first:
-      213: -3640951114362092059
-    second: player_grab 1_10
+      213: 4062602058356807851
+    second: player_grab_9
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -130,231 +127,209 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: player_grab_0
+      name: player_grab_0_old
       rect:
         serializedVersion: 2
         x: 0
-        y: 2
-        width: 787
+        y: 0
+        width: 739
         height: 842
       alignment: 9
-      pivot: {x: 0.2674714, y: 0}
+      pivot: {x: 0.2848444, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 786d624eb76d84e31807c61b3b09ea09
-      internalID: -117952098
+      spriteID: de6d30febb7d24997b81880fa32c2c1e
+      internalID: 640613283
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_1
+      name: player_grab_1_old
       rect:
         serializedVersion: 2
         x: 842
-        y: 2
-        width: 790
+        y: 0
+        width: 791
         height: 842
       alignment: 9
-      pivot: {x: 0.2664557, y: 0}
+      pivot: {x: 0.26611882, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b75f5e70bfc7b4c6281a4480db9f7095
-      internalID: 1803023299
+      spriteID: cd67bff0458ac4663a44ef0b95e39898
+      internalID: 2060518566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_2
+      name: player_grab_2_old
       rect:
         serializedVersion: 2
         x: 1684
-        y: 2
-        width: 777
+        y: 0
+        width: 768
         height: 842
       alignment: 9
-      pivot: {x: 0.27091378, y: 0}
+      pivot: {x: 0.27408853, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f42d67d2ea8d14c2684999e6eb779e5c
-      internalID: -1794978755
+      spriteID: 5f99a124e913c458abadf3484560a977
+      internalID: -2092596719
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_3
+      name: player_grab_3_old
       rect:
         serializedVersion: 2
         x: 2526
-        y: 2
-        width: 755
+        y: 0
+        width: 783
         height: 842
       alignment: 9
-      pivot: {x: 0.27880794, y: 0}
+      pivot: {x: 0.2688378, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: bc2a7473f736c482da16c43d66c89aef
-      internalID: 305933919
+      spriteID: fe67d266867564495b133fdb83ff4642
+      internalID: -65499638
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_4
+      name: player_grab_4_old
       rect:
         serializedVersion: 2
         x: 3368
-        y: 2
-        width: 767
+        y: 0
+        width: 783
         height: 842
       alignment: 9
-      pivot: {x: 0.2744459, y: 0}
+      pivot: {x: 0.2688378, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fbe91071192904d57ab546ad205191af
-      internalID: 1323305595
+      spriteID: 82821f7e7759d41cb890c694cf62b37f
+      internalID: 821437156
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_5
+      name: player_grab_5_old
       rect:
         serializedVersion: 2
         x: 4210
-        y: 2
-        width: 779
+        y: 0
+        width: 783
         height: 842
       alignment: 9
-      pivot: {x: 0.27021822, y: 0}
+      pivot: {x: 0.2688378, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 940825a7b33da4efba5c74629d0a2457
-      internalID: -390197728
+      spriteID: f76907ede777e46519ebfd4b2921b650
+      internalID: -1670728374
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_6
+      name: player_grab_6_old
       rect:
         serializedVersion: 2
         x: 5052
-        y: 2
-        width: 741
+        y: 0
+        width: 798
         height: 842
       alignment: 9
-      pivot: {x: 0.2840756, y: 0}
+      pivot: {x: 0.26378447, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a184826a2f8540bdbefc586fb2fa869
-      internalID: -331876852
+      spriteID: 9fe0e33bd0bc74494947f8f20f82a769
+      internalID: 202470940
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_7
+      name: player_grab_7_old
       rect:
         serializedVersion: 2
         x: 5894
-        y: 2
-        width: 777
+        y: 0
+        width: 783
         height: 842
       alignment: 9
-      pivot: {x: 0.27091378, y: 0}
+      pivot: {x: 0.2688378, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dba9f36c3419747ba890ae74494f8ef5
-      internalID: 906682796
+      spriteID: b57461548fa4942c5ab4c8c5c6cec5e8
+      internalID: 31115370
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_8
+      name: player_grab_8_old
       rect:
         serializedVersion: 2
         x: 6736
-        y: 2
-        width: 764
+        y: 0
+        width: 768
         height: 842
       alignment: 9
-      pivot: {x: 0.27552357, y: 0}
+      pivot: {x: 0.27408853, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 66ed87b4f3b584c8fa989e913fc20c26
-      internalID: 2135312313
+      spriteID: 7247044fce67544e9bfb1415c2d7a043
+      internalID: 1121161286
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: player_grab_9
+      name: player_grab_9_old
       rect:
         serializedVersion: 2
         x: 7578
-        y: 2
-        width: 759
-        height: 842
-      alignment: 9
-      pivot: {x: 0.2773386, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d27fdc8dfcc794fce83307def726ddff
-      internalID: 261637567
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: player_grab_10
-      rect:
-        serializedVersion: 2
-        x: 8420
-        y: 2
+        y: 0
         width: 842
         height: 842
       alignment: 9
@@ -365,8 +340,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1791e06eae46749f78d19166a4d1b5f8
-      internalID: -961974090
+      spriteID: 0e59eb67df73f4739b6704fc659ba28a
+      internalID: -1429109610
       vertices: []
       indices: 
       edges: []
@@ -375,7 +350,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: fa167c6a974d14464b066b97c0e73d08
+    spriteID: 7e25db2273470489fb58d37d209ed822
     internalID: 0
     vertices: []
     indices: 
@@ -385,19 +360,18 @@ TextureImporter:
     spriteCustomMetadata:
       entries:
       - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":842.0,"y":842.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.25,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":1,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":842.0,"y":842.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.25,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":9,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      player_grab_0: -117952098
-      player_grab_1: 1803023299
-      player_grab_10: -961974090
-      player_grab_2: -1794978755
-      player_grab_3: 305933919
-      player_grab_4: 1323305595
-      player_grab_5: -390197728
-      player_grab_6: -331876852
-      player_grab_7: 906682796
-      player_grab_8: 2135312313
-      player_grab_9: 261637567
+      player_grab_0_old: 640613283
+      player_grab_1_old: 2060518566
+      player_grab_2_old: -2092596719
+      player_grab_3_old: -65499638
+      player_grab_4_old: 821437156
+      player_grab_5_old: -1670728374
+      player_grab_6_old: 202470940
+      player_grab_7_old: 31115370
+      player_grab_8_old: 1121161286
+      player_grab_9_old: -1429109610
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -97,6 +97,7 @@ public class BasicFighter : Fighter
 		_lastDirInputTime = -1000;
 		_lastPunchInput = -1000;
 		_lastKickInput = -1000;
+		_lastJumpInput = -1000;
 		_tickCounter = 0;
 
 		// reset all the state-related vars, just in case...
@@ -176,75 +177,142 @@ public class BasicFighter : Fighter
 			case State.DashBack:
 				State_Dash(_animsSO.DashBack, State.StandIdle);
 				break;
+			case State.Grab:
+				State_Knockback(_animsSO.Grab, State.StandIdle);
+				break;
+			case State.Grabbed:
+				State_Knockback(_animsSO.Grabbed, State.StandIdle);
+				break;
+			case State.GrabSuccess:
+				State_Anim(_animsSO.GrabSuccess, State.StandIdle);
+				break;
+			case State.Knocked:
+				State_Knocked();
+				break;
 		}
 	}
 
 	public override AttackResult OnHitByAttack(AttackInfo attack)
 	{
-		AttackResult res = AttackResult.None;
+		if (!attack.IsGrab)
+		{
+			AttackResult res = AttackResult.None;
 
-		switch (_state)
-		{
-			case State.StandIdle:
-			case State.StandPunch:
-			case State.StandKick:
-			case State.DashForward:
-			case State.DashBack:
-				res = OnHit_Standing(attack);
-				break;
-			case State.CrouchIdle:
-			case State.CrouchPunch:
-			case State.CrouchKick:
-				res = OnHit_Crouch(attack);
-				break;
-			case State.JumpIdle:
-			case State.JumpPunch:
-			case State.JumpKick:
-				res = OnHit_Airborne(attack);
-				break;
-			default:
-				Debug.LogError("OnHitByAttack() not handled properly");
-				break;
-		}
-
-		if (res == AttackResult.Blocked)
-		{
-			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Block_Sfx);
-			PlayVFX(_vfxList.BlockVFX, attack.VisualPosition, attack.VisualDirection);
-		}
-		else if (res == AttackResult.Hit)
-		{
-			bool isKick = false;
-			if (attack.From is BasicFighter attacker)
+			switch (_state)
 			{
-				isKick = attacker._state is State.StandKick or State.CrouchKick or State.JumpKick;
+				case State.StandIdle:
+				case State.StandPunch:
+				case State.StandKick:
+				case State.DashForward:
+				case State.DashBack:
+					res = OnHit_Standing(attack);
+					break;
+				case State.CrouchIdle:
+				case State.CrouchPunch:
+				case State.CrouchKick:
+					res = OnHit_Crouch(attack);
+					break;
+				case State.JumpIdle:
+				case State.JumpPunch:
+				case State.JumpKick:
+					res = OnHit_Airborne(attack);
+					break;
+				case State.Grabbed:
+					res = OnHit_Grabbed(attack);
+					break;
+				default:
+					Debug.LogError("OnHitByAttack() not handled properly");
+					break;
 			}
 
-			AudioManager.Instance.PlayOneShot(
-				isKick ? FMODEvents.Instance.KickLand_Sfx : FMODEvents.Instance.PunchLand_Sfx
-			);
-
-			Health -= attack.Damage;
-			if (Health <= 0)
+			if (res == AttackResult.Blocked)
 			{
-				Health = 0;
-				_vel = (_hitKnockback * (int)attack.Direction * Vector3.right) + (0.08f * Vector3.up);
-				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Death_Sfx);
-				TransitionState(State.Dead);
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Block_Sfx);
+				PlayVFX(_vfxList.BlockVFX, attack.VisualPosition, attack.VisualDirection);
+			}
+			else if (res == AttackResult.Hit)
+			{
+				bool isKick = false;
+				if (attack.From is BasicFighter attacker)
+				{
+					isKick = attacker._state is State.StandKick or State.CrouchKick or State.JumpKick;
+				}
+
+				AudioManager.Instance.PlayOneShot(
+					isKick ? FMODEvents.Instance.KickLand_Sfx : FMODEvents.Instance.PunchLand_Sfx
+				);
+
+				Health -= attack.Damage;
+				if (Health <= 0)
+				{
+					Health = 0;
+					_vel = (_hitKnockback * (int)attack.Direction * Vector3.right) + (0.08f * Vector3.up);
+					AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Death_Sfx);
+					TransitionState(State.Dead);
+				}
+
+				AnimationClip clip = attack.IsHeavy ? _vfxList.KickVFX : _vfxList.PunchVFX;
+				PlayVFX(clip, attack.VisualPosition, attack.VisualDirection);
 			}
 
-			AnimationClip clip = isKick ? _vfxList.KickVFX : _vfxList.PunchVFX;
-			PlayVFX(clip, attack.VisualPosition, attack.VisualDirection);
+			return res;
 		}
+		else
+		{
+			AttackResult res = AttackResult.None;
 
-		return res;
+			switch (_state)
+			{
+				case State.StandIdle:
+				case State.StandPunch:
+				case State.StandKick:
+				case State.DashForward:
+				case State.DashBack:
+				case State.CrouchIdle:
+				case State.CrouchPunch:
+				case State.CrouchKick:
+					res = OnGrab_Standing(attack);
+					break;
+				case State.Grab:
+				case State.GrabSuccess:
+					// if you are grabbed while grabbing, trade
+					res = OnGrabTrade_Standing(attack);
+					break;
+
+				case State.StandHurt:
+				case State.StandBlock:
+				case State.CrouchHurt:
+				case State.CrouchBlock:
+				case State.JumpIdle:
+				case State.JumpPunch:
+				case State.JumpKick:
+					res = AttackResult.None;
+					break;
+				default:
+					Debug.LogError("OnHitByAttack() grab not handled properly");
+					break;
+			}
+
+			return res;
+		}
 	}
 
 	public override void OnAttackLanded(AttackResult result)
 	{
-		if (result == AttackResult.Hit)
+		// should never be null
+		AttackInfo ourAttack = ReadHitBoxes().Attack.Value;
+
+		if (ourAttack.IsGrab)
 		{
-			Debug.Log("LANDED!");
+			if (result == AttackResult.Hit)
+			{
+				TransitionState(State.GrabSuccess);
+				State_Anim(_animsSO.GrabSuccess);
+			}
+			else if (result == AttackResult.Blocked)
+			{
+				_vel = -_hitKnockback * (int)ourAttack.Direction * Vector3.right;
+			}
 		}
 	}
 
@@ -375,7 +443,7 @@ public class BasicFighter : Fighter
 	private void SpawnAfterImage()
 	{
 		AfterImage afterImage = Instantiate(_afterImagePrefab);
-		afterImage.Show(transform, _animDataController.GetCurrentSprite(), 0.1f);
+		afterImage.Show(transform, _animDataController.GetCurrentSpriteRenderer(), 0.1f);
 	}
 
 	#endregion helpers
@@ -470,11 +538,22 @@ public class BasicFighter : Fighter
 
 		if (_wantsPunch)
 		{
-			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
-			_lastPunchInput = -1000;
-			TransitionState(State.StandPunch);
-			State_Anim(_animsSO.StandPunch);
-			return;
+			float distanceToOpponent = Mathf.Abs(transform.position.x - opponentPos.x);
+			if (opponentPos.y < 0.01f && distanceToOpponent < 1f && _walkDirection == _facingDirection)
+			{
+				_lastPunchInput = -1000;
+				TransitionState(State.Grab);
+				State_Anim(_animsSO.Grab);
+				return;
+			}
+			else
+			{
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Punch_Sfx);
+				_lastPunchInput = -1000;
+				TransitionState(State.StandPunch);
+				State_Anim(_animsSO.StandPunch);
+				return;
+			}
 		}
 		if (_wantsKick)
 		{
@@ -646,6 +725,22 @@ public class BasicFighter : Fighter
 		}
 	}
 
+	private void State_Knocked()
+	{
+		if (transform.position.y > 0f)
+		{
+			HandleAirbornePhysics();
+		}
+		else
+		{
+			// slide for a bit when we hit the ground (LOL)
+			transform.Translate(_vel);
+			_vel = Vector2.MoveTowards(_vel, Vector2.zero, _knockbackGroundDecel);
+		}
+
+		State_Anim(_animsSO.KnockDownGetUp, State.StandIdle);
+	}
+
 	private void State_Dead()
 	{
 		if (transform.position.y > 0f)
@@ -685,6 +780,8 @@ public class BasicFighter : Fighter
 
 	private AttackResult OnHit_Crouch(AttackInfo attack)
 	{
+		_vel = _hitKnockback * (int)attack.Direction * Vector3.right;
+
 		if (_isReadyToBlock && (attack.Type == AttackType.Low || attack.Type == AttackType.Mid))
 		{
 			TransitionState(State.CrouchBlock);
@@ -701,9 +798,49 @@ public class BasicFighter : Fighter
 
 	private AttackResult OnHit_Airborne(AttackInfo attack)
 	{
+		_vel.x = _jumpHorizontalVel * (int)attack.Direction;
+		if (_vel.y > 0f)
+		{
+			_vel.y *= 0.7f;
+		}
+
 		TransitionState(State.JumpHurt);
 		State_Anim(_animsSO.JumpHurt);
 		return AttackResult.Hit;
+	}
+
+	private AttackResult OnHit_Grabbed(AttackInfo attack)
+	{
+		_vel = (_hitKnockback * 0.7f * (int)attack.Direction * Vector3.right) + (0.08f * Vector3.up);
+		TransitionState(State.Knocked);
+		State_Anim(_animsSO.KnockDownGetUp);
+		return AttackResult.Hit;
+	}
+
+	private AttackResult OnGrab_Standing(AttackInfo attack)
+	{
+		// negative knockback, to suck the player in
+		_vel = -_hitKnockback * 0.4f * (int)attack.Direction * Vector3.right;
+		TransitionState(State.Grabbed);
+		State_Anim(_animsSO.Grabbed); // temp
+		return AttackResult.Hit;
+	}
+
+	private AttackResult OnGrabTrade_Standing(AttackInfo attack)
+	{
+		// bit of a hack: check our attack hitbox data to see if our action frame was this frame too.
+		// assume that if we have an attackbox, then it landed (that's probably almost always true)
+		HitBoxData data = ReadHitBoxes();
+		if (data.Attack.HasValue)
+		{
+			_vel = _hitKnockback * (int)attack.Direction * Vector3.right;
+			// no transition
+			return AttackResult.Blocked;
+		}
+		else
+		{
+			return OnGrab_Standing(attack);
+		}
 	}
 
 	#endregion statemachine
@@ -734,6 +871,8 @@ public class BasicFighter : Fighter
 
 		Grab,
 		Grabbed,
+		GrabSuccess,
+		Knocked,
 
 		Dead,
 	}

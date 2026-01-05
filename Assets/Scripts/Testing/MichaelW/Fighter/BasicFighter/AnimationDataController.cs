@@ -78,8 +78,8 @@ public class AnimationDataController : MonoBehaviour
 		};
 	}
 
-	public Sprite GetCurrentSprite()
+	public SpriteRenderer GetCurrentSpriteRenderer()
 	{
-		return _spriteRenderer.sprite;
+		return _spriteRenderer;
 	}
 }

@@ -17,6 +17,8 @@ public class BasicFighterAnimsSO : ScriptableObject
 	public AnimationClip DashForward;
 	public AnimationClip Die;
 	public AnimationClip Grab;
+	public AnimationClip Grabbed;
+	public AnimationClip GrabSuccess;
 	public AnimationClip Jump;
 	public AnimationClip JumpHurt;
 	public AnimationClip JumpKick;

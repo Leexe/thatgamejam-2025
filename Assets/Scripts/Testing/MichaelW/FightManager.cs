@@ -428,11 +428,22 @@ public class FightManager : MonoBehaviour
 		{
 			Rect attackRect = attack.Value.Bounds;
 
-			foreach (Rect hurtBox in target.ReadHitBoxes().HurtBoxes)
+			if (attack.Value.IsGrab)
 			{
-				if (hurtBox.width > 0f && hurtBox.height > 0f && attackRect.Overlaps(hurtBox))
+				Rect targetBox = target.ReadHitBoxes().CollisionBox;
+				if (targetBox.width > 0f && targetBox.height > 0f && attackRect.Overlaps(targetBox))
 				{
 					return attack.Value;
+				}
+			}
+			else
+			{
+				foreach (Rect hurtBox in target.ReadHitBoxes().HurtBoxes)
+				{
+					if (hurtBox.width > 0f && hurtBox.height > 0f && attackRect.Overlaps(hurtBox))
+					{
+						return attack.Value;
+					}
 				}
 			}
 		}
@@ -452,14 +463,20 @@ public class FightManager : MonoBehaviour
 			// yikes
 			int oldHealth = _p1.Health;
 			attackOnP1Result = _p1.OnHitByAttack(attackOnP1.Value);
-			_p1Channel.RaiseHealthChanged(_p1.Health - oldHealth, _p1.Health, _p1.MaxHealth);
+			if (oldHealth != _p1.Health)
+			{
+				_p1Channel.RaiseHealthChanged(_p1.Health - oldHealth, _p1.Health, _p1.MaxHealth);
+			}
 		}
 
 		if (attackOnP2.HasValue)
 		{
 			int oldHealth = _p2.Health;
 			attackOnP2Result = _p2.OnHitByAttack(attackOnP2.Value);
-			_p2Channel.RaiseHealthChanged(_p2.Health - oldHealth, _p2.Health, _p2.MaxHealth);
+			if (oldHealth != _p2.Health)
+			{
+				_p2Channel.RaiseHealthChanged(_p2.Health - oldHealth, _p2.Health, _p2.MaxHealth);
+			}
 		}
 
 		if (attackOnP1Result != AttackResult.None)
