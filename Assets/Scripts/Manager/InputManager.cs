@@ -10,6 +10,7 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 	private InputAction _movement2Action;
 	private InputAction _kickAction;
 	private InputAction _punchAction;
+	private InputAction _grabAction;
 	private InputAction _continueStoryAction;
 	private InputAction _backlogAction;
 	private InputAction _escapeAction;
@@ -33,6 +34,9 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 
 	[HideInInspector]
 	public UnityEvent OnKickPerformed;
+
+	[HideInInspector]
+	public UnityEvent OnGrabPerformed;
 
 	[HideInInspector]
 	public UnityEvent OnContinueStoryPerformed;
@@ -103,6 +107,7 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 
 		_punchAction = InputActions.FindAction("Punch");
 		_kickAction = InputActions.FindAction("Kick");
+		_grabAction = InputActions.FindAction("Grab");
 
 		_continueStoryAction = InputActions.FindAction("ContinueStory");
 		_escapeAction = InputActions.FindAction("Escape");
@@ -113,6 +118,7 @@ public class InputManager : PersistentMonoSingleton<InputManager>
 	{
 		AddEventToAction(_kickAction, ref OnKickPerformed);
 		AddEventToAction(_punchAction, ref OnPunchPerformed);
+		AddEventToAction(_grabAction, ref OnGrabPerformed);
 
 		AddEventToAction(_continueStoryAction, ref OnContinueStoryPerformed);
 		AddEventToAction(_escapeAction, ref OnEscapePerformed);

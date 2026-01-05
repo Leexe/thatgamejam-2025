@@ -5,6 +5,7 @@ public struct InputInfo
 	public Vector2 Dir;
 	public bool KickButton;
 	public bool PunchButton;
+	public bool GrabButton;
 }
 
 public enum Direction

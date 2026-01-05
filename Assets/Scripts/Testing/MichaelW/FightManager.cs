@@ -135,6 +135,7 @@ public class FightManager : MonoBehaviour
 		InputManager.Instance.OnMovement2.AddListener(OnMovement2);
 		InputManager.Instance.OnPunchPerformed.AddListener(OnPunch);
 		InputManager.Instance.OnKickPerformed.AddListener(OnKick);
+		InputManager.Instance.OnGrabPerformed.AddListener(OnGrab);
 	}
 
 	private void OnDisable()
@@ -145,6 +146,7 @@ public class FightManager : MonoBehaviour
 			InputManager.Instance.OnMovement2.RemoveListener(OnMovement2);
 			InputManager.Instance.OnPunchPerformed.RemoveListener(OnPunch);
 			InputManager.Instance.OnKickPerformed.RemoveListener(OnKick);
+			InputManager.Instance.OnGrabPerformed.RemoveListener(OnGrab);
 		}
 	}
 
@@ -161,6 +163,11 @@ public class FightManager : MonoBehaviour
 	private void OnKick()
 	{
 		_upcomingInput.KickButton = true;
+	}
+
+	private void OnGrab()
+	{
+		_upcomingInput.GrabButton = true;
 	}
 
 	private void OnMovement2(Vector2 dir)
@@ -236,6 +243,10 @@ public class FightManager : MonoBehaviour
 					if (_p2.transform.position.y < 0.01f)
 					{
 						p2Input.KickButton = Random.value < 0.05f;
+						if (horzDist < 1.2f)
+						{
+							p2Input.GrabButton = Random.value < 0.026f;
+						}
 						p2Input.PunchButton = Random.value < 0.05f;
 					}
 
@@ -309,8 +320,10 @@ public class FightManager : MonoBehaviour
 
 		_upcomingInput.KickButton = false;
 		_upcomingInput.PunchButton = false;
+		_upcomingInput.GrabButton = false;
 		_upcomingInput2.KickButton = false;
 		_upcomingInput2.PunchButton = false;
+		_upcomingInput2.GrabButton = false;
 
 		_p1.Tick(p1Input, p2CurrentPos);
 		_p2.Tick(p2Input, p1CurrentPos);
