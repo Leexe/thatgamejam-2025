@@ -18,6 +18,9 @@ public class MatchupManager : MonoBehaviour
 	[SerializeField]
 	private int _winsNeeded = 2;
 
+	[SerializeField]
+	private float _initialDelay = 1.084f;
+
 	[Header("Events")]
 	[HideInInspector]
 	public UnityEvent OnRoundWin;
@@ -34,8 +37,12 @@ public class MatchupManager : MonoBehaviour
 	[HideInInspector]
 	public UnityEvent OnGameLose;
 
+	[HideInInspector]
+	public UnityEvent OnNewFight;
+
 	private int _p1Wins = 0;
 	private int _p2Wins = 0;
+	private bool _initalLaunch = true;
 
 	private void OnEnable()
 	{
@@ -55,12 +62,20 @@ public class MatchupManager : MonoBehaviour
 		Reset();
 	}
 
-	private void NewFight()
+	private void NewFight(float delay = 0f)
 	{
 		_fightManager.ResetGame();
+		OnNewFight?.Invoke();
 		// TODO: brief pause, where we show the countdown
 		// this is a temporary thing to show that we can wait before enabling controls.
-		Tween.Delay(this, duration: 2f, _fightManager.StartFight);
+		Tween.Delay(
+			this,
+			duration: 3.4f + delay,
+			() =>
+			{
+				_fightManager.StartFight();
+			}
+		);
 	}
 
 	[Button]
@@ -70,7 +85,15 @@ public class MatchupManager : MonoBehaviour
 		_p2Wins = 0;
 		_p1RoundIndicator.UpdateDisplay(_p1Wins);
 		_p2RoundIndicator.UpdateDisplay(_p2Wins);
-		NewFight();
+		if (_initalLaunch)
+		{
+			NewFight(_initialDelay);
+			_initalLaunch = false;
+		}
+		else
+		{
+			NewFight();
+		}
 	}
 
 	private void OnGameEnd(GameResult result)
@@ -120,7 +143,7 @@ public class MatchupManager : MonoBehaviour
 		if (!matchOver)
 		{
 			// if the match isn't over, start the next round
-			Tween.Delay(this, duration: 4f, NewFight);
+			Tween.Delay(this, duration: 4f, () => NewFight());
 		}
 		else
 		{

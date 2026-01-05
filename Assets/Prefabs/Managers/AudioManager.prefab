@@ -138,6 +138,13 @@ MonoBehaviour:
       Data3: 588225176
       Data4: 855235944
     Path: event:/Fighting/Punch Whiff
+  <Grab_Sfx>k__BackingField:
+    Guid:
+      Data1: -1245017142
+      Data2: 1264949198
+      Data3: -39643755
+      Data4: 275159976
+    Path: event:/Fighting/Grab
   <Death_Sfx>k__BackingField:
     Guid:
       Data1: 1268263422
@@ -229,6 +236,13 @@ MonoBehaviour:
       Data3: 464710307
       Data4: 1007240553
     Path: event:/Title Screen/Button Click
+  <Countdown_Sfx>k__BackingField:
+    Guid:
+      Data1: 736615646
+      Data2: 1120634333
+      Data3: 1187265692
+      Data4: 618708617
+    Path: event:/Fighting/Countdown
   <Lose_LoopSFX>k__BackingField:
     Guid:
       Data1: -608145482

@@ -51,6 +51,10 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
+	public EventReference Grab_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
 	public EventReference Death_Sfx { get; private set; }
 
 	[field: SerializeField]
@@ -100,6 +104,10 @@ public class FMODEvents : MonoSingleton<FMODEvents>
 	[field: SerializeField]
 	[field: FoldoutGroup("SFX")]
 	public EventReference ButtonClick_Sfx { get; private set; }
+
+	[field: SerializeField]
+	[field: FoldoutGroup("SFX")]
+	public EventReference Countdown_Sfx { get; private set; }
 
 	#endregion
 

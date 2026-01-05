@@ -332,6 +332,7 @@ public class BasicFighter : Fighter
 		{
 			if (result == AttackResult.Hit)
 			{
+				AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Grab_Sfx);
 				TransitionState(State.GrabSuccess);
 				State_Anim(_animsSO.GrabSuccess);
 			}

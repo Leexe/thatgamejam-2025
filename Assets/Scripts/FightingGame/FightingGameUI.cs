@@ -32,6 +32,9 @@ public class FightingGameUI : MonoBehaviour
 	[SerializeField]
 	private AnimationClip _screenOutAnimation;
 
+	[SerializeField]
+	private AnimationClip _countDownAnimation;
+
 	[Title("Sprites")]
 	[SerializeField]
 	private Sprite _losePopUpSprite;
@@ -66,6 +69,8 @@ public class FightingGameUI : MonoBehaviour
 
 			_matchupManager.OnGameWin.AddListener(OnGameWin);
 			_matchupManager.OnGameLose.AddListener(OnGameLose);
+
+			_matchupManager.OnNewFight.AddListener(PlayIntroAnimation);
 		}
 	}
 
@@ -79,6 +84,8 @@ public class FightingGameUI : MonoBehaviour
 
 			_matchupManager.OnGameWin.RemoveListener(OnGameWin);
 			_matchupManager.OnGameLose.RemoveListener(OnGameLose);
+
+			_matchupManager.OnNewFight.RemoveListener(PlayIntroAnimation);
 		}
 	}
 
@@ -151,8 +158,7 @@ public class FightingGameUI : MonoBehaviour
 			_activeState.Events(this).OnEnd = () =>
 			{
 				OnIntroEnd?.Invoke();
-				_activeState.Stop();
-				_activeState = null;
+				PlayCountDownAnimation();
 			};
 
 			OnIntroStart?.Invoke();
@@ -194,7 +200,24 @@ public class FightingGameUI : MonoBehaviour
 			{
 				_activeState.Stop();
 				_activeState = null;
+				_matchupManager.Reset();
+				PlayIntroAnimation();
 			};
+		}
+	}
+
+	private void PlayCountDownAnimation()
+	{
+		if (_countDownAnimation != null)
+		{
+			_activeState = _animancer.Play(_countDownAnimation);
+			_activeState.Events(this).OnEnd = () =>
+			{
+				_activeState.Stop();
+				_activeState = null;
+			};
+
+			AudioManager.Instance.PlayOneShot(FMODEvents.Instance.Countdown_Sfx);
 		}
 	}
 
@@ -203,7 +226,6 @@ public class FightingGameUI : MonoBehaviour
 		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm);
 		GameManager.Instance.PreventCursorHide = false;
-		_matchupManager.Reset();
 		PlayScreenOutAnimation();
 		GameManager.Instance.HideCursor();
 	}
@@ -213,5 +235,10 @@ public class FightingGameUI : MonoBehaviour
 		AudioManager.Instance.PlayOneShot(FMODEvents.Instance.ButtonClick_Sfx);
 		GameManager.Instance.PreventCursorHide = false;
 		GameManager.Instance.SwitchScenes(GameManager.SceneNames.MainMenu);
+	}
+
+	public void PlayFightingGameMusic()
+	{
+		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm, true);
 	}
 }
