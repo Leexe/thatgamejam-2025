@@ -207,6 +207,21 @@ public class BasicFighter : Fighter
 				case State.DashBack:
 					res = OnHit_Standing(attack);
 					break;
+				case State.Grab:
+				{
+					HitBoxData data = ReadHitBoxes();
+					if (data.Attack.HasValue)
+					{
+						res = AttackResult.None;
+						break;
+					}
+					else
+					{
+						res = OnHit_Standing(attack);
+						break;
+					}
+				}
+
 				case State.CrouchIdle:
 				case State.CrouchPunch:
 				case State.CrouchKick:
