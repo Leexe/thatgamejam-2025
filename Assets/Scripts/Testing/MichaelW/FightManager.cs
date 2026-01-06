@@ -16,6 +16,9 @@ public class FightManager : MonoBehaviour
 	[SerializeField]
 	private CinemachineBrain _cameraBrain;
 
+	[SerializeField]
+	private FightAI _ai;
+
 	[Header("Events")]
 	[HideInInspector]
 	public UnityEvent<GameResult> OnGameEnd;
@@ -198,6 +201,8 @@ public class FightManager : MonoBehaviour
 		_p2Channel.RaiseInitiateHealth(_p2.Health, _p2.MaxHealth);
 		_p2Channel.RaiseHealthChanged(0f, _p2.Health, _p2.MaxHealth);
 
+		_ai.Set((BasicFighter)_p2, (BasicFighter)_p1);
+
 		SetSlowMoRate(1);
 
 		ComputeArenaBounds();
@@ -227,13 +232,15 @@ public class FightManager : MonoBehaviour
 		InputInfo p1Input = default;
 		InputInfo p2Input = default;
 
+		var p1F = (BasicFighter)_p1;
+
 		if (_fightRunning)
 		{
 			// snapshot player inputs and reset
 			p1Input = _upcomingInput;
 			p2Input = _upcomingInput2;
 
-			if (true)
+			if (false)
 			{
 				// for testing: make player 2 kick periodically
 				float horzDist = Mathf.Abs(_p1.transform.position.x - _p2.transform.position.x);
@@ -308,12 +315,13 @@ public class FightManager : MonoBehaviour
 				{
 					_debugP2Dir = 0;
 					float rand = Random.value;
-					if (rand < 0.2f + (0.1f * Mathf.Max(0f, _p2.transform.position.x)))
+					float offset = _p2.transform.position.x - _p1.transform.position.x;
+					if (rand < 0.2f + (0.1f * Mathf.Max(0f, offset)))
 					{
 						_debugP2Dir = -1f;
 						_debugDirCooldown += Random.Range(10, 25);
 					}
-					else if (rand > 0.8f + (0.1f * Mathf.Min(0f, _p2.transform.position.x)))
+					else if (rand > 0.8f + (0.1f * Mathf.Min(0f, offset)))
 					{
 						_debugP2Dir = 1f;
 						_debugDirCooldown += Random.Range(10, 25);
@@ -324,8 +332,20 @@ public class FightManager : MonoBehaviour
 					}
 				}
 
+				// if (p1F.GetState() == BasicFighter.State.StandKick)
+				// {
+				// 	_debugP2Dir = Mathf.Sign(_p2.transform.position.x - _p1.transform.position.x);
+				// }
+				// if (p1F.GetState() == BasicFighter.State.CrouchKick)
+				// {
+				// 	_debugP2Dir = -Mathf.Sign(_p2.transform.position.x - _p1.transform.position.x);
+				// 	_debugP2VertDir = 1f;
+				// }
+
 				p2Input.Dir = new Vector2(_debugP2Dir, _debugP2VertDir);
 			}
+
+			p2Input = _ai.Tick();
 		}
 
 		_debugP2PrevPos = _p2.transform.position;

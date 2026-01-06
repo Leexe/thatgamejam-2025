@@ -74,6 +74,16 @@ public class BasicFighter : Fighter
 		return _state;
 	}
 
+	public int GetStateCounter()
+	{
+		return _stateCounter;
+	}
+
+	public Vector2 GetVel()
+	{
+		return _vel;
+	}
+
 	// idle state vars
 	private Direction _walkDirection = Direction.None;
 	private Direction _prevWalkDirection = Direction.None;
