@@ -1,5 +1,4 @@
 using Animancer;
-using PrimeTween;
 using Sirenix.OdinInspector;
 using UnityEngine;
 using UnityEngine.UI;
@@ -239,6 +238,6 @@ public class FightingGameUI : MonoBehaviour
 
 	public void PlayFightingGameMusic()
 	{
-		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm, true);
+		AudioManager.Instance.SwitchMusicTrack(FMODEvents.Instance.FightingGame_Bgm);
 	}
 }
