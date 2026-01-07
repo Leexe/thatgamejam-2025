@@ -729,7 +729,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6559442635336663700
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1893,7 +1893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139.25, y: -152.05}
+  m_AnchoredPosition: {x: 139.25, y: -228.07501}
   m_SizeDelta: {x: 278.5, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1501506489668031016
@@ -2504,7 +2504,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 139.25, y: -50.683334}
+  m_AnchoredPosition: {x: 139.25, y: -76.025}
   m_SizeDelta: {x: 278.5, y: 60}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6327400302131660320
@@ -2728,7 +2728,7 @@ MonoBehaviour:
   _settingsTabCanvasGroup: {fileID: 5937177501003113545}
   _background: {fileID: 2535179159730047062}
   _pauseTweenDuration: 0.2
-  _setttingsTweenDuration: 0.1
+  _settingTweenDuration: 0.3
   OnPauseMenuOpen:
     m_PersistentCalls:
       m_Calls: []

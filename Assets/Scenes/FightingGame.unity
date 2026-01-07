@@ -239,6 +239,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ece51f2901e7445ab60da3685d6b5f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Unity.Cinemachine::Unity.Cinemachine.CinemachineBrain
+--- !u!1 &284001042
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 284001044}
+  - component: {fileID: 284001043}
+  m_Layer: 0
+  m_Name: FightAI
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &284001043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284001042}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c72d5aeeaea15448294d1054100d92e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FightAI
+--- !u!4 &284001044
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 284001042}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.46936, y: 0.55431, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &284048206
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -321,7 +365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.008691102
+      value: 0.008695573
       objectReference: {fileID: 0}
     - target: {fileID: 6818552153995469450, guid: b1260e86d189f49e7b939d59b327563b, type: 3}
       propertyPath: m_LocalPosition.y
@@ -799,6 +843,10 @@ PrefabInstance:
       propertyPath: _p2RoundIndicator
       value: 
       objectReference: {fileID: 2047098846}
+    - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
+      propertyPath: _ai
+      value: 
+      objectReference: {fileID: 284001043}
     - target: {fileID: 9210326844115371349, guid: e392dda9b704049c5b78b51c9f3421a0, type: 3}
       propertyPath: _p1
       value: 
@@ -1329,3 +1377,4 @@ SceneRoots:
   - {fileID: 1744372534}
   - {fileID: 74477801}
   - {fileID: 1201676757}
+  - {fileID: 284001044}
